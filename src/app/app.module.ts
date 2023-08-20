@@ -3,8 +3,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { MaterialModule } from './material-module';
 import { AppComponent } from './app.component';
-import { DynamicFormComponent } from './dynamic-form.component';
-import { DynamicFormQuestionComponent } from './dynamic-form-question.component';
+import { DynamicFormComponent } from './dynamic-form-question/dynamic-form.component';
+import { DynamicFormQuestionComponent } from './dynamic-form-question/dynamic-form-question.component';
 
 @NgModule({
   imports: [BrowserModule, ReactiveFormsModule, MaterialModule],

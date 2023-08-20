@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
       <app-dynamic-form [questions]="questions$ | async"></app-dynamic-form>
     </div>
   `,
-  providers:  [QuestionService]
+  providers: [QuestionService],
 })
 export class AppComponent {
   questions$: Observable<QuestionBase<any>[]>;
@@ -21,7 +21,6 @@ export class AppComponent {
     this.questions$ = service.getQuestions();
   }
 }
-
 
 /*
 Copyright Google LLC. All Rights Reserved.
