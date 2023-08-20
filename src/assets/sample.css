@@ -12,6 +12,21 @@
   color: navy;
 }
 
+.box {
+  color: white;
+  padding: 10px;
+  text-align: center;
+  border-style: inset;
+}
+
+.green {
+  background: green;
+}
+
+.blue {
+  background: blue;
+}
+
 /*
 Copyright Google LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that
