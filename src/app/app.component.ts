@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { QuestionService } from './question.service';
 import { QuestionBase } from './controls/question-base';
 import { Observable } from 'rxjs';
+import { ArticalService } from './artical.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  providers: [QuestionService],
+  providers: [QuestionService, ArticalService],
 })
 export class AppComponent {
   // questions$: Observable<QuestionBase<any>[]>;

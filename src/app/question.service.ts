@@ -53,10 +53,10 @@ export class QuestionService {
         order: 5,
       }),
       new ImageQuestion({
-        key: 'phonecontact',
+        key: 'header',
         label: 'Phone',
         type: 'image',
-        order: 5,
+        order: 6,
         src: 'https://ultimaworks.ltimindtree.com/assets/icons/Ultima_works_blue.svg',
       }),
     ];

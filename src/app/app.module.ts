@@ -9,6 +9,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AdminComponent } from './admin/admin.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ArticalComponent } from './artical/artical.component';
+import { DynamicArticalComponent } from './artical-dynamic-form/dynamic-artical.component';
+import { DynamicArticalControlComponent } from './artical-dynamic-form/dynamic-artical-control.component';
+import { DynamicArticalParentControlComponent } from './artical-dynamic-form/dynamic-artical-parent-control.component';
 
 const appRoutes: Routes = [
   { path: 'admin', component: AdminComponent },
@@ -22,6 +26,7 @@ const appRoutes: Routes = [
   // { path: '**', component: PageNotFoundComponent },
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'artical', component: ArticalComponent },
 ];
 @NgModule({
   imports: [
@@ -38,8 +43,12 @@ const appRoutes: Routes = [
     AppComponent,
     DynamicFormComponent,
     DynamicFormQuestionComponent,
+    DynamicArticalComponent,
+    DynamicArticalControlComponent,
+    DynamicArticalParentControlComponent,
     HomeComponent,
     AdminComponent,
+    ArticalComponent,
   ],
   bootstrap: [AppComponent],
 })
