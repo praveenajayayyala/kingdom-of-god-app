@@ -1,18 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ArticalControlBase } from '../artical-controls/artical-control-base';
-import { Observable } from 'rxjs/internal/Observable';
 import { ArticalService } from '../artical.service';
-import { concatMap } from 'rxjs/internal/operators/concatMap';
-import { groupBy } from 'rxjs/internal/operators/groupBy';
-import { tap } from 'rxjs/internal/operators/tap';
-import { mergeMap } from 'rxjs/internal/operators/mergeMap';
-import { zip } from 'rxjs/internal/observable/zip';
-import { toArray } from 'rxjs/internal/operators/toArray';
-import { map } from 'rxjs/internal/operators/map';
-import { of } from 'rxjs/internal/observable/of';
 import { ArticalControlService } from '../artical-control.service';
-import { DropdownControl } from '../artical-controls/control-dropdown';
 
 @Component({
   selector: 'app-artical-parent-control',
@@ -28,6 +18,19 @@ export class DynamicArticalParentControlComponent {
   }
   @Input() parentControl!: ArticalControlBase<string>;
   @Input() form!: FormGroup;
+
+  get FxLayout() {
+    return this.parentControl?.layout.fxLayout;
+  }
+  get FxLayoutGap() {
+    return this.parentControl?.layout.fxLayoutGap;
+  }
+  get FxLayoutAlign() {
+    return this.parentControl?.layout.fxLayoutAlign;
+  }
+  get FxFlex() {
+    return this.parentControl?.layout.fxflex;
+  }
 
   // get isValid() {
   //   return this.form.controls[this.parentControl.key].valid;

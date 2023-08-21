@@ -5,6 +5,7 @@ import { DropdownControl } from './artical-controls/control-dropdown';
 import { TextboxControl } from './artical-controls/control-textbox';
 import { DivControl } from './artical-controls/control-div';
 import { ImageControl } from './artical-controls/control-img';
+import { CardControl } from './artical-controls/control-card';
 
 @Injectable()
 export class ArticalService {
@@ -33,19 +34,35 @@ export class ArticalService {
         parentKey: 'first-Row',
         row: 2,
         layout: {
-          fxLayout: 'column',
+          fxLayout: 'row',
           fxLayoutAlignVertical: 'center',
           fxLayoutAlignHorizontal: 'stretch',
           fxflex: '100%',
           fxLayoutGap: '',
           default: false,
-          color: 'blue',
+          color: 'green',
         },
         hasChildren: true,
         order: 2,
       }),
       new ImageControl({
-        key: 'phonecontact',
+        key: 'logo',
+        parentKey: 'second-Row',
+        label: 'Phone',
+        type: 'image',
+        order: 3,
+        src: 'https://www.calvary-ag.net/C.jpg',
+      }),
+      new CardControl({
+        key: 'logo',
+        parentKey: 'second-Row',
+        label: 'Phone',
+        type: 'image',
+        order: 3,
+        src: 'https://material.angular.io/assets/img/examples/shiba2.jpg',
+      }),
+      new CardControl({
+        key: 'logo',
         parentKey: 'second-Row',
         label: 'Phone',
         type: 'image',
@@ -57,7 +74,7 @@ export class ArticalService {
         parentKey: 'first-Row',
         row: 3,
         layout: {
-          fxLayout: 'column',
+          fxLayout: 'row',
           fxLayoutAlignVertical: 'center',
           fxLayoutAlignHorizontal: 'stretch',
           fxflex: '100%',

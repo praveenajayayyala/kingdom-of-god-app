@@ -1,10 +1,10 @@
 <div
   class="container"
-  fxLayout="{{ parentControl.layout.fxLayout }}"
-  fxLayoutGap="{{ parentControl.layout.fxLayoutGap }}"
+  [attr.fxLayout]="FxLayout"
+  [attr.fxLayoutGap]="FxLayoutGap"
   style="background-color: {{ parentControl.layout.color }};"
-  fxLayoutAlign="{{ parentControl.layout.fxLayoutAlign }}"
-  fxFlex="{{ parentControl.layout.fxflex }}"
+  [attr.fxLayoutAlign]="FxLayoutAlign"
+  [attr.fxFlex]="FxFlex"
   *ngFor="let control of parentControl.children"
 >
   <!--fxLayoutAlign="{{ parentControl.layout.fxLayoutAlign }}"
