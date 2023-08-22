@@ -6,9 +6,9 @@ import { ArticalControlService } from '../artical-control.service';
 
 @Component({
   selector: 'app-artical-parent-control',
-  templateUrl: './dynamic-artical-parent-control.component.html',
+  templateUrl: './dynamic-artical-parent-div.component.html',
 })
-export class DynamicArticalParentControlComponent {
+export class DynamicArticalParentDivComponent {
   //articalControls$: Observable<ArticalControlBase<any>[]>;
   constructor(
     private service: ArticalService,

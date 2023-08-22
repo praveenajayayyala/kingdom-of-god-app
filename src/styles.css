@@ -20,6 +20,12 @@ body {
   padding-top: 50px;
   color: #959595;
 }
+.container-main {
+  background-color: white !important;
+  margin: 20px;
+  padding-top: 15px;
+  border-radius: 6px;
+}
 .main-form {
   padding-top: 40px;
 }
@@ -5301,6 +5307,11 @@ a.badge:focus {
 }
 .jumbotron .container {
   max-width: 100%;
+}
+@media (max-device-width: 600px) {
+  .jumbotron {
+    margin-top: -30px;
+  }
 }
 @media screen and (min-width: 768px) {
   .jumbotron {

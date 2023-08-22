@@ -3,7 +3,7 @@
     ><mat-card-content>{{ control.label }}</mat-card-content></mat-card
   > -->
   <app-artical-parent-control
-    *ngIf="control.hasChildren"
+    *ngIf="control.hasChildren && control.controlType == 'div'"
     [parentControl]="control"
     [form]="form"
   ></app-artical-parent-control>

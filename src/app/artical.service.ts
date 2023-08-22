@@ -56,11 +56,18 @@ export class ArticalService {
         row: 2,
         order: 5,
       }),
-
+      new DivControl({
+        key: 'container-main',
+        css: 'container-main',
+        row: 2,
+        hasChildren: true,
+        order: 6,
+      }),
       new DivControl({
         key: 'main-container',
         css: 'container',
         row: 2,
+        parentKey: 'container-main',
         hasChildren: true,
         order: 6,
       }),

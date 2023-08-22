@@ -12,7 +12,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ArticalComponent } from './artical/artical.component';
 import { DynamicArticalComponent } from './artical-dynamic-form/dynamic-artical.component';
 import { DynamicArticalControlComponent } from './artical-dynamic-form/dynamic-artical-control.component';
-import { DynamicArticalParentControlComponent } from './artical-dynamic-form/dynamic-artical-parent-control.component';
+import { DynamicArticalParentDivComponent } from './artical-dynamic-form/dynamic-artical-parent-div.component';
 
 const appRoutes: Routes = [
   { path: 'admin', component: AdminComponent },
@@ -45,7 +45,7 @@ const appRoutes: Routes = [
     DynamicFormQuestionComponent,
     DynamicArticalComponent,
     DynamicArticalControlComponent,
-    DynamicArticalParentControlComponent,
+    DynamicArticalParentDivComponent,
     HomeComponent,
     AdminComponent,
     ArticalComponent,
