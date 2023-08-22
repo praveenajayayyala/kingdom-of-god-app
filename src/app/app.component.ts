@@ -11,14 +11,12 @@ import { ArticalService } from './artical.service';
   providers: [QuestionService, ArticalService],
 })
 export class AppComponent {
-  // questions$: Observable<QuestionBase<any>[]>;
-  // constructor(service: QuestionService) {
-  //   this.questions$ = service.getQuestions();
-  // }
+  menucss: string = ' ';
+  openCloseMenu() {
+    if (this.menucss == 'collapse navbar-collapse') {
+      this.menucss = 'collapse navbar-collapse in';
+    } else {
+      this.menucss = 'collapse navbar-collapse';
+    }
+  }
 }
-
-/*
-Copyright Google LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at https://angular.io/license
-*/
