@@ -11,6 +11,7 @@ import { H1Control } from './artical-controls/control-h1';
 import { PeraControl } from './artical-controls/control-pera';
 import { BRControl } from './artical-controls/control-br';
 import { CardOfArticalControl } from './artical-controls/control-card-artical';
+import { H3Control } from './artical-controls/control-h3';
 
 @Injectable()
 export class ArticalService {
@@ -95,14 +96,25 @@ export class ArticalService {
         row: 2,
         order: 10,
       }),
+      new BRControl({
+        key: 'main-container-col1-br2',
+        parentKey: 'main-container-col1',
+        row: 2,
+        order: 11,
+      }),
+      new BRControl({
+        key: 'main-container-col1-br3',
+        parentKey: 'main-container-col1',
+        row: 2,
+        order: 12,
+      }),
       new DivControl({
         key: 'main-container-row2',
         css: 'row',
-        backGroundColor: 'lightgrey',
         parentKey: 'main-container',
         hasChildren: true,
         row: 2,
-        order: 11,
+        order: 13,
       }),
       new DivControl({
         key: 'main-container-row2-col1',
@@ -110,23 +122,94 @@ export class ArticalService {
         parentKey: 'main-container-row2',
         hasChildren: true,
         row: 2,
-        order: 12,
+        order: 14,
+      }),
+      new DivControl({
+        key: 'main-container-row2-col1-row',
+        css: 'row article-intro-row',
+        parentKey: 'main-container-row2-col1',
+        label: 'Bible reading',
+        hasChildren: true,
+        order: 15,
       }),
       new CardOfArticalControl({
         key: 'card-1',
-        parentKey: 'main-container-row2-col1',
-        label: 'Phone',
+        parentKey: 'main-container-row2-col1-row',
+        label: 'Bible reading',
         type: 'image',
-        order: 13,
-        src: 'https://material.angular.io/assets/img/examples/shiba2.jpg',
+        order: 16,
+        src: 'https://www.calvary-ag.net/bible.jpg',
+      }),
+      new H3Control({
+        key: 'main-container-row2-col1-h3',
+        parentKey: 'main-container-row2-col1-row',
+        label: 'The Bible',
+        type: 'image',
+        order: 17,
+      }),
+      new PeraControl({
+        key: 'main-container-row2-col1-h3',
+        parentKey: 'main-container-row2-col1-row',
+        label:
+          "The Bible is God's message of rescue and reconciliation for everyone. It is an accurate picture of who God is and the good things he has in store for us. The Bible reveals God's principles for a life of faith, behavior, and healthy relationships.",
+        order: 18,
+      }),
+      new DivControl({
+        key: 'main-container-row2-col2-row',
+        css: 'row article-intro-row',
+        parentKey: 'main-container-row2-col1',
+        hasChildren: true,
+        order: 19,
       }),
       new CardOfArticalControl({
         key: 'card-2',
-        parentKey: 'main-container-row2-col1',
-        label: 'Phone',
+        parentKey: 'main-container-row2-col2-row',
+        label: 'Public',
         type: 'image',
-        order: 14,
-        src: 'https://material.angular.io/assets/img/examples/shiba2.jpg',
+        order: 20,
+        src: 'https://www.calvary-ag.net/people.jpg',
+      }),
+      new H3Control({
+        key: 'main-container-row2-col2-row-h3',
+        parentKey: 'main-container-row2-col2-row',
+        label: 'People',
+        type: 'image',
+        order: 17,
+      }),
+      new PeraControl({
+        key: 'main-container-row2-col2-row-p',
+        parentKey: 'main-container-row2-col2-row',
+        label:
+          'Originally created perfect by God, human beings disobeyed Him. This brought sin, sickness, and death upon the human race. God is passionate to rescue and restore us from the pain and suffering we experience.',
+        order: 18,
+      }),
+      new DivControl({
+        key: 'main-container-row2-col3-row',
+        css: 'row article-intro-row',
+        parentKey: 'main-container-row2-col1',
+        hasChildren: true,
+        order: 19,
+      }),
+      new CardOfArticalControl({
+        key: 'card-3',
+        parentKey: 'main-container-row2-col3-row',
+        label: "God's work",
+        order: 21,
+        src: 'https://www.calvary-ag.net/C.jpg',
+      }),
+      new H3Control({
+        key: 'main-container-row2-col1-h3',
+        parentKey: 'main-container-row2-col3-row',
+        label: 'Jesus Christ',
+        type: 'image',
+        order: 17,
+      }),
+      new PeraControl({
+        key: 'main-container-row2-col1-h3',
+        parentKey: 'main-container-row2-col3-row',
+        label:
+          'He has always been fully God and always will be. Jesus also became a man to rescue us from our failures and painful experiences. He willingly died on a cross to remove our sin and offer eternal life. After his death, He rose from the dead, providing a new life for all who trust in Him.',
+        order: 18,
       }),
       /*new DivControl({
         key: 'first-Row',
