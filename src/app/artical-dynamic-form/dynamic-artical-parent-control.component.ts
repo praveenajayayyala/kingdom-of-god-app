@@ -19,19 +19,6 @@ export class DynamicArticalParentControlComponent {
   @Input() parentControl!: ArticalControlBase<string>;
   @Input() form!: FormGroup;
 
-  get FxLayout() {
-    return this.parentControl?.layout.fxLayout;
-  }
-  get FxLayoutGap() {
-    return this.parentControl?.layout.fxLayoutGap;
-  }
-  get FxLayoutAlign() {
-    return this.parentControl?.layout.fxLayoutAlign;
-  }
-  get FxFlex() {
-    return this.parentControl?.layout.fxflex;
-  }
-
   // get isValid() {
   //   return this.form.controls[this.parentControl.key].valid;
   // }

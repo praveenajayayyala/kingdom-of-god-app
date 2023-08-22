@@ -1,21 +1,7 @@
 <div
-  class="container"
-  [attr.fxLayout]="FxLayout"
-  [attr.fxLayoutGap]="FxLayoutGap"
-  style="background-color: {{ parentControl.layout.color }};"
-  [attr.fxLayoutAlign]="FxLayoutAlign"
-  [attr.fxFlex]="FxFlex"
+  class="{{ parentControl.css }}"
+  style="background-color:{{ parentControl.backGroundColor }}"
   *ngFor="let control of parentControl.children"
 >
-  <!--fxLayoutAlign="{{ parentControl.layout.fxLayoutAlign }}"
-  fxflex="{{ parentControl.layout.fxflex }}"
-    
-    fxLayout: 'row',
-fxLayoutAlignVertical: 'center',
-fxLayoutAlignHorizontal: 'stretch',
-fxflex: '100%',
-fxLayoutGap: 'none',
-   [fxLayout.xs]="column"
-  fxLayoutWrap -->
   <app-artical-control [control]="control" [form]="form"></app-artical-control>
 </div>

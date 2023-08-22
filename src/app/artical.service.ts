@@ -5,7 +5,12 @@ import { DropdownControl } from './artical-controls/control-dropdown';
 import { TextboxControl } from './artical-controls/control-textbox';
 import { DivControl } from './artical-controls/control-div';
 import { ImageControl } from './artical-controls/control-img';
-import { CardControl } from './artical-controls/control-card';
+import { CardBasicControl } from './artical-controls/control-card';
+import { LabelControl } from './artical-controls/control-label';
+import { H1Control } from './artical-controls/control-h1';
+import { PeraControl } from './artical-controls/control-pera';
+import { BRControl } from './artical-controls/control-br';
+import { CardOfArticalControl } from './artical-controls/control-card-artical';
 
 @Injectable()
 export class ArticalService {
@@ -15,33 +20,126 @@ export class ArticalService {
   getQuestions() {
     this.controls = [
       new DivControl({
-        key: 'first-Row',
+        key: 'jumbotron-Row',
+        css: 'jumbotron feature',
+        backGroundColor: '#337ab7',
         row: 1,
-        layout: {
-          fxLayout: 'row',
-          fxLayoutAlignVertical: 'center',
-          fxLayoutAlignHorizontal: 'stretch',
-          fxflex: '100%',
-          fxLayoutGap: '',
-          default: false,
-          color: 'red',
-        },
+        order: 1,
+        hasChildren: true,
+      }),
+      new DivControl({
+        key: 'jumbotron-container',
+        parentKey: 'jumbotron-Row',
+        css: 'container',
+        row: 2,
+        hasChildren: true,
+        order: 2,
+      }),
+      new H1Control({
+        key: 'jumbotron-h1',
+        parentKey: 'jumbotron-container',
+        label: 'Kingdom Of God',
+        row: 2,
+        order: 3,
+      }),
+      new BRControl({
+        key: 'jumbotron-h1-br1',
+        parentKey: 'jumbotron-container',
+        row: 2,
+        order: 4,
+      }),
+      new BRControl({
+        key: 'jumbotron-h1-br2',
+        parentKey: 'jumbotron-container',
+        label: 'Kingdom Of God',
+        row: 2,
+        order: 5,
+      }),
+
+      new DivControl({
+        key: 'main-container',
+        css: 'container',
+        row: 2,
+        hasChildren: true,
+        order: 6,
+      }),
+      new DivControl({
+        key: 'main-container-row1',
+        css: 'row',
+        parentKey: 'main-container',
+        row: 2,
+        hasChildren: true,
+        order: 7,
+      }),
+      new DivControl({
+        key: 'main-container-col1',
+        css: 'col-lg-12',
+        parentKey: 'main-container-row1',
+        hasChildren: true,
+        row: 2,
+        order: 8,
+      }),
+      new H1Control({
+        key: 'main-container-col1-h1',
+        parentKey: 'main-container-col1',
+        label: 'Superior Collaboration',
+        css: 'page-header',
+        row: 2,
+        order: 9,
+      }),
+      new PeraControl({
+        key: 'main-container-col1-h1',
+        parentKey: 'main-container-col1',
+        label:
+          'Proactively envisioned multimedia based expertise and cross-media growth strategies. Seamlessly visualize quality intellectual capital without superior collaboration and idea-sharing. Holistically pontificate installed base portals after maintainable products.',
+        row: 2,
+        order: 10,
+      }),
+      new DivControl({
+        key: 'main-container-row2',
+        css: 'row',
+        backGroundColor: 'lightgrey',
+        parentKey: 'main-container',
+        hasChildren: true,
+        row: 2,
+        order: 11,
+      }),
+      new DivControl({
+        key: 'main-container-row2-col1',
+        css: 'col-md-4 article-intro',
+        parentKey: 'main-container-row2',
+        hasChildren: true,
+        row: 2,
+        order: 12,
+      }),
+      new CardOfArticalControl({
+        key: 'card-1',
+        parentKey: 'main-container-row2-col1',
+        label: 'Phone',
+        type: 'image',
+        order: 13,
+        src: 'https://material.angular.io/assets/img/examples/shiba2.jpg',
+      }),
+      new CardOfArticalControl({
+        key: 'card-2',
+        parentKey: 'main-container-row2-col1',
+        label: 'Phone',
+        type: 'image',
+        order: 14,
+        src: 'https://material.angular.io/assets/img/examples/shiba2.jpg',
+      }),
+      /*new DivControl({
+        key: 'first-Row',
+        css: 'row',
+        row: 1,
         order: 1,
         hasChildren: true,
       }),
       new DivControl({
         key: 'second-Row',
         parentKey: 'first-Row',
+        css: 'row',
         row: 2,
-        layout: {
-          fxLayout: 'row',
-          fxLayoutAlignVertical: 'center',
-          fxLayoutAlignHorizontal: 'stretch',
-          fxflex: '100%',
-          fxLayoutGap: '',
-          default: false,
-          color: 'green',
-        },
         hasChildren: true,
         order: 2,
       }),
@@ -53,17 +151,33 @@ export class ArticalService {
         order: 3,
         src: 'https://www.calvary-ag.net/C.jpg',
       }),
+      new DivControl({
+        key: 'cards-Row',
+        parentKey: 'first-Row',
+        css: 'col-md-4',
+        row: 2,
+        hasChildren: true,
+        order: 2,
+      }),
       new CardControl({
-        key: 'logo',
-        parentKey: 'second-Row',
+        key: 'logo-1',
+        parentKey: 'cards-Row',
         label: 'Phone',
         type: 'image',
         order: 3,
         src: 'https://material.angular.io/assets/img/examples/shiba2.jpg',
       }),
       new CardControl({
-        key: 'logo',
-        parentKey: 'second-Row',
+        key: 'logo-2',
+        parentKey: 'cards-Row',
+        label: 'Phone',
+        type: 'image',
+        order: 3,
+        src: 'https://www.calvary-ag.net/C.jpg',
+      }),
+      new CardControl({
+        key: 'logo-3',
+        parentKey: 'cards-Row',
         label: 'Phone',
         type: 'image',
         order: 3,
@@ -72,16 +186,8 @@ export class ArticalService {
       new DivControl({
         key: 'third-Row',
         parentKey: 'first-Row',
+        css: 'col-md-4',
         row: 3,
-        layout: {
-          fxLayout: 'row',
-          fxLayoutAlignVertical: 'center',
-          fxLayoutAlignHorizontal: 'stretch',
-          fxflex: '100%',
-          fxLayoutGap: '',
-          default: false,
-          color: 'blue',
-        },
         hasChildren: true,
         order: 2,
       }),
@@ -107,7 +213,23 @@ export class ArticalService {
         required: true,
         order: 4,
       }),
-      /*new DropdownQuestion({
+      new DivControl({
+        key: 'last-Row',
+        parentKey: 'first-Row',
+        css: 'row col-lg-12',
+        row: 2,
+        hasChildren: true,
+        order: 2,
+      }),
+      new LabelControl({
+        key: 'firstName',
+        parentKey: 'last-Row',
+        label: 'First name',
+        value: 'Hello Lucky',
+        required: true,
+        order: 4,
+      }),
+      new DropdownQuestion({
         key: 'brave',
         label: 'Bravery Rating',
         options: [

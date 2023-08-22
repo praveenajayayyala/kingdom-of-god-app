@@ -1,17 +1,3 @@
-<p>artical works!</p>
-
-<div
-  class="container"
-  fxLayout="row"
-  fxLayout.xs="column"
-  fxLayoutWrap
-  fxLayoutGap="0.5%"
-  fxLayoutAlign="center"
->
-  <div fxFlex="30%"></div>
-  <div fxFlex="70%">
-    <app-artical-form
-      [articalControls]="articalControls$ | async"
-    ></app-artical-form>
-  </div>
-</div>
+<app-artical-form
+  [articalControls]="articalControls$ | async"
+></app-artical-form>

@@ -7,7 +7,7 @@
     [parentControl]="control"
     [form]="form"
   ></app-artical-parent-control>
-  <label [attr.for]="control.key">{{ control.label }}</label>
+
   <div [ngSwitch]="control.controlType">
     <input
       class="sample-xl"
@@ -16,7 +16,11 @@
       [id]="control.key"
       [type]="control.type"
     />
-
+    <label *ngSwitchCase="'label'" [attr.for]="control.key">{{
+      control.label
+    }}</label>
+    <br *ngSwitchCase="'br'" />
+    <p *ngSwitchCase="'pera'">{{ control.label }}</p>
     <select
       [id]="control.key"
       *ngSwitchCase="'dropdown'"
@@ -32,8 +36,12 @@
       [id]="control.key"
       [src]="control.src"
     />
-
-    <mat-card class="example-card" *ngSwitchCase="'card'">
+    <h1 *ngSwitchCase="'h1'" class="{{ control.css }}">{{ control.label }}</h1>
+    <span *ngSwitchCase="'span'">{{ control.label }}</span>
+    <mat-card *ngSwitchCase="'card-basic'">
+      <mat-card-content>{{ control.label }}</mat-card-content>
+    </mat-card>
+    <mat-card class="example-card" *ngSwitchCase="'card-artical'">
       <mat-card-header>
         <div mat-card-avatar class="example-header-image"></div>
         <mat-card-title>{{ control.label }}</mat-card-title>

@@ -4,17 +4,9 @@ export class ArticalControlBase<T> {
   label: string;
   required: boolean;
   src: string;
+  css: string;
   order: number;
-  layout: {
-    fxLayout: string;
-    fxLayoutAlignVertical: string;
-    fxLayoutAlignHorizontal: string;
-    fxflex: string; //percentage
-    fxLayoutGap: string;
-    default?: boolean;
-    fxLayoutAlign?: string;
-    color?: string;
-  };
+  backGroundColor: string;
   row: number;
   column: number;
   controlType: string;
@@ -31,6 +23,7 @@ export class ArticalControlBase<T> {
       required?: boolean;
       order?: number;
       row?: number;
+      css?: string;
       column?: number;
       src?: string;
       controlType?: string;
@@ -38,15 +31,7 @@ export class ArticalControlBase<T> {
       parentKey?: string;
       hasChildren?: boolean;
       children?: ArticalControlBase<T>[];
-      layout?: {
-        fxLayout: string;
-        fxLayoutAlignVertical: string;
-        fxLayoutAlignHorizontal: string;
-        fxflex: string;
-        fxLayoutGap: string;
-        default?: boolean;
-        color?: string;
-      };
+      backGroundColor?: string;
 
       options?: { key: string; value: string }[];
     } = {}
@@ -62,20 +47,10 @@ export class ArticalControlBase<T> {
     this.type = options.type || '';
     this.options = options.options || [];
     this.src = options.src || '';
+    this.css = options.css || '';
     this.parentKey = options.parentKey || '';
     this.hasChildren = options.hasChildren || false;
     this.children = options.children || [];
-    this.layout = options.layout || {
-      fxLayout: 'row',
-      fxLayoutAlignVertical: '',
-      fxLayoutAlignHorizontal: 'stretch',
-      fxflex: '', //percentage
-      fxLayoutGap: '',
-      default: true,
-    };
-    this.layout.fxLayoutAlign =
-      this.layout.fxLayoutAlignVertical +
-      ' ' +
-      this.layout.fxLayoutAlignHorizontal;
+    this.backGroundColor = options.backGroundColor || 'inherit';
   }
 }

@@ -1,20 +1,18 @@
-<div>
-  <form (ngSubmit)="onSubmit()" [formGroup]="form">
-    <div *ngFor="let artControl of articalControls" class="form-row">
-      <app-artical-control
-        [control]="artControl"
-        [form]="form"
-      ></app-artical-control>
-    </div>
-
-    <div class="form-row">
-      <button type="submit" mat-button color="primary" [disabled]="!form.valid">
-        Save
-      </button>
-    </div>
-  </form>
-
-  <div *ngIf="payLoad" class="form-row">
-    <strong>Saved the following values</strong><br />{{ payLoad }}
+<form (ngSubmit)="onSubmit()" [formGroup]="form" class="main-form">
+  <div *ngFor="let artControl of articalControls">
+    <app-artical-control
+      [control]="artControl"
+      [form]="form"
+    ></app-artical-control>
   </div>
+
+  <div class="form-row">
+    <button type="submit" mat-button color="primary" [disabled]="!form.valid">
+      Save
+    </button>
+  </div>
+</form>
+
+<div *ngIf="payLoad" class="form-row">
+  <strong>Saved the following values</strong><br />{{ payLoad }}
 </div>
