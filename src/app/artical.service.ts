@@ -218,6 +218,63 @@ export class ArticalService {
           'He has always been fully God and always will be. Jesus also became a man to rescue us from our failures and painful experiences. He willingly died on a cross to remove our sin and offer eternal life. After his death, He rose from the dead, providing a new life for all who trust in Him.',
         order: 18,
       }),
+      new DivControl({
+        key: 'last-jumbotron-Row',
+        css: 'jumbotron feature',
+        backGroundColor: '#97b898',
+        row: 1,
+        order: 18,
+        hasChildren: true,
+      }),
+      new DivControl({
+        key: 'last-jumbotron-container',
+        parentKey: 'last-jumbotron-Row',
+        css: 'container',
+        row: 2,
+        hasChildren: true,
+        order: 2,
+      }),
+      new DivControl({
+        key: 'last-jumbotron-container-container-row2',
+        css: 'row',
+        parentKey: 'last-jumbotron-container',
+        hasChildren: true,
+        row: 2,
+        order: 13,
+      }),
+      new DivControl({
+        key: 'last-jumbotron-container-container-row2-container-row2-col1',
+        css: 'col-md-3 article-intro',
+        parentKey: 'last-jumbotron-container-container-row2',
+        hasChildren: true,
+        row: 2,
+        order: 14,
+      }),
+      new DivControl({
+        key: 'last-jumbotron-container-container-row2-container-row2-col1-container-row2-col1-row',
+        css: 'row article-intro-row',
+        parentKey:
+          'last-jumbotron-container-container-row2-container-row2-col1',
+        label: 'Bible reading',
+        hasChildren: true,
+        order: 15,
+      }),
+      new H3Control({
+        key: 'last-jumbotron-container-container-row2-container-row2-col1-container-row2-col1-row-h3',
+        parentKey:
+          'last-jumbotron-container-container-row2-container-row2-col1-container-row2-col1-row',
+        label: 'Jesus Christ',
+        type: 'image',
+        order: 17,
+      }),
+      new PeraControl({
+        key: 'last-jumbotron-container-container-row2-container-row2-col1-container-row2-col1-row-p',
+        parentKey:
+          'last-jumbotron-container-container-row2-container-row2-col1-container-row2-col1-row',
+        label:
+          'He has always been fully God and always will be. Jesus also became a man to rescue us from our failures and painful experiences. He willingly died on a cross to remove our sin and offer eternal life. After his death, He rose from the dead, providing a new life for all who trust in Him.',
+        order: 18,
+      }),
       /*new DivControl({
         key: 'first-Row',
         css: 'row',

@@ -9,6 +9,7 @@ import {
   MatTreeFlattener,
 } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
+import { ArticalControlBase } from '../artical-controls/artical-control-base';
 
 /**
  * Node for to-do item
@@ -297,5 +298,11 @@ export class AdminComponent {
   saveNode(node: TodoItemFlatNode, itemValue: string) {
     const nestedNode = this.flatNodeMap.get(node);
     this._database.updateItem(nestedNode!, itemValue);
+  }
+
+  getClassFields() {
+    let fields = new ArticalControlBase<string>();
+    let values = Object.entries(fields);
+    values.forEach((v) => console.log(v[0], typeof v[1]));
   }
 }

@@ -64,5 +64,8 @@
   </div>
   <div fxFlex="70%">
     <app-dynamic-form [questions]="questions$ | async"></app-dynamic-form>
+    <button (click)="this.getClassFields()" value="Get fields">
+      Get fields
+    </button>
   </div>
 </div>
