@@ -5,20 +5,14 @@ import { QuestionBase } from './controls/question-base';
 
 @Injectable()
 export class QuestionControlService {
-  toFormGroup(questions: QuestionBase<string>[] ) {
+  toFormGroup(questions: QuestionBase<string>[]) {
     const group: any = {};
 
-    questions.forEach(question => {
-      group[question.key] = question.required ? new FormControl(question.value || '', Validators.required)
-                                              : new FormControl(question.value || '');
+    questions.forEach((question) => {
+      group[question.key] = question.required
+        ? new FormControl(question.value || '', Validators.required)
+        : new FormControl(question.value || '');
     });
     return new FormGroup(group);
   }
 }
-
-
-/*
-Copyright Google LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at https://angular.io/license
-*/
