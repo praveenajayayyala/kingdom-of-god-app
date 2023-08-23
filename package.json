@@ -1,8 +1,8 @@
 {
-  "name": "angular.io-example",
+  "name": "angular.io-kingdomofgod",
   "version": "0.0.0",
-  "description": "Example project from an angular.io guide.",
-  "license": "MIT",
+  "description": "KingdomOfGod is christian church website",
+  "license": "Contact-ajaypraveen.vtm@gmail.com",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
