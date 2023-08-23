@@ -221,7 +221,7 @@ export class ArticalService {
       new DivControl({
         key: 'last-jumbotron-Row',
         css: 'jumbotron feature',
-        backGroundColor: '#97b898',
+        backGroundColor: 'rgb(114 143 115)',
         row: 1,
         order: 18,
         hasChildren: true,
