@@ -12,6 +12,5 @@ export class ArticalComponent {
   articalControls$: Observable<ArticalControlBase<any>[]>;
   constructor(service: ArticalService) {
     this.articalControls$ = service.getQuestions();
-    console.log('this.articalControls$>>', this.articalControls$);
   }
 }

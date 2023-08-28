@@ -1,71 +1,80 @@
-<p>admin works!</p>
-<div
-  class="container"
-  fxLayout="row"
-  fxLayout.xs="column"
-  fxLayoutWrap
-  fxLayoutGap="0.5%"
-  fxLayoutAlign="center"
->
-  <div fxFlex="30%">
-    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-      <mat-tree-node
-        *matTreeNodeDef="let node"
-        matTreeNodeToggle
-        matTreeNodePadding
-      >
-        <button mat-icon-button disabled></button>
-        <mat-checkbox
-          class="checklist-leaf-node"
-          [checked]="checklistSelection.isSelected(node)"
-          (change)="todoLeafItemSelectionToggle(node)"
-          >{{ node.item }}</mat-checkbox
-        >
-      </mat-tree-node>
+<div class="admin-container">
+  <div class="container-main" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%"
+    fxLayoutAlign="center">
+    <div class="container">
+      <div fxFlex="30%" class="admin-right-container">
+       <h2>Pages/Articles</h2>
+        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+          <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
+            <button mat-icon-button disabled></button>
+            <mat-checkbox class="checklist-leaf-node" [checked]="checklistSelection.isSelected(node)"
+              (change)="todoLeafItemSelectionToggle(node)">{{ node.item }}</mat-checkbox>
+          </mat-tree-node>
 
-      <mat-tree-node
-        *matTreeNodeDef="let node; when: hasNoContent"
-        matTreeNodePadding
-      >
-        <button mat-icon-button disabled></button>
-        <mat-form-field>
-          <mat-label>New item...</mat-label>
-          <input matInput #itemValue placeholder="Ex. Lettuce" />
-        </mat-form-field>
-        <button mat-button (click)="saveNode(node, itemValue.value)">
-          Save
-        </button>
-      </mat-tree-node>
+          <mat-tree-node *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding>
+            <button mat-icon-button disabled></button>
+            <mat-form-field>
+              <mat-label>New item...</mat-label>
+              <input matInput #itemValue placeholder="Ex. Lettuce" />
+            </mat-form-field>
+            <button mat-button (click)="saveNode(node, itemValue.value)">
+              Save
+            </button>
+          </mat-tree-node>
 
-      <mat-tree-node
-        *matTreeNodeDef="let node; when: hasChild"
-        matTreeNodePadding
-      >
-        <button
-          mat-icon-button
-          matTreeNodeToggle
-          [attr.aria-label]="'Toggle ' + node.item"
-        >
-          <mat-icon class="mat-icon-rtl-mirror">
-            {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
-          </mat-icon>
+          <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+            <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.item">
+              <mat-icon class="mat-icon-rtl-mirror">
+                {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+              </mat-icon>
+            </button>
+            <mat-checkbox [checked]="descendantsAllSelected(node)" [indeterminate]="descendantsPartiallySelected(node)"
+              (change)="todoItemSelectionToggle(node)">{{ node.item }}</mat-checkbox>
+            <button mat-icon-button (click)="addNewItem(node)">
+              <mat-icon>add</mat-icon>
+            </button>
+          </mat-tree-node>
+        </mat-tree>
+      </div>
+      <div fxFlex="70%" class="admin-right-container">
+        <h2>Pages/Articles</h2>
+        <mat-card>
+          <mat-card-content>Create new Page/Article</mat-card-content>
+        </mat-card>
+        <!-- <mat-tab-group>
+          <mat-tab label="Articles">
+            <table>
+              <tr>
+                <th>Field-Name</th>
+                <th>Values</th>
+              </tr>
+              <tr *ngFor="let fld of pageFields">
+                <td>{{fld.field}}</td>
+                <td>{{fld.type}}</td>
+              </tr>
+            </table>
+          </mat-tab>
+
+          <mat-tab label="Forms">
+            <app-dynamic-form [questions]="questions$ | async"></app-dynamic-form>
+          </mat-tab>
+          <mat-tab label="Third"> Content 3 </mat-tab>
+        </mat-tab-group> -->
+         <table>
+              <tr>
+                <th>Field-Name</th>
+                <th>Values</th>
+              </tr>
+              <tr *ngFor="let fld of pageFields">
+                <td>{{fld.field}}</td>
+                <td>{{fld.type}}</td>
+              </tr>
+            </table>
+
+        <button (click)="this.getClassFields()" value="Get fields">
+          Get fields
         </button>
-        <mat-checkbox
-          [checked]="descendantsAllSelected(node)"
-          [indeterminate]="descendantsPartiallySelected(node)"
-          (change)="todoItemSelectionToggle(node)"
-          >{{ node.item }}</mat-checkbox
-        >
-        <button mat-icon-button (click)="addNewItem(node)">
-          <mat-icon>add</mat-icon>
-        </button>
-      </mat-tree-node>
-    </mat-tree>
-  </div>
-  <div fxFlex="70%">
-    <app-dynamic-form [questions]="questions$ | async"></app-dynamic-form>
-    <button (click)="this.getClassFields()" value="Get fields">
-      Get fields
-    </button>
+      </div>
+    </div>
   </div>
 </div>

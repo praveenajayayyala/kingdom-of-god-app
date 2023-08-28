@@ -1,15 +1,15 @@
-import { Observable } from 'rxjs/internal/Observable';
-import { QuestionService } from '../question.service';
-import { QuestionBase } from '../controls/question-base';
-import { SelectionModel } from '@angular/cdk/collections';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, Injectable } from '@angular/core';
+import { Observable } from "rxjs/internal/Observable";
+import { QuestionService } from "../question.service";
+import { QuestionBase } from "../controls/question-base";
+import { SelectionModel } from "@angular/cdk/collections";
+import { FlatTreeControl } from "@angular/cdk/tree";
+import { Component, Injectable } from "@angular/core";
 import {
   MatTreeFlatDataSource,
   MatTreeFlattener,
-} from '@angular/material/tree';
-import { BehaviorSubject } from 'rxjs';
-import { ArticalControlBase } from '../artical-controls/artical-control-base';
+} from "@angular/material/tree";
+import { BehaviorSubject } from "rxjs";
+import { ArticalControlBase } from "../artical-controls/artical-control-base";
 
 /**
  * Node for to-do item
@@ -30,14 +30,14 @@ export class TodoItemFlatNode {
  * The Json object for to-do list data.
  */
 const TREE_DATA = {
-  'Kingdom-Of-God': {
+  "Kingdom-Of-God": {
     Home: null,
-    'About-Us': null,
-    'Contact-Us': null,
+    "About-Us": null,
+    "Contact-Us": null,
     Articals: {
       Latest: null,
-      Songs: ['Telugu', 'Hindi'],
-      'Video-Massages': null,
+      Songs: ["Telugu", "Hindi"],
+      "Video-Massages": null,
     },
   },
   // Reminders: [
@@ -84,7 +84,7 @@ export class ChecklistDatabase {
       node.item = key;
 
       if (value != null) {
-        if (typeof value === 'object') {
+        if (typeof value === "object") {
           node.children = this.buildFileTree(value, level + 1);
         } else {
           node.item = value;
@@ -110,9 +110,9 @@ export class ChecklistDatabase {
 }
 
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css'],
+  selector: "app-admin",
+  templateUrl: "./admin.component.html",
+  styleUrls: ["./admin.component.css"],
   providers: [ChecklistDatabase],
   // standalone: true,
   // imports: [
@@ -140,7 +140,7 @@ export class AdminComponent {
   selectedParent: TodoItemFlatNode | null = null;
 
   /** The new item's name */
-  newItemName = '';
+  newItemName = "";
 
   treeControl: FlatTreeControl<TodoItemFlatNode>;
 
@@ -173,6 +173,8 @@ export class AdminComponent {
       this.dataSource.data = data;
     });
     this.questions$ = service.getQuestions();
+
+    this.treeControl.expandAll();
   }
 
   getLevel = (node: TodoItemFlatNode) => node.level;
@@ -184,7 +186,7 @@ export class AdminComponent {
   hasChild = (_: number, _nodeData: TodoItemFlatNode) => _nodeData.expandable;
 
   hasNoContent = (_: number, _nodeData: TodoItemFlatNode) =>
-    _nodeData.item === '';
+    _nodeData.item === "";
 
   /**
    * Transformer to convert nested node to flat node. Record the nodes in maps for later use.
@@ -290,7 +292,7 @@ export class AdminComponent {
   /** Select the category so we can insert the new item. */
   addNewItem(node: TodoItemFlatNode) {
     const parentNode = this.flatNodeMap.get(node);
-    this._database.insertItem(parentNode!, '');
+    this._database.insertItem(parentNode!, "");
     this.treeControl.expand(node);
   }
 
@@ -298,11 +300,15 @@ export class AdminComponent {
   saveNode(node: TodoItemFlatNode, itemValue: string) {
     const nestedNode = this.flatNodeMap.get(node);
     this._database.updateItem(nestedNode!, itemValue);
+
+    this.getClassFields();
   }
 
+  pageFields: any[] = [];
   getClassFields() {
     let fields = new ArticalControlBase<string>();
     let values = Object.entries(fields);
-    values.forEach((v) => console.log(v[0], typeof v[1]));
+    this.pageFields=[];
+    values.forEach((v) => this.pageFields.push({field: v[0], type: typeof v[1]}));
   }
 }

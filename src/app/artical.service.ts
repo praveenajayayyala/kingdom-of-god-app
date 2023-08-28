@@ -443,7 +443,8 @@ export class ArticalService {
     });
     console.log(
       'this.controls=> ',
-      this.controls.filter((v) => v.parentKey == '')
+      JSON.stringify(this.controls)
+
     );
     return of(
       this.controls
