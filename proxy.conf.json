@@ -1,0 +1,10 @@
+{
+  "/api": {
+    "target": "https://so926lyyic.execute-api.ap-south-1.amazonaws.com/prod",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api": "https://so926lyyic.execute-api.ap-south-1.amazonaws.com/prod"
+    }
+  }
+}

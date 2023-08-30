@@ -13,6 +13,7 @@ import { ArticalComponent } from './artical/artical.component';
 import { DynamicArticalComponent } from './artical-dynamic-form/dynamic-artical.component';
 import { DynamicArticalControlComponent } from './artical-dynamic-form/dynamic-artical-control.component';
 import { DynamicArticalParentDivComponent } from './artical-dynamic-form/dynamic-artical-parent-div.component';
+import { HttpClientModule } from '@angular/common/http';
 
 const appRoutes: Routes = [
   { path: 'admin', component: AdminComponent },
@@ -34,6 +35,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     MaterialModule,
     FlexLayoutModule,
+    HttpClientModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only

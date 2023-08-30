@@ -11,11 +11,11 @@ export class DynamicArticalControlComponent {
   @Input() form!: FormGroup;
 
   get isValid() {
-    console.log(
-      'DynamicArticalControlComponent-control',
-      this.control.key,
-      this.form.controls
-    );
+    // console.log(
+    //   'DynamicArticalControlComponent-control',
+    //   this.control.key,
+    //   this.form.controls
+    // );
     //if (this.control.controlType == 'div') return true;
     return this.form.controls[this.control.key].valid;
   }
