@@ -10,6 +10,11 @@ import {
 } from "@angular/material/tree";
 import { BehaviorSubject } from "rxjs";
 import { ArticalControlBase } from "../artical-controls/artical-control-base";
+import { Article } from "../model/article";
+import { ArticalService } from "../artical.service";
+import { AuthorizeService } from "../authorize.service";
+import { ActivatedRoute } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 /**
  * Node for to-do item
@@ -125,8 +130,10 @@ export class ChecklistDatabase {
   // ],
 })
 export class AdminComponent {
+  needToLogin: boolean = this.authorizeService.neetToLogin;
   questions$: Observable<QuestionBase<any>[]>;
-
+  statusMessage: string = "";
+  statusMsgColor: string = "black";
   // constructor() {
 
   // }
@@ -153,7 +160,14 @@ export class AdminComponent {
     true /* multiple */
   );
 
-  constructor(private _database: ChecklistDatabase, service: QuestionService) {
+  constructor(
+    private _database: ChecklistDatabase,
+    service: QuestionService,
+    private articleService: ArticalService,
+    private authorizeService: AuthorizeService,
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar
+  ) {
     this.treeFlattener = new MatTreeFlattener(
       this.transformer,
       this.getLevel,
@@ -308,7 +322,53 @@ export class AdminComponent {
   getClassFields() {
     let fields = new ArticalControlBase<string>();
     let values = Object.entries(fields);
-    this.pageFields=[];
-    values.forEach((v) => this.pageFields.push({field: v[0], type: typeof v[1]}));
+    this.pageFields = [];
+    values.forEach((v) =>
+      this.pageFields.push({ field: v[0], type: typeof v[1] })
+    );
+  }
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action);
+  }
+  saveArticleByValidation() {
+    this.route.queryParams.subscribe((params) => {
+      let queryStringCode = params["code"];
+      if (queryStringCode == undefined || queryStringCode == "") {
+        return;
+      }
+      this.authorizeService.getAccessToken(queryStringCode).subscribe(
+        (result: any) => {
+          //console.log("access_token", result);
+          this.saveArticle(result.access_token).subscribe((result: any) => {
+            if (result.statusCode == 200 || result.statusCode == 201) {
+              this.statusMessage = "Artical saved successfully.";
+              this.statusMsgColor = "green";
+            } else {
+              console.log("Somthing went wrong!", result);
+              this.statusMessage =
+                "Somthing went wrong! status-code:" + result.status;
+              this.statusMsgColor = "red";
+            }
+          });
+        },
+        (err) => {
+          console.log("Article save error", err);
+          this.statusMessage = "Please login to get active session.";
+          this.statusMsgColor = "red";
+          this.needToLogin = true;
+        }
+      );
+    });
+  }
+  saveArticle(token: string) {
+    let article: Article = {
+      content: "Working fine",
+      isActive: true,
+      parent: "Article",
+      order: 11,
+      id: "1007",
+      name: "Article-7",
+    };
+    return this.articleService.addArticle(article, token);
   }
 }
