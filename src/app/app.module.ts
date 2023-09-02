@@ -14,6 +14,7 @@ import { DynamicArticalComponent } from './artical-dynamic-form/dynamic-artical.
 import { DynamicArticalControlComponent } from './artical-dynamic-form/dynamic-artical-control.component';
 import { DynamicArticalParentDivComponent } from './artical-dynamic-form/dynamic-artical-parent-div.component';
 import { HttpClientModule } from '@angular/common/http';
+import { LogoutComponent } from './logout/logout.component';
 
 const appRoutes: Routes = [
   { path: 'admin', component: AdminComponent },
@@ -28,6 +29,7 @@ const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'artical', component: ArticalComponent },
+  { path: 'logout', component: LogoutComponent },
 ];
 @NgModule({
   imports: [
@@ -51,6 +53,7 @@ const appRoutes: Routes = [
     HomeComponent,
     AdminComponent,
     ArticalComponent,
+    LogoutComponent,
   ],
   bootstrap: [AppComponent],
 })

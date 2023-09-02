@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { of } from "rxjs";
+import { catchError, of, retry } from "rxjs";
 import { ArticalControlBase } from "./artical-controls/artical-control-base";
 import { DropdownControl } from "./artical-controls/control-dropdown";
 import { TextboxControl } from "./artical-controls/control-textbox";
@@ -13,6 +13,8 @@ import { BRControl } from "./artical-controls/control-br";
 import { CardOfArticalControl } from "./artical-controls/control-card-artical";
 import { H3Control } from "./artical-controls/control-h3";
 import { HttpClient } from "@angular/common/http";
+import * as $ from "jquery";
+import { Article } from "./model/article";
 
 @Injectable()
 export class ArticalService {
@@ -22,33 +24,47 @@ export class ArticalService {
   controlsByParentKey = new Map<string, ArticalControlBase<string>[]>();
 
   public getArticleById(id: string, options?: any) {
-    return this.http.post(
-      this.baseUrl + "/articles/getarticles?postId=" + id,
-      options
-    );
+    return this.http
+      .get(this.baseUrl + "/getarticles?postId=" + id, options)
+      .pipe(retry(2));
+  }
+
+  public getValidate() {
+    return this.http
+      .post(
+        "https://kingdomofgod.auth.ap-south-1.amazoncognito.com/login?response_type=codeclient_id=vclkssn2ftril9vhgbscnc46r&redirect_uri=http://localhost:4200/admin/",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      )
+  }
+
+  public addArticle(article: Article, token: string) {
+    return this.http
+      .post(this.baseUrl + "/addarticle", {"body-json": article}, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      })
   }
 
   // TODO: get from a remote source of question metadata
   getQuestions() {
-    this.getArticleById("1003", {
+    this.getArticleById("*", {
       headers: {
-        "Access-Control-Allow-Headers":
-          "Content-Type,X-Amz-Date,Access-Control-Allow-Origin,Authorization,X-Api-Key,X-Amz-Security-Token",
-        "Access-Control-Allow-Methods": "GET,OPTIONS,POST",
-        "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
       },
-    }).subscribe((response: any) => console.log("response-AWS", response));
-    // 'Accept':
-    //   "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-    // "Content-Type": "application/json",
-    // "Referrer Policy": "strict-origin-when-cross-origin",
-    // ":authority": "so926lyyic.execute-api.ap-south-1.amazonaws.com",
-    // "Accept-Encoding": "gzip, deflate, br",
-    // "Accept-Language": "en-US,en;q=0.9",
-    //"Access-Control-Allow-Headers":["Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token"],
-    // "Access-Control-Allow-Methods":["GET,OPTIONS"],
-    // "Access-Control-Allow-Origin":["http://localhost:4200/artical"],
+    }).subscribe((response: any) => {
+      let body: any = JSON.parse(response.body);
+      console.log("response-AWS", body);
+      body.forEach((v: any) => {
+        console.log(v.id, JSON.parse(v.content));
+      });
+    });
     this.controls = [
       new DivControl({
         key: "jumbotron-Row",

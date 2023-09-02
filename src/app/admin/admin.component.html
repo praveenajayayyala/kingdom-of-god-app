@@ -37,7 +37,9 @@
         </mat-tree>
       </div>
       <div fxFlex="70%" class="admin-right-container">
-        <h2>Pages/Articles</h2>
+        <div class="login-div"><h3><a *ngIf="this.needToLogin" href="https://kingdomofgod.auth.ap-south-1.amazoncognito.com/oauth2/authorize?client_id=vclkssn2ftril9vhgbscnc46r&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone&redirect_uri=http%3A%2F%2Flocalhost%3A4200%2Fadmin%2F">Login</a></h3></div>
+        <h2>Pages/Articles</h2>        
+        <h3 [style.color]="this.statusMsgColor">{{this.statusMessage}}</h3>
         <mat-card>
           <mat-card-content>Create new Page/Article</mat-card-content>
         </mat-card>
@@ -74,6 +76,8 @@
         <button (click)="this.getClassFields()" value="Get fields">
           Get fields
         </button>
+        <button (click)="this.saveArticleByValidation()">Save article</button>
+        <!-- <button (click)="this.getValidate()">Validate</button> -->
       </div>
     </div>
   </div>

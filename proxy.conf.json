@@ -1,10 +1,11 @@
 {
-  "/api": {
+  "/api/*": {
     "target": "https://so926lyyic.execute-api.ap-south-1.amazonaws.com/prod",
     "secure": true,
-    "changeOrigin": true,
+    "changeOrigin": false,
+    "logLevel": "debug",
     "pathRewrite": {
-      "^/api": "https://so926lyyic.execute-api.ap-south-1.amazonaws.com/prod"
+      "^/api/": "https://so926lyyic.execute-api.ap-south-1.amazonaws.com/prod/"
     }
   }
 }
