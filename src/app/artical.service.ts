@@ -28,7 +28,7 @@ export class ArticalService {
   public getArticleById(id: string, options?: any) {
     return this.http
       .get(this.baseUrl + "/getarticles?postId=" + id, options)
-      .pipe(retry(2));
+      .pipe(catchError(retry(2)));
   }
 
   public getValidate() {
