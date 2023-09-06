@@ -1,25 +1,15 @@
-import { Component, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { ArticalControlBase } from '../artical-controls/artical-control-base';
-import { ArticalService } from '../artical.service';
-import { ArticalControlService } from '../artical-control.service';
+import { Component, Input } from "@angular/core";
+import { FormGroup } from "@angular/forms";
+import { ArticalControlBase } from "../artical-controls/artical-control-base";
 
 @Component({
-  selector: 'app-artical-parent-control',
-  templateUrl: './dynamic-artical-parent-div.component.html',
+  selector: "app-artical-parent-control",
+  templateUrl: "./dynamic-artical-parent-div.component.html",
 })
 export class DynamicArticalParentDivComponent {
-  //articalControls$: Observable<ArticalControlBase<any>[]>;
-  constructor(
-    private service: ArticalService,
-    private ctrlService: ArticalControlService
-  ) {
-    //this.articalControls$ = service.getQuestions();
-  }
   @Input() parentControl!: ArticalControlBase<string>;
   @Input() form!: FormGroup;
-
-  // get isValid() {
-  //   return this.form.controls[this.parentControl.key].valid;
-  // }
+  get styleOfControl() {
+    return "background-color: " + this.parentControl.backGroundColor;
+  }
 }

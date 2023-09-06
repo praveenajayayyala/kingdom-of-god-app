@@ -10,7 +10,7 @@ import {
 } from "@angular/material/tree";
 import { BehaviorSubject } from "rxjs";
 import { ArticalControlBase } from "../artical-controls/artical-control-base";
-import { Article } from "../model/article";
+import { Article } from "../modal/article";
 import { ArticalService } from "../artical.service";
 import { AuthorizeService } from "../authorize.service";
 import { ActivatedRoute } from "@angular/router";

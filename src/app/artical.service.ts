@@ -14,13 +14,15 @@ import { CardOfArticalControl } from "./artical-controls/control-card-artical";
 import { H3Control } from "./artical-controls/control-h3";
 import { HttpClient } from "@angular/common/http";
 import * as $ from "jquery";
-import { Article } from "./model/article";
+import { Article } from "./modal/article";
+import { SpanControl } from "./artical-controls/control-span";
 
 @Injectable()
 export class ArticalService {
   constructor(private http: HttpClient) {}
   baseUrl = "https://so926lyyic.execute-api.ap-south-1.amazonaws.com/prod";
   controls: ArticalControlBase<string>[] = [];
+  ControlsByPostId: ArticalControlBase<string>[] = [];
   controlsByParentKey = new Map<string, ArticalControlBase<string>[]>();
 
   public getArticleById(id: string, options?: any) {
@@ -30,41 +32,129 @@ export class ArticalService {
   }
 
   public getValidate() {
-    return this.http
-      .post(
-        "https://kingdomofgod.auth.ap-south-1.amazoncognito.com/login?response_type=codeclient_id=vclkssn2ftril9vhgbscnc46r&redirect_uri=http://localhost:4200/admin/",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        }
-      )
+    return this.http.post(
+      "https://kingdomofgod.auth.ap-south-1.amazoncognito.com/login?response_type=codeclient_id=vclkssn2ftril9vhgbscnc46r&redirect_uri=http://localhost:4200/admin/",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    );
   }
 
   public addArticle(article: Article, token: string) {
-    return this.http
-      .post(this.baseUrl + "/addarticle", {"body-json": article}, {
+    return this.http.post(
+      this.baseUrl + "/addarticle",
+      { "body-json": article },
+      {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
         },
-      })
+      }
+    );
+  }
+
+  async getArticlesByPostId(postId: string) {
+    return await new Promise<ArticalControlBase<string>[]>((resolve) => {
+      this.getArticleById(postId, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).subscribe((response: any) => {
+        let body: any = JSON.parse(response.body);
+        let controlsByPostId :ArticalControlBase<string>[]=[]; 
+
+        body.forEach((v: any) => {
+          if (v.content != undefined) {
+            //console.log("id:", v.id, JSON.parse(v.content));
+            JSON.parse(v.content).forEach((c: ArticalControlBase<string>) => {
+              controlsByPostId.push(this.getTansilateJSONToControl(c));
+            });
+          }
+        });
+
+        this.mapControlsBasedOnParentKey(controlsByPostId).subscribe(
+          (v) => {
+            resolve(v);
+          }
+        );
+      });
+    });
+  }
+  
+  getTansilateJSONToControl(control: ArticalControlBase<string>) {
+    let result: any = null;
+    switch (control.controlType) {
+      case "div":
+        result = new DivControl(control);
+        break;
+      case "br":
+        result = new BRControl(control);
+        break;
+      case "card-artical":
+        result = new CardOfArticalControl(control);
+        break;
+      case "card-basic":
+        result = new CardBasicControl(control);
+        break;
+      case "dropdown":
+        result = new DropdownControl(control);
+        break;
+      case "h1":
+        result = new H1Control(control);
+        break;
+      case "h3":
+        result = new H3Control(control);
+        break;
+      case "image":
+        result = new ImageControl(control);
+        break;
+      case "label":
+        result = new LabelControl(control);
+        break;
+      case "pera":
+        result = new PeraControl(control);
+        break;
+      case "span":
+        result = new SpanControl(control);
+        break;
+      case "textbox":
+        result = new TextboxControl(control);
+        break;
+    }
+    return result;
+  }
+
+  mapControlsBasedOnParentKey(controls: ArticalControlBase<string>[]) {
+    let controlsByParentKey = new Map<string, ArticalControlBase<string>[]>();
+    for (var i = 0; i < controls.length; i++) {
+      var key = controls[i].parentKey;
+      var value = controls[i];
+
+      if (controlsByParentKey.get(key) != null) {
+        controlsByParentKey.get(key)?.push(value);
+      } else {
+        controlsByParentKey.set(key, [value]);
+      }
+    }
+    controls.forEach((crtl) => {
+      if (controlsByParentKey.get(crtl.key)) {
+        crtl.children = controlsByParentKey.get(crtl.key);
+      }
+    });
+
+    return of(
+      controls
+        ?.filter((v) => v.parentKey == "")
+        .sort((a, b) => a.order - b.order)
+    );
   }
 
   // TODO: get from a remote source of question metadata
   getQuestions() {
-    this.getArticleById("*", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).subscribe((response: any) => {
-      let body: any = JSON.parse(response.body);
-      console.log("response-AWS", body);
-      body.forEach((v: any) => {
-        console.log(v.id, JSON.parse(v.content));
-      });
-    });
+    //this.getArticlesByPostId("1003");
     this.controls = [
       new DivControl({
         key: "jumbotron-Row",
@@ -474,28 +564,29 @@ export class ArticalService {
         src: 'https://www.calvary-ag.net/C.jpg',
       }),*/
     ];
-    this.controlsByParentKey = new Map<string, ArticalControlBase<string>[]>();
-    for (var i = 0; i < this.controls.length; i++) {
-      var key = this.controls[i].parentKey;
-      var value = this.controls[i];
+    return this.mapControlsBasedOnParentKey(this.controls);
+    // this.controlsByParentKey = new Map<string, ArticalControlBase<string>[]>();
+    // for (var i = 0; i < this.controls.length; i++) {
+    //   var key = this.controls[i].parentKey;
+    //   var value = this.controls[i];
 
-      if (this.controlsByParentKey.get(key) != null) {
-        this.controlsByParentKey.get(key)?.push(value);
-      } else {
-        this.controlsByParentKey.set(key, [value]);
-      }
-    }
-    this.controls.forEach((crtl) => {
-      if (this.controlsByParentKey.get(crtl.key)) {
-        crtl.children = this.controlsByParentKey.get(crtl.key);
-      }
-    });
-    //console.log("this.controls=> ", JSON.stringify(this.controls));
-    return of(
-      this.controls
-        ?.filter((v) => v.parentKey == "")
-        .sort((a, b) => a.order - b.order)
-    );
+    //   if (this.controlsByParentKey.get(key) != null) {
+    //     this.controlsByParentKey.get(key)?.push(value);
+    //   } else {
+    //     this.controlsByParentKey.set(key, [value]);
+    //   }
+    // }
+    // this.controls.forEach((crtl) => {
+    //   if (this.controlsByParentKey.get(crtl.key)) {
+    //     crtl.children = this.controlsByParentKey.get(crtl.key);
+    //   }
+    // });
+    // console.log("this.controls=> ", JSON.stringify(this.controls));
+    // return of(
+    //   this.controls
+    //     ?.filter((v) => v.parentKey == "")
+    //     .sort((a, b) => a.order - b.order)
+    // );
   }
   getChildrenControls(parentKey: string) {
     return this.controlsByParentKey.get(parentKey);

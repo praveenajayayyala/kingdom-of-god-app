@@ -1,13 +1,12 @@
 <div [formGroup]="form">
-  <!-- <mat-card
-    ><mat-card-content>{{ control.label }}</mat-card-content></mat-card
-  > -->
+  <!-- Div Control has children -->
   <app-artical-parent-control
     *ngIf="control.hasChildren && control.controlType == 'div'"
     [parentControl]="control"
     [form]="form"
   ></app-artical-parent-control>
 
+  <!-- Control Switch case -->
   <div [ngSwitch]="control.controlType">
     <input
       class="sample-xl"
@@ -16,11 +15,15 @@
       [id]="control.key"
       [type]="control.type"
     />
+    <!-- Control LABEL -->
     <label *ngSwitchCase="'label'" [attr.for]="control.key">{{
       control.label
     }}</label>
+    <!-- Control BR -->
     <br *ngSwitchCase="'br'" />
+    <!-- Control P -->
     <p *ngSwitchCase="'pera'">{{ control.label }}</p>
+    <!-- Control SELECT -->
     <select
       [id]="control.key"
       *ngSwitchCase="'dropdown'"
@@ -30,18 +33,24 @@
         {{ opt.value }}
       </option>
     </select>
+    <!-- Control IMG -->
     <img
       *ngSwitchCase="'image'"
       [formControlName]="control.key"
       [id]="control.key"
       [src]="control.src"
     />
+    <!-- Control H1 -->
     <h1 *ngSwitchCase="'h1'" class="{{ control.css }}">{{ control.label }}</h1>
+    <!-- Control H3 -->
     <h3 *ngSwitchCase="'h3'" class="{{ control.css }}">{{ control.label }}</h3>
+    <!-- Control SPAN -->
     <span *ngSwitchCase="'span'">{{ control.label }}</span>
+    <!-- Control MAT-CARD-BASIC -->
     <mat-card *ngSwitchCase="'card-basic'">
       <mat-card-content>{{ control.label }}</mat-card-content>
     </mat-card>
+    <!-- Control MAT-CARD-ARTICAL -->
     <mat-card class="example-card" *ngSwitchCase="'card-artical'">
       <mat-card-header>
         <div mat-card-avatar class="example-header-image"></div>
@@ -57,7 +66,7 @@
         </p>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-button>LIKE</button>
+        <button mat-button (click)="this.isValid">LIKE</button>
         <button mat-button>SHARE</button>
       </mat-card-actions>
     </mat-card>

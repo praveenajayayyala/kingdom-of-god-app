@@ -1,6 +1,6 @@
 <div
   class="{{ parentControl.css }}"
-  style="background-color:{{ parentControl.backGroundColor }}"
+  [style]="this.styleOfControl"
   *ngFor="let control of parentControl.children"
 >
   <app-artical-control [control]="control" [form]="form"></app-artical-control>

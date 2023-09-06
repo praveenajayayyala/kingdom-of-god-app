@@ -1,19 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { ArticalControlBase } from '../artical-controls/artical-control-base';
-import { ArticalControlService } from '../artical-control.service';
+import { Component, Input, OnInit } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
+import { ArticalControlBase } from "../artical-controls/artical-control-base";
+import { ArticalControlService } from "../artical-control.service";
 
 @Component({
-  selector: 'app-artical-form',
-  templateUrl: './dynamic-artical.component.html',
+  selector: "app-artical-form",
+  templateUrl: "./dynamic-artical.component.html",
   providers: [ArticalControlService],
 })
 export class DynamicArticalComponent implements OnInit {
-  @Input() articalControls: ArticalControlBase<string>[] | null = [];
-  form!: FormGroup;
-  payLoad = '';
+  @Input() articalControls: any;
+  form: FormGroup = new FormGroup({
+    firstName: new FormControl(),
+  });
+  payLoad = "";
 
-  constructor(private qcs: ArticalControlService) {}
+  constructor(
+    private qcs: ArticalControlService,
+  ) {}
 
   ngOnInit() {
     this.form = this.qcs.toFormGroup(

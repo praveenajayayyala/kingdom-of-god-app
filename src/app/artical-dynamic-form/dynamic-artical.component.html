@@ -7,7 +7,7 @@
   </div>
 
   <div class="form-row">
-    <button type="submit" mat-button color="primary" [disabled]="!form.valid">
+    <button type="submit" mat-button color="primary" [disabled]="form != undefined ? !form.valid : true">
       Save
     </button>
   </div>
