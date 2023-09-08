@@ -15,6 +15,7 @@ import { DynamicArticalControlComponent } from './artical-dynamic-form/dynamic-a
 import { DynamicArticalParentDivComponent } from './artical-dynamic-form/dynamic-artical-parent-div.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LogoutComponent } from './logout/logout.component';
+import { NavigationTreeComponent } from './navigation-tree/navigation-tree.component';
 
 const appRoutes: Routes = [
   { path: 'admin', component: AdminComponent },
@@ -54,6 +55,7 @@ const appRoutes: Routes = [
     AdminComponent,
     ArticalComponent,
     LogoutComponent,
+    NavigationTreeComponent,
   ],
   bootstrap: [AppComponent],
 })

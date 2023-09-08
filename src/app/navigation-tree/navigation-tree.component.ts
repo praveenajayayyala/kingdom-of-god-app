@@ -3,7 +3,7 @@ import { QuestionService } from "../question.service";
 import { QuestionBase } from "../controls/question-base";
 import { SelectionModel } from "@angular/cdk/collections";
 import { FlatTreeControl } from "@angular/cdk/tree";
-import { AfterViewInit, Component, Injectable } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Injectable, Output } from "@angular/core";
 import {
   MatTreeFlatDataSource,
   MatTreeFlattener,
@@ -15,7 +15,6 @@ import { ArticalService } from "../artical.service";
 import { AuthorizeService } from "../authorize.service";
 import { ActivatedRoute } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-
 /**
  * Node for to-do item
  */
@@ -35,8 +34,15 @@ export class TodoItemFlatNode {
  * The Json object for to-do list data.
  */
 const TREE_DATA = {
-  div: {
-    div: ["XXX"],
+  "Kingdom-Of-God": {
+    Home: ["XXX"],
+    About: ["XXX"],
+    "Contact-us": ["XXX"],
+    Articals: {
+      Latest: ["XXX"],
+      Songs: { Telugu: ["XXX"], Hindi: ["XXX"] },
+      "Video-Massages": ["XXX"],
+    },
   },
   // Reminders: [
   //   'Cook dinner',
@@ -113,30 +119,19 @@ export class ChecklistDatabase {
     this.dataChange.next(this.data);
   }
 }
-
 @Component({
-  selector: "app-admin",
-  templateUrl: "./admin.component.html",
-  styleUrls: ["./admin.component.css"],
+  selector: 'app-navigation-tree',
+  templateUrl: './navigation-tree.component.html',
+  styleUrls: ['./navigation-tree.component.css'],
   providers: [ChecklistDatabase],
-  // standalone: true,
-  // imports: [
-  //   MatTreeModule,
-  //   MatButtonModule,
-  //   MatCheckboxModule,
-  //   MatFormFieldModule,
-  //   MatInputModule,
-  //   MatIconModule,
-  // ],
 })
-export class AdminComponent implements AfterViewInit {
+export class NavigationTreeComponent implements AfterViewInit {
+  @Output() messageEvent = new EventEmitter<any>();
   needToLogin: boolean = this.authorizeService.neetToLogin;
   questions$: Observable<QuestionBase<any>[]>;
   statusMessage: string = "";
   statusMsgColor: string = "black";
   selectedNode!: { node: TodoItemFlatNode; isSelected: boolean };
-  selectedMenu!: { node: TodoItemFlatNode; isSelected: boolean };
-  propPosition: string = "top: 100px;";
   // constructor() {
 
   // }
@@ -187,12 +182,12 @@ export class AdminComponent implements AfterViewInit {
     //   this.getLevel,
     //   this.isExpandable
     // );
-
+    
     this.dataSource = new MatTreeFlatDataSource(
       this.treeControl,
       this.treeFlattener
     );
-
+    
     _database.dataChange.subscribe((data) => {
       this.dataSource.data = data;
     });
@@ -264,7 +259,7 @@ export class AdminComponent implements AfterViewInit {
       node: node,
       isSelected: !this.checklistSelection.isSelected(node),
     };
-    console.log("todoItemSelectionToggle", this.selectedNode);
+    this.messageEvent.emit(this.selectedNode);
     this.checklistSelection.toggle(node);
     const descendants = this.treeControl.getDescendants(node);
     this.checklistSelection.isSelected(node)
@@ -275,40 +270,14 @@ export class AdminComponent implements AfterViewInit {
     descendants.forEach((child) => this.checklistSelection.isSelected(child));
     this.checkAllParentsSelection(node);
   }
-  onMouseClick(e: MouseEvent, node: TodoItemFlatNode) {
-    this.selectedNode = {
-      node: node,
-      isSelected: this.checklistSelection.isSelected(node),
-    };
-    //console.log(e, this.selectedNode);
-    //e.pageX will give you offset from left screen border
-    //e.pageY will give you offset from top screen border
 
-    //determine popup X and Y position to ensure it is not clipped by screen borders
-    const popupHeight = 400, // hardcode these values
-      popupWidth = 300; // or compute them dynamically
-
-    let popupXPosition, popupYPosition;
-
-    if (e.clientX + popupWidth > window.innerWidth) {
-      popupXPosition = e.pageX - popupWidth;
-    } else {
-      popupXPosition = e.pageX;
-    }
-
-    if (e.clientY + popupHeight > window.innerHeight) {
-      popupYPosition = e.pageY - popupHeight;
-    } else {
-      popupYPosition = e.pageY;
-    }
-    this.propPosition= `top: ${popupYPosition-50}px;`;
-  }
   /** Toggle a leaf to-do item selection. Check all the parents to see if they changed */
   todoLeafItemSelectionToggle(node: TodoItemFlatNode): void {
     this.selectedNode = {
       node: node,
       isSelected: !this.checklistSelection.isSelected(node),
     };
+    this.messageEvent.emit(this.selectedNode);
     this.checklistSelection.toggle(node);
     this.checkAllParentsSelection(node);
   }
@@ -375,65 +344,5 @@ export class AdminComponent implements AfterViewInit {
     //nestedNode?.children.push({item: ""} as TodoItemNode)
     this._database.updateItem(nestedNode!, itemValue);
     this.treeControl.dataNodes.forEach((d) => this.deleteDefault(d));
-  }
-
-  get classFields() {
-    let fields = new ArticalControlBase<string>();
-    let values = Object.entries(fields);
-    let pageFields: any[] = [];
-    values.forEach((v) => pageFields.push({ field: v[0], type: typeof v[1] }));
-    return pageFields;
-  }
-  get availableControls() {
-    return ArticalControlBase.derived;
-  }
-
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action);
-  }
-  saveArticleByValidation() {
-    this.route.queryParams.subscribe((params) => {
-      let queryStringCode = params["code"];
-      if (queryStringCode == undefined || queryStringCode == "") {
-        return;
-      }
-      this.authorizeService.getAccessToken(queryStringCode).subscribe(
-        (result: any) => {
-          //console.log("access_token", result);
-          this.saveArticle(result.access_token).subscribe((result: any) => {
-            if (result.statusCode == 200 || result.statusCode == 201) {
-              this.statusMessage = "Artical saved successfully.";
-              this.statusMsgColor = "green";
-            } else {
-              console.log("Somthing went wrong!", result);
-              this.statusMessage =
-                "Somthing went wrong! status-code:" + result.status;
-              this.statusMsgColor = "red";
-            }
-          });
-        },
-        (err) => {
-          console.log("Article save error", err);
-          this.statusMessage = "Please login to get active session.";
-          this.statusMsgColor = "red";
-          this.needToLogin = true;
-        }
-      );
-    });
-  }
-  saveArticle(token: string) {
-    let article: Article = {
-      content: "Working fine",
-      isActive: true,
-      parent: "Article",
-      order: 11,
-      id: "1007",
-      name: "Article-7",
-    };
-    return this.articleService.addArticle(article, token);
-  }
-
-  displayMessage(msg: any) {
-    this.selectedMenu = msg;
   }
 }

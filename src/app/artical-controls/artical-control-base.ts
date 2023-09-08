@@ -53,4 +53,20 @@ export class ArticalControlBase<T> {
     this.children = options.children || [];
     this.backGroundColor = options.backGroundColor || 'inherit';
   }
+  static derived = new Set();
+  // static getAllSubclasses(baseClass: any) {
+  //   var globalObject = Function('return this')(); 
+    
+  //   var allVars = Object.keys(globalObject);
+  //   console.log("globalObject", allVars)
+  //   var classes = allVars.filter(function (key) {
+  //   try {
+  //     var obj = globalObject[key];
+  //         return obj.prototype instanceof baseClass;
+  //     } catch (e) {
+  //         return false;
+  //     }
+  //   });
+  //   return classes;
+  // }
 }
