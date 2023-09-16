@@ -13,7 +13,13 @@
   width: 100%;
   padding: 0px;
 }
-
+.tree-node {
+  font-weight: 500 !important;
+}
+.tree-node-title {
+  font-weight: 500 !important;
+  color: rgb(6, 70, 155);
+}
 .box {
   color: white;
   padding: 10px;
@@ -28,10 +34,10 @@
 .blue {
   background: blue;
 }
-.admin-container{
+.admin-container {
   margin-top: 75px;
 }
-.admin-right-container{
+.admin-right-container {
   /* border-left: 6px solid rgb(51, 122, 183); */
   flex: 1 1 100%;
   box-sizing: border-box;
@@ -44,29 +50,43 @@
 .admin-container mat-tree.mat-tree.cdk-tree {
   margin-left: -25px;
 }
-.login-div{
+.login-div {
   margin: 10px;
   float: right;
 }
-.admin-container .article-intro{
+.admin-container .article-intro {
   border: 2px solid #ddd;
   height: 95.5%;
   border-radius: 6px;
   overflow-x: auto;
   overflow-y: hidden;
+  padding-bottom: 75px;
 }
 .admin-container input[type="text"] {
   box-sizing: border-box;
   width: 100%;
   /* padding: 0.5rem; */
   height: 20px;
-  font-size: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
-.admin-container td, th {
+
+.admin-container select,
+option {
+  width: 100%;
+  font-weight: 600;
+  font-size: 10px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.admin-container td,
+th {
   padding: 0;
   font-size: 14px;
 }
-.admin-container .mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
+.admin-container
+  .mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined)
+  .mat-mdc-form-field-infix {
   padding-top: 0px;
   padding-bottom: 0px;
 }
@@ -77,20 +97,88 @@
   /* position: relative; */
   box-sizing: border-box;
 }
-.mat-crtl-col{
+.mat-crtl-col {
   border-radius: 6px;
   position: absolute;
   margin-left: -13px;
   /* margin-right: 4px; */
   padding: 3px;
 }
-.admin-container tr{
+.admin-container tr {
   border-bottom: 1px;
   border-color: gray;
 }
-.table-wrapper{
+.table-wrapper {
   margin: 10px 70px 70px;
-  box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+  box-shadow: 0px 35px 50px rgba(0, 0, 0, 0.2);
+}
+.multiselect {
+  width: 100%;
+}
+
+.selectBox {
+  position: relative;
+}
+
+.selectBox select {
+  width: 100%;
+  font-weight: bold;
+}
+
+.overSelect {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+#preview-div{
+  width: 450px;
+  height: 400px;
+  border-radius: 6px;
+  background-color: #fff;
+  border: dashed 1px #869fac;
+  padding: 0.5em;
+  z-index: 10;
+  position: absolute !important;
+  box-sizing: content-box;
+}
+
+.slected-node-cls{
+  color: blue;
+  font-size: 14px !important;
+}
+.ng-draggable {
+  cursor: grab;
+}
+
+.ng-dragging {
+  cursor: grabbing;
+}
+
+#checkboxes {
+  display: none;
+  border: 1px #dadada solid;
+  background-color: white;
+  border-radius: 6px;
+  padding-left: 3px;
+  position: absolute;
+  z-index: 2;
+  width: 55%;
+  max-height: 255px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#checkboxes label{
+  display: block;
+  margin: 2px !important;
+  width: 100%;
+}
+
+#checkboxes label:hover {
+  background-color: #1e90ff;
 }
 
 .fl-table {
@@ -106,7 +194,8 @@
   padding: 5px;
 }
 
-.fl-table td, .fl-table th {
+.fl-table td,
+.fl-table th {
   text-align: left;
   padding-left: 5px;
   padding-right: 3px;
@@ -120,9 +209,8 @@
 
 .fl-table thead th {
   color: #ffffff;
-  background: #4FC3A1;
+  background: #4fc3a1;
 }
-
 
 .fl-table thead th:nth-child(odd) {
   color: #ffffff;
@@ -137,67 +225,70 @@
 
 @media (max-width: 767px) {
   .fl-table {
-      display: block;
-      width: 100%;
+    display: block;
+    width: 100%;
   }
-  .table-wrapper:before{
-      content: "Scroll horizontally >";
-      display: block;
-      text-align: right;
-      font-size: 11px;
-      color: white;
-      padding: 0 0 10px;
+  .table-wrapper:before {
+    content: "Scroll horizontally >";
+    display: block;
+    text-align: right;
+    font-size: 11px;
+    color: white;
+    padding: 0 0 10px;
   }
-  .fl-table thead, .fl-table tbody, .fl-table thead th {
-      display: block;
+  .fl-table thead,
+  .fl-table tbody,
+  .fl-table thead th {
+    display: block;
   }
-  .fl-table thead th:last-child{
-      border-bottom: none;
+  .fl-table thead th:last-child {
+    border-bottom: none;
   }
   .fl-table thead {
-      float: left;
+    float: left;
   }
   .fl-table tbody {
-      width: auto;
-      position: relative;
-      overflow-x: auto;
+    width: auto;
+    position: relative;
+    overflow-x: auto;
   }
-  .fl-table td, .fl-table th {
-      padding: 20px .625em .625em .625em;
-      height: 60px;
-      vertical-align: middle;
-      box-sizing: border-box;
-      overflow-x: hidden;
-      overflow-y: auto;
-      width: 120px;
-      font-size: 13px;
-      text-overflow: ellipsis;
+  .fl-table td,
+  .fl-table th {
+    padding: 20px 0.625em 0.625em 0.625em;
+    height: 60px;
+    vertical-align: middle;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 120px;
+    font-size: 13px;
+    text-overflow: ellipsis;
   }
   .fl-table thead th {
-      text-align: left;
-      border-bottom: 1px solid #f7f7f9;
+    text-align: left;
+    border-bottom: 1px solid #f7f7f9;
   }
   .fl-table tbody tr {
-      display: table-cell;
+    display: table-cell;
   }
   .fl-table tbody tr:nth-child(odd) {
-      background: none;
+    background: none;
   }
   .fl-table tr:nth-child(even) {
-      background: transparent;
+    background: transparent;
   }
   .fl-table tr td:nth-child(odd) {
-      background: #F8F8F8;
-      border-right: 1px solid #E6E4E4;
+    background: #f8f8f8;
+    border-right: 1px solid #e6e4e4;
   }
   .fl-table tr td:nth-child(even) {
-      border-right: 1px solid #E6E4E4;
+    border-right: 1px solid #e6e4e4;
   }
   .fl-table tbody td {
-      display: block;
-      text-align: center;
+    display: block;
+    text-align: center;
   }
-  .fl-table .mat-mdc-button{
+  .fl-table .mat-mdc-button {
     color: white;
   }
 }

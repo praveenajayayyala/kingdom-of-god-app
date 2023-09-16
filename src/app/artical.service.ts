@@ -13,7 +13,6 @@ import { BRControl } from "./artical-controls/control-br";
 import { CardOfArticalControl } from "./artical-controls/control-card-artical";
 import { H3Control } from "./artical-controls/control-h3";
 import { HttpClient } from "@angular/common/http";
-import * as $ from "jquery";
 import { Article } from "./modal/article";
 import { SpanControl } from "./artical-controls/control-span";
 
@@ -564,29 +563,29 @@ export class ArticalService {
         src: 'https://www.calvary-ag.net/C.jpg',
       }),*/
     ];
-    return this.mapControlsBasedOnParentKey(this.controls);
-    // this.controlsByParentKey = new Map<string, ArticalControlBase<string>[]>();
-    // for (var i = 0; i < this.controls.length; i++) {
-    //   var key = this.controls[i].parentKey;
-    //   var value = this.controls[i];
+    //return this.mapControlsBasedOnParentKey(this.controls);
+    this.controlsByParentKey = new Map<string, ArticalControlBase<string>[]>();
+    for (var i = 0; i < this.controls.length; i++) {
+      var key = this.controls[i].parentKey;
+      var value = this.controls[i];
 
-    //   if (this.controlsByParentKey.get(key) != null) {
-    //     this.controlsByParentKey.get(key)?.push(value);
-    //   } else {
-    //     this.controlsByParentKey.set(key, [value]);
-    //   }
-    // }
-    // this.controls.forEach((crtl) => {
-    //   if (this.controlsByParentKey.get(crtl.key)) {
-    //     crtl.children = this.controlsByParentKey.get(crtl.key);
-    //   }
-    // });
-    // console.log("this.controls=> ", JSON.stringify(this.controls));
-    // return of(
-    //   this.controls
-    //     ?.filter((v) => v.parentKey == "")
-    //     .sort((a, b) => a.order - b.order)
-    // );
+      if (this.controlsByParentKey.get(key) != null) {
+        this.controlsByParentKey.get(key)?.push(value);
+      } else {
+        this.controlsByParentKey.set(key, [value]);
+      }
+    }
+    this.controls.forEach((crtl) => {
+      if (this.controlsByParentKey.get(crtl.key)) {
+        crtl.children = this.controlsByParentKey.get(crtl.key);
+      }
+    });
+    //console.log("this.controls=> ", JSON.stringify(this.controls));
+    return of(
+      this.controls
+        ?.filter((v) => v.parentKey == "")
+        .sort((a, b) => a.order - b.order)
+    );
   }
   getChildrenControls(parentKey: string) {
     return this.controlsByParentKey.get(parentKey);

@@ -3,7 +3,12 @@ import { QuestionService } from "../question.service";
 import { QuestionBase } from "../controls/question-base";
 import { SelectionModel } from "@angular/cdk/collections";
 import { FlatTreeControl } from "@angular/cdk/tree";
-import { AfterViewInit, Component, Injectable } from "@angular/core";
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  Injectable,
+} from "@angular/core";
 import {
   MatTreeFlatDataSource,
   MatTreeFlattener,
@@ -14,7 +19,6 @@ import { Article } from "../modal/article";
 import { ArticalService } from "../artical.service";
 import { AuthorizeService } from "../authorize.service";
 import { ActivatedRoute } from "@angular/router";
-import { MatSnackBar } from "@angular/material/snack-bar";
 
 /**
  * Node for to-do item
@@ -22,6 +26,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 export class TodoItemNode {
   children!: TodoItemNode[];
   item!: string;
+  props!: ArticalControlBase<string>;
 }
 
 /** Flat to-do item node with expandable and level information */
@@ -29,6 +34,7 @@ export class TodoItemFlatNode {
   item!: string;
   level!: number;
   expandable!: boolean;
+  props!: ArticalControlBase<string>;
 }
 
 /**
@@ -43,6 +49,26 @@ const TREE_DATA = {
   //   'Read the Material Design spec',
   //   'Upgrade Application to Angular',
   // ],
+};
+const availableStyles = {
+  "": [],
+  div: [
+    "jumbotron",
+    "feature",
+    "container",
+    "container-main",
+    "row",
+    "col-lg-12",
+    "col-md-4",
+    "article-intro",
+    "article-intro-row",
+    "col-md-3",
+  ],
+  h1: ["page-header"],
+  br: [],
+  pera: [],
+  "card-artical": [],
+  h3: [],
 };
 
 /**
@@ -71,6 +97,13 @@ export class ChecklistDatabase {
     this.dataChange.next(data);
   }
 
+  templateLoad(template: any) {
+    const data = this.buildFileTree(template, 0);
+
+    // Notify the change.
+    this.dataChange.next(data);
+  }
+
   /**
    * Build the file structure tree. The `value` is the Json object, or a sub-tree of a Json object.
    * The return value is the list of `TodoItemNode`.
@@ -91,6 +124,30 @@ export class ChecklistDatabase {
 
       return accumulator.concat(node);
     }, []);
+  }
+
+  buildFileArticleTree(
+    obj: { [key: string]: ArticalControlBase<string> },
+    level: number
+  ): TodoItemNode[] {
+    return Object.keys(obj).reduce<TodoItemNode[]>(
+      (accumulator, [key, val]) => {
+        const value = obj[key];
+        const node = new TodoItemNode();
+        node.item = key;
+
+        if (value != null) {
+          if (typeof value === "object") {
+            node.children = this.buildFileTree(value, level + 1);
+          } else {
+            node.item = value;
+          }
+        }
+
+        return accumulator.concat(node);
+      },
+      []
+    );
   }
 
   /** Add an item to to-do list */
@@ -119,24 +176,22 @@ export class ChecklistDatabase {
   templateUrl: "./admin.component.html",
   styleUrls: ["./admin.component.css"],
   providers: [ChecklistDatabase],
-  // standalone: true,
-  // imports: [
-  //   MatTreeModule,
-  //   MatButtonModule,
-  //   MatCheckboxModule,
-  //   MatFormFieldModule,
-  //   MatInputModule,
-  //   MatIconModule,
-  // ],
 })
-export class AdminComponent implements AfterViewInit {
+export class AdminComponent implements AfterViewChecked {
   needToLogin: boolean = this.authorizeService.neetToLogin;
   questions$: Observable<QuestionBase<any>[]>;
   statusMessage: string = "";
   statusMsgColor: string = "black";
   selectedNode!: { node: TodoItemFlatNode; isSelected: boolean };
   selectedMenu!: { node: TodoItemFlatNode; isSelected: boolean };
-  propPosition: string = "top: 100px;";
+  selectedNodeItem: string = "";
+  propPosition: string = "top: 45px;";
+  totalStyles = new Map<string, string[]>();
+  expanded = false;
+  chkStyle = "display: none";
+  cssSelected = "";
+  togglePreviewText = "Open Preview";
+
   // constructor() {
 
   // }
@@ -171,7 +226,7 @@ export class AdminComponent implements AfterViewInit {
     private articleService: ArticalService,
     private authorizeService: AuthorizeService,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private ref: ChangeDetectorRef
   ) {
     this.treeFlattener = new MatTreeFlattener(
       this.transformer,
@@ -183,10 +238,6 @@ export class AdminComponent implements AfterViewInit {
       this.getLevel,
       this.isExpandable
     );
-    // this.crtlsTreeControl = new FlatTreeControl<TodoItemFlatNode>(
-    //   this.getLevel,
-    //   this.isExpandable
-    // );
 
     this.dataSource = new MatTreeFlatDataSource(
       this.treeControl,
@@ -199,13 +250,26 @@ export class AdminComponent implements AfterViewInit {
     this.questions$ = service.getQuestions();
 
     this.treeControl.expandAll();
+    this.totalStyles = this.convertJSObjToTSMap(availableStyles);
+
+    console.log("this.totalStyles", this.totalStyles);
   }
-  ngAfterViewInit(): void {
+  convertJSObjToTSMap(jsObj: any) {
+    const tsMap = new Map();
+    const arrayOfMapEntries = new Map<any, any>(Object.entries(jsObj));
+    for (const [key, value] of arrayOfMapEntries.entries()) {
+      tsMap.set(key, value);
+    }
+    return tsMap;
+  }
+  ngAfterViewChecked(): void {
     this.treeControl.dataNodes.forEach((d) => this.deleteDefault(d));
+    this.ref.detectChanges();
   }
 
   deleteDefault = (node: TodoItemFlatNode) => {
     if (node.item == "XXX") {
+      console.log("deleteDefault", node);
       this.removeItem(node);
     }
   };
@@ -230,13 +294,42 @@ export class AdminComponent implements AfterViewInit {
       existingNode && existingNode.item === node.item
         ? existingNode
         : new TodoItemFlatNode();
+
+    if (node.props == undefined) {
+      node.props = new ArticalControlBase<string>({ key: node.item });
+    }
+    if (node.props.key == "") {
+      node.props.key = node.item;
+    }
+
+    if (node.props.css != "") {
+      node.props?.css?.split(" ")?.forEach((css) => {
+        if (
+          !this.totalStyles.get(node?.props?.controlType)?.find((v) => v == css)
+        ) {
+          this.totalStyles.get(node?.props?.controlType)?.push(css);
+        }
+      });
+    }
     flatNode.item = node.item;
+    flatNode.props = node.props;
     flatNode.level = level;
     flatNode.expandable = !!node.children?.length;
     this.flatNodeMap.set(flatNode, node);
     this.nestedNodeMap.set(node, flatNode);
     return flatNode;
   };
+
+  togglePreview() {
+    let previewEle = document.getElementById("preview-div");
+    if (previewEle!.style.display == "none") {
+      previewEle!.style.display = "block";
+      this.togglePreviewText = "Close Preview";
+    } else {
+      previewEle!.style.display = "none";
+      this.togglePreviewText = "Open Preview";
+    }
+  }
 
   /** Whether all the descendants of the node are selected. */
   descendantsAllSelected(node: TodoItemFlatNode): boolean {
@@ -264,7 +357,7 @@ export class AdminComponent implements AfterViewInit {
       node: node,
       isSelected: !this.checklistSelection.isSelected(node),
     };
-    console.log("todoItemSelectionToggle", this.selectedNode);
+    //console.log("todoItemSelectionToggle", this.selectedNode);
     this.checklistSelection.toggle(node);
     const descendants = this.treeControl.getDescendants(node);
     this.checklistSelection.isSelected(node)
@@ -275,12 +368,147 @@ export class AdminComponent implements AfterViewInit {
     descendants.forEach((child) => this.checklistSelection.isSelected(child));
     this.checkAllParentsSelection(node);
   }
+
+  cssSelectionChange(e: any, crtl: any) {
+    if (e.target.checked) {
+      this.cssSelected = this.cssSelected + " " + crtl.name;
+    } else {
+      let removedlst = this.cssSelected
+        .split(" ")
+        .filter((v) => v != crtl.name);
+      this.cssSelected = removedlst.join(" ");
+    }
+    this.selectedNode.node.props.css = this.cssSelected;
+  }
+
+  getControlKeyValue(selectedNode: any, field: string) {
+    let crtl: ArticalControlBase<string> = selectedNode.node.props;
+    let mapObject = new Map<string, any>(Object.entries(crtl));
+    // if (field == "required") {
+    //   console.log("mapObject.get(field)", mapObject.get(field));
+    // }
+    if (field == "children" && crtl.children) {
+      let childrenKys: string[] = [];
+      crtl.children.forEach((v) => childrenKys.push(v.key));
+      return childrenKys.join("; ");
+    } else if (field == "css") {
+      let csslst = this.totalStyles.get(crtl.controlType);
+      let resultCsslst: any[] = [];
+      this.cssSelected = crtl?.css;
+      let selectedCss = crtl?.css?.split(" ");
+      csslst?.forEach((css) =>
+        resultCsslst.push({
+          id: crtl.key + "-css-" + css,
+          name: css,
+          selected: selectedCss.find((v) => v == css) != null,
+        })
+      );
+
+      return resultCsslst;
+    } else {
+      return mapObject.get(field);
+    }
+  }
+  saveProps() {
+    this.updateSelectedNode();
+  }
+  updateSelectedNode() {
+    let fildsValues: any = {};
+    this.classFields.forEach((cf) => {
+      if (cf.type == "boolean") {
+        fildsValues[cf.field] = (<HTMLSelectElement>(
+          document.getElementById(this.selectedNode.node.item + "-" + cf.field)
+        ))?.value;
+      } else {
+        fildsValues[cf.field] = (<HTMLInputElement>(
+          document.getElementById(this.selectedNode.node.item + "-" + cf.field)
+        ))?.value;
+      }
+    });
+    fildsValues["children"] = this.selectedNode.node.props.children;
+    fildsValues["hasChildren"] =
+      this.selectedNode.node.props.children != undefined &&
+      this.selectedNode.node.props.children.length > 0;
+    fildsValues["css"] = this.cssSelected;
+    let parentNode =
+      this.selectedNode.node.level > 0
+        ? this.getParentNode(this.selectedNode.node)
+        : null;
+    fildsValues["parentKey"] = parentNode?.item;
+    let newChanges = new ArticalControlBase<string>(fildsValues);
+    console.log(
+      "newChanges",
+      newChanges,
+      (<HTMLSelectElement>(
+        document.getElementById(this.selectedNode.node.item + "-required")
+      ))?.value
+    );
+    //Updating Parent Pros.Children
+    let currentNodeInparent = parentNode?.props?.children?.find(
+      (v) => v.key == this.selectedNode.node.item
+    );
+    if (currentNodeInparent == undefined) {
+      parentNode?.props?.children?.push(newChanges);
+    } else {
+      parentNode?.props?.children?.forEach((cn) => {
+        if (cn.key == this.selectedNode.node.item) {
+          cn = newChanges;
+        }
+      });
+    }
+    if (
+      this.selectedNode.node.props.children != undefined &&
+      this.selectedNode.node.props.children.length > 0
+    ) {
+      this.selectedNode.node.props.children.forEach((v) => {
+        v.parentKey = newChanges.key;
+      });
+    }
+    //Updating Node.Children
+    let childrenNodes =
+      this.selectedNode.node.level > 0
+        ? this.getChildren(this.flatNodeMap.get(parentNode!)!)
+        : null;
+    childrenNodes?.forEach((cn) => {
+      if (cn.item == this.selectedNode.node.item) {
+        cn.props = newChanges;
+        cn.item = newChanges.key;
+      }
+    });
+
+    this.selectedNode.node.props = newChanges;
+    this.selectedNode.node.item = newChanges.key;
+  }
+
+  showCheckboxes() {
+    this.updateSelectedNode();
+    //var checkboxes = checkboxes
+    if (!this.expanded) {
+      this.chkStyle = "display: block";
+      //checkboxes.style.display = "block";
+      this.expanded = true;
+    } else {
+      this.chkStyle = "display: none";
+      //checkboxes.style.display = "none";
+      this.expanded = false;
+    }
+  }
   onMouseClick(e: MouseEvent, node: TodoItemFlatNode) {
     this.selectedNode = {
       node: node,
       isSelected: this.checklistSelection.isSelected(node),
     };
-    //console.log(e, this.selectedNode);
+    console.log("this.selectedNode", this.selectedNode.node);
+    let parent = document.querySelectorAll(".slected-node-cls");
+    parent.forEach((ele) => {
+      document.getElementById(ele.id)?.classList.remove("slected-node-cls");
+    });
+    (<HTMLInputElement>e.target).classList.add("slected-node-cls");
+
+    // console.log(
+    //   "this.selectedNode.node.props=>",
+    //   JSON.stringify(this.selectedNode.node.props)
+    // );
     //e.pageX will give you offset from left screen border
     //e.pageY will give you offset from top screen border
 
@@ -301,8 +529,11 @@ export class AdminComponent implements AfterViewInit {
     } else {
       popupYPosition = e.pageY;
     }
-    this.propPosition= `top: ${popupYPosition-50}px;`;
+    //this.propPosition = `top: ${popupYPosition - 50}px;`;
+
+    //this.createFormGroup(this.selectedNode);
   }
+
   /** Toggle a leaf to-do item selection. Check all the parents to see if they changed */
   todoLeafItemSelectionToggle(node: TodoItemFlatNode): void {
     this.selectedNode = {
@@ -360,6 +591,10 @@ export class AdminComponent implements AfterViewInit {
   removeItem(node: TodoItemFlatNode) {
     const parentNode = this.getParentNode(node);
     const parentFlat = this.flatNodeMap.get(parentNode!);
+    let propChildren = parentNode?.props?.children;
+    parentNode!.props.children = parentNode!.props.children?.filter(
+      (v) => v.key != node.item
+    );
     this._database.deleteItem(parentFlat!, node.item!);
   }
   /** Select the category so we can insert the new item. */
@@ -372,10 +607,13 @@ export class AdminComponent implements AfterViewInit {
   /** Save the node to database */
   saveNode(node: TodoItemFlatNode, itemValue: string) {
     const nestedNode = this.flatNodeMap.get(node);
-    //nestedNode?.children.push({item: ""} as TodoItemNode)
+    console.log("saveNode", node, nestedNode, itemValue);
     this._database.updateItem(nestedNode!, itemValue);
-    this.treeControl.dataNodes.forEach((d) => this.deleteDefault(d));
   }
+  // cancelNode(node: TodoItemFlatNode, itemValue: string){
+  //   const parentNode = this.flatNodeMap.get(node);
+  //   this._database.deleteItem(parentNode!, "");
+  // }
 
   get classFields() {
     let fields = new ArticalControlBase<string>();
@@ -388,9 +626,6 @@ export class AdminComponent implements AfterViewInit {
     return ArticalControlBase.derived;
   }
 
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action);
-  }
   saveArticleByValidation() {
     this.route.queryParams.subscribe((params) => {
       let queryStringCode = params["code"];
@@ -435,5 +670,50 @@ export class AdminComponent implements AfterViewInit {
 
   displayMessage(msg: any) {
     this.selectedMenu = msg;
+  }
+
+  loadDefault() {
+    this.articleService.getQuestions().subscribe((v) => {
+      //console.log(JSON.stringify(v));
+
+      let nodes: TodoItemNode[] = [];
+      v.forEach((ctrl) => nodes.push(this.buildFileArticleTree(ctrl, 0)));
+      console.log("nodes=>", nodes);
+      let tree = this._database.dataChange.next(nodes);
+
+      console.log("tree", tree);
+    });
+  }
+  articleTree: TodoItemNode[] = [];
+  buildFileArticleTree(
+    crtl: ArticalControlBase<string>,
+    level: number
+  ): TodoItemNode {
+    const value = crtl;
+    const node = new TodoItemNode();
+    node.item = value.key;
+    node.props = value;
+
+    if (value != null) {
+      //if (typeof value === "object") {
+      if (
+        value.hasChildren &&
+        value.children != undefined &&
+        value.children?.length > 0
+      ) {
+        value.children.forEach((child) => {
+          if (node.children == undefined) {
+            node.children = [];
+          }
+          node.children.push(this.buildFileArticleTree(child, level + 1));
+        });
+
+        //node.children = this.buildFileArticleTree(value.children, level + 1);
+      } else {
+        node.item = value.key;
+        node.props = value;
+      }
+    }
+    return node;
   }
 }

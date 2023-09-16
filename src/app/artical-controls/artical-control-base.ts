@@ -37,36 +37,27 @@ export class ArticalControlBase<T> {
     } = {}
   ) {
     this.value = options.value;
-    this.key = options.key || '';
-    this.label = options.label || '';
-    this.required = !!options.required;
+    this.key = options.key || "";
+    this.label = options.label || "";
+    this.required = options.required || false;
     this.order = options.order === undefined ? 1 : options.order;
     this.row = options.row === undefined ? 1 : options.row;
     this.column = options.column === undefined ? 1 : options.column;
-    this.controlType = options.controlType || '';
-    this.type = options.type || '';
+    this.controlType = options.controlType || "";
+    this.type = options.type || "";
     this.options = options.options || [];
-    this.src = options.src || '';
-    this.css = options.css || '';
-    this.parentKey = options.parentKey || '';
+    this.src = options.src || "";
+    this.css = options.css || "";
+    this.parentKey = options.parentKey || "";
     this.hasChildren = options.hasChildren || false;
     this.children = options.children || [];
-    this.backGroundColor = options.backGroundColor || 'inherit';
+    this.backGroundColor = options.backGroundColor || "inherit";
   }
   static derived = new Set();
-  // static getAllSubclasses(baseClass: any) {
-  //   var globalObject = Function('return this')(); 
-    
-  //   var allVars = Object.keys(globalObject);
-  //   console.log("globalObject", allVars)
-  //   var classes = allVars.filter(function (key) {
-  //   try {
-  //     var obj = globalObject[key];
-  //         return obj.prototype instanceof baseClass;
-  //     } catch (e) {
-  //         return false;
-  //     }
-  //   });
-  //   return classes;
+  // updateValue(field: string, vale: any) {
+  //   switch (this) {
+  //     case this.key:
+  //       break;
+  //   }f
   // }
 }

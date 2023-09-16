@@ -3,7 +3,7 @@ import { QuestionService } from "../question.service";
 import { QuestionBase } from "../controls/question-base";
 import { SelectionModel } from "@angular/cdk/collections";
 import { FlatTreeControl } from "@angular/cdk/tree";
-import { AfterViewInit, Component, EventEmitter, Injectable, Output } from "@angular/core";
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Injectable, Output } from "@angular/core";
 import {
   MatTreeFlatDataSource,
   MatTreeFlattener,
@@ -125,7 +125,7 @@ export class ChecklistDatabase {
   styleUrls: ['./navigation-tree.component.css'],
   providers: [ChecklistDatabase],
 })
-export class NavigationTreeComponent implements AfterViewInit {
+export class NavigationTreeComponent implements AfterViewChecked {
   @Output() messageEvent = new EventEmitter<any>();
   needToLogin: boolean = this.authorizeService.neetToLogin;
   questions$: Observable<QuestionBase<any>[]>;
@@ -165,8 +165,7 @@ export class NavigationTreeComponent implements AfterViewInit {
     service: QuestionService,
     private articleService: ArticalService,
     private authorizeService: AuthorizeService,
-    private route: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private ref: ChangeDetectorRef
   ) {
     this.treeFlattener = new MatTreeFlattener(
       this.transformer,
@@ -195,8 +194,12 @@ export class NavigationTreeComponent implements AfterViewInit {
 
     this.treeControl.expandAll();
   }
-  ngAfterViewInit(): void {
+  ngAfterViewChecked(): void {
     this.treeControl.dataNodes.forEach((d) => this.deleteDefault(d));
+    this.ref.detectChanges();
+  }
+  ngAfterViewInit(): void {
+    //this.treeControl.dataNodes.forEach((d) => this.deleteDefault(d));
   }
 
   deleteDefault = (node: TodoItemFlatNode) => {
@@ -252,7 +255,35 @@ export class NavigationTreeComponent implements AfterViewInit {
     );
     return result && !this.descendantsAllSelected(node);
   }
+  onMouseClick(e: MouseEvent, node: TodoItemFlatNode) {
+    this.selectedNode = {
+      node: node,
+      isSelected: this.checklistSelection.isSelected(node),
+    };
+    this.messageEvent.emit(this.selectedNode);
+    //console.log("this.selectedNode.node.props=>", this.selectedNode.node.props);
+    //e.pageX will give you offset from left screen border
+    //e.pageY will give you offset from top screen border
 
+    //determine popup X and Y position to ensure it is not clipped by screen borders
+    const popupHeight = 400, // hardcode these values
+      popupWidth = 300; // or compute them dynamically
+
+    let popupXPosition, popupYPosition;
+
+    if (e.clientX + popupWidth > window.innerWidth) {
+      popupXPosition = e.pageX - popupWidth;
+    } else {
+      popupXPosition = e.pageX;
+    }
+
+    if (e.clientY + popupHeight > window.innerHeight) {
+      popupYPosition = e.pageY - popupHeight;
+    } else {
+      popupYPosition = e.pageY;
+    }
+    //this.propPosition = `top: ${popupYPosition - 50}px;`;
+  }
   /** Toggle the to-do item selection. Select/deselect all the descendants node */
   todoItemSelectionToggle(node: TodoItemFlatNode): void {
     this.selectedNode = {
@@ -343,6 +374,6 @@ export class NavigationTreeComponent implements AfterViewInit {
     const nestedNode = this.flatNodeMap.get(node);
     //nestedNode?.children.push({item: ""} as TodoItemNode)
     this._database.updateItem(nestedNode!, itemValue);
-    this.treeControl.dataNodes.forEach((d) => this.deleteDefault(d));
+    //this.treeControl.dataNodes.forEach((d) => this.deleteDefault(d));
   }
 }

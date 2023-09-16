@@ -251,7 +251,9 @@ sup {
   vertical-align: baseline;
 }
 sup {
-  top: -0.5em;
+  top: -1.5em;
+    font-weight: 600;
+    color: rgb(6, 70, 155);
 }
 sub {
   bottom: -0.25em;

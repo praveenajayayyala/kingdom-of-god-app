@@ -1,45 +1,43 @@
 <div class="admin-container">
+  <div id="preview-div" style="display: none;" ngDraggable ngResizable> Preview draggable and resizable 
+    <button style="float: right;" mat-icon-button (click)="this.togglePreview()">
+      <mat-icon style="color: gray;">close</mat-icon>
+    </button>
+    <iframe src="/artical" width="100%" height="88%"></iframe>
+  </div>
   <div class="container-main" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%"
     fxLayoutAlign="center">
     <div class="container">
       <div class="article-intro col-md-4">
-        <h2>Navigation</h2>
-        <app-navigation-tree (messageEvent)="displayMessage($event)"></app-navigation-tree>
-      </div>
-      <div class="article-intro col-md-5">
         <div class="login-div">
           <h3><a *ngIf="this.needToLogin"
               href="https://kingdomofgod.auth.ap-south-1.amazoncognito.com/oauth2/authorize?client_id=vclkssn2ftril9vhgbscnc46r&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone&redirect_uri=http://localhost:4200/admin/">Login</a>
           </h3>
         </div>
+        <h2>Navigation</h2>
+        <app-navigation-tree (messageEvent)="displayMessage($event)"></app-navigation-tree>
+      </div>
+      <div class="article-intro col-md-5">
+        <div class="login-div">
+          <h3>
+            <ul>
+              <li><a (click)="this.loadDefault()">Load Default</a></li>
+              <li><a (click)="this.togglePreview()">{{this.togglePreviewText}}</a></li>
+            </ul>
+          </h3>
+        </div>
         <h2>Pages/Articles</h2>
         <h3 [style.color]="this.statusMsgColor">{{this.statusMessage}}</h3>
         <h4>Design page by adding controls</h4>
-        <!-- <mat-tab-group>
-          <mat-tab label="Articles">
-            <table>
-              <tr>
-                <th>Field-Name</th>
-                <th>Values</th>
-              </tr>
-              <tr *ngFor="let fld of pageFields">
-                <td>{{fld.field}}</td>
-                <td>{{fld.type}}</td>
-              </tr>
-            </table>
-          </mat-tab>
-
-          <mat-tab label="Forms">
-            <app-dynamic-form [questions]="questions$ | async"></app-dynamic-form>
-          </mat-tab>
-          <mat-tab label="Third"> Content 3 </mat-tab>
-        </mat-tab-group> -->
-        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+        <h4 class="tree-node-title">Menu: {{this.selectedMenu | nodeItemPipe}}</h4>
+        <mat-tree *ngIf="this.selectedMenu != undefined" [dataSource]="dataSource" [treeControl]="treeControl">
           <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
             <!-- <button mat-icon-button disabled></button> -->
-            <mat-checkbox class="checklist-leaf-node" [checked]="checklistSelection.isSelected(node)"
-              (change)="todoLeafItemSelectionToggle(node)">{{ node.item }}</mat-checkbox>
-
+            <!-- <mat-checkbox class="checklist-leaf-node" [checked]="checklistSelection.isSelected(node)"
+              (change)="todoLeafItemSelectionToggle(node)">{{ node.item }}</mat-checkbox> -->
+            <h5 [id]="node.item + '-' + node.level" class="tree-node" (click)="onMouseClick($event,node)">{{ node.item
+              }}</h5>
+            <sup>[{{node?.props?.controlType}}]</sup>
             <button mat-icon-button (click)="removeItem(node)">
               <mat-icon style="color: gray;">delete</mat-icon>
             </button>
@@ -66,10 +64,12 @@
                 {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
               </mat-icon>
             </button>
-            <mat-checkbox [checked]="descendantsAllSelected(node)" (click)="onMouseClick($event,node)"
+            <!-- <mat-checkbox [checked]="descendantsAllSelected(node)" (click)="onMouseClick($event,node)"
               [indeterminate]="descendantsPartiallySelected(node)" (change)="todoItemSelectionToggle(node)">{{ node.item
-              }}</mat-checkbox>
-            <sup>Testing</sup>
+              }}</mat-checkbox> -->
+            <h5 [id]="node.item + '-' + node.level" class="tree-node" (click)="onMouseClick($event,node)">{{ node.item
+              }}</h5>
+            <sup>[{{node?.props?.controlType}}]</sup>
             <button mat-icon-button (click)="addNewItem(node)">
               <mat-icon>add</mat-icon>
             </button>
@@ -79,17 +79,18 @@
           </mat-tree-node>
         </mat-tree>
 
-        <div>{{this.selectedMenu | json}}</div>
-
         <button (click)="this.classFields" value="Get fields">
           Get fields
         </button>
         <button (click)="this.saveArticleByValidation()">Save article</button>
         <!-- <button (click)="this.getValidate()">Validate</button> -->
       </div>
-      <div class="article-intro col-md-3">
+      <div class="article-intro col-md-3" style="overflow-y: auto;">
         <h2>Properties of Control </h2>
-        <div class="mat-crtl-col" [style]="this.propPosition">
+        <div class="mat-crtl-col" *ngIf="this.selectedNode != undefined" [style]="this.propPosition">
+          <h4 class="tree-node-title">Control: {{this.selectedNode | nodeItemPipe}}</h4>
+          <!-- <form [formGroup]="form" (ngSubmit)="submit()"> -->
+
           <table class="fl-table">
             <!-- <tr>
             <th>Field-Name</th>
@@ -98,16 +99,69 @@
             <tr *ngFor="let fld of classFields">
               <td>{{fld.field}}</td>
               <td [ngSwitch]="fld.type">
-                <input class="sample-xl" *ngSwitchCase="'string'" type="text" />
-                <input class="sample-xl" *ngSwitchCase="'number'" type="number" />
-                <select class="sample-xl" *ngSwitchCase="'boolean'">
-                  <option>true</option>
-                  <option>false</option>
-                </select>
+                <ng-container *ngSwitchCase="'string'">
+                  <!-- string: parentKey -->
+                  <input [id]="this.selectedNode.node.item + '-' + fld.field" class="sample-xl" disabled
+                    *ngIf="fld.field == 'parentKey'" title="{{this.getControlKeyValue(this.selectedNode, fld.field)}}"
+                    value="{{this.getControlKeyValue(this.selectedNode, fld.field)}}" type="text" />
+                     <!-- string: label -->
+                  <textarea [id]="this.selectedNode.node.item + '-' + fld.field" class="sample-xl"
+                  *ngIf="fld.field == 'label'" title="{{this.getControlKeyValue(this.selectedNode, fld.field)}}"
+                  value="{{this.getControlKeyValue(this.selectedNode, fld.field)}}" type="text"></textarea>
+                  <!-- string: !css, !controlType & !parentKey -->
+                  <input [id]="this.selectedNode.node.item + '-' + fld.field" class="sample-xl"
+                    *ngIf="fld.field != 'css' && fld.field != 'controlType' && fld.field != 'label' && fld.field != 'parentKey'"
+                    title="{{this.getControlKeyValue(this.selectedNode, fld.field)}}"
+                    value="{{this.getControlKeyValue(this.selectedNode, fld.field)}}" type="text" />
+                  <!-- string: controlType -->
+                  <select [id]="this.selectedNode.node.item + '-' + fld.field" *ngIf="fld.field == 'controlType'">
+                    <option *ngFor="let crtl of availableControls" [value]="crtl"
+                      [selected]="this.getControlKeyValue(this.selectedNode, fld.field) == crtl"> {{ crtl }}</option>
+                  </select>
+                  <!-- string: css -->
+                  <div class="multiselect" title="{{this.cssSelected}}" *ngIf="fld.field == 'css'">
+                    <div class="selectBox" (click)="this.showCheckboxes()">
+                      <select [id]="this.selectedNode.node.item + '-' + fld.field">
+                        <option value="{{this.cssSelected}}">{{this.cssSelected}}</option>
+                      </select>
+                      <div class="overSelect"></div>
+                    </div>
+                    <div id="checkboxes" [style]="this.chkStyle">
+                      <label *ngFor="let crtl of this.getControlKeyValue(this.selectedNode, fld.field)">
+                        <input type="checkbox" [id]="crtl.id" (change)="this.cssSelectionChange($event, crtl)"
+                          [checked]="crtl.selected" />{{crtl.name}}</label>
+                    </div>
+                  </div>
+
+                </ng-container>
+                <!-- object: children -->
+                <ng-container *ngSwitchCase="'object'">
+                  <input [id]="this.selectedNode.node.item + '-' + fld.field" disabled class="sample-xl"
+                    *ngIf="fld.field == 'children'" title="{{this.getControlKeyValue(this.selectedNode, fld.field)}}"
+                    type="text" value="{{this.getControlKeyValue(this.selectedNode, fld.field)}}" />
+                </ng-container>
+                <!-- number: row, column & order -->
+                <input [id]="this.selectedNode.node.item + '-' + fld.field" class="sample-xl" *ngSwitchCase="'number'"
+                  type="number" [value]="this.getControlKeyValue(this.selectedNode, fld.field)" />
+                <ng-container *ngSwitchCase="'boolean'">
+                  <!-- boolean: hasChildren -->
+                  <select [id]="this.selectedNode.node.item + '-' + fld.field" class="sample-xl"
+                    *ngIf="fld.field == 'hasChildren'" disabled>
+                    <option [selected]="this.getControlKeyValue(this.selectedNode, fld.field)+'' == 'true'" [value]="true">true</option>
+                    <option [selected]="this.getControlKeyValue(this.selectedNode, fld.field)+'' == 'false'" [value]="false">false</option>
+                  </select>
+                   <!-- boolean: !hasChildren -->
+                  <select [id]="this.selectedNode.node.item + '-' + fld.field" class="sample-xl"
+                    *ngIf="fld.field != 'hasChildren'">
+                    <option [selected]="this.getControlKeyValue(this.selectedNode, fld.field)+'' == 'true'" [value]="true">true</option>
+                    <option [selected]="this.getControlKeyValue(this.selectedNode, fld.field)+'' == 'false'" [value]="false">false</option>
+                  </select>
+                </ng-container>
+
               </td>
             </tr>
             <tr>
-              <td><button mat-button>
+              <td><button mat-button (click)="this.saveProps()">
                   Save
                 </button></td>
               <td><button mat-button>
@@ -115,6 +169,7 @@
                 </button></td>
             </tr>
           </table>
+          <!-- </form> -->
         </div>
       </div>
     </div>
