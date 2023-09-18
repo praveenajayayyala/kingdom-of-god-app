@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { ArticalService } from "../artical.service";
+import { Component, OnInit } from "@angular/core";
+import { ArticleService } from "../artical.service";
 import { ArticalControlBase } from "../artical-controls/artical-control-base";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
@@ -17,20 +17,28 @@ export class DataSharingService {
   styleUrls: ["./artical.component.css"],
   providers: [DataSharingService],
 })
-export class ArticalComponent {
+export class ArticalComponent implements OnInit {
   articalControls$: ArticalControlBase<string>[] = [];
   constructor(
-    private service: ArticalService,
+    private service: ArticleService,
     private dataSharingService: DataSharingService
   ) {
     this.service.getArticlesByPostId("1003").then((ctrls) => {
+      console.log("going to call next")
       this.dataSharingService.articalControls.next(ctrls);
     });
   }
-  get articalControls() {
+  ngOnInit(): void {
     this.dataSharingService.articalControls.subscribe((value) => {
+      console.log("going to subscribe next", value)
       this.articalControls$ = value;
     });
-    return this.articalControls$;
   }
+  // get articalControls() {
+  //   this.dataSharingService.articalControls.subscribe((value) => {
+  //     console.log("going to subscribe next", value)
+  //     this.articalControls$ = value;
+  //   });
+  //   return this.articalControls$;
+  // }
 }

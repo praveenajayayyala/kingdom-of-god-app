@@ -8,15 +8,16 @@ import {
   ChangeDetectorRef,
   Component,
   Injectable,
+  OnInit,
 } from "@angular/core";
 import {
   MatTreeFlatDataSource,
   MatTreeFlattener,
 } from "@angular/material/tree";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, take } from "rxjs";
 import { ArticalControlBase } from "../artical-controls/artical-control-base";
 import { Article } from "../modal/article";
-import { ArticalService } from "../artical.service";
+import { ArticleService } from "../artical.service";
 import { AuthorizeService } from "../authorize.service";
 import { ActivatedRoute } from "@angular/router";
 
@@ -191,7 +192,8 @@ export class AdminComponent implements AfterViewChecked {
   chkStyle = "display: none";
   cssSelected = "";
   togglePreviewText = "Open Preview";
-
+  //articalControls: ArticalControlBase<string>[] = [];
+  previewUrl = "";
   // constructor() {
 
   // }
@@ -223,7 +225,7 @@ export class AdminComponent implements AfterViewChecked {
   constructor(
     private _database: ChecklistDatabase,
     service: QuestionService,
-    private articleService: ArticalService,
+    private articleService: ArticleService,
     private authorizeService: AuthorizeService,
     private route: ActivatedRoute,
     private ref: ChangeDetectorRef
@@ -254,6 +256,7 @@ export class AdminComponent implements AfterViewChecked {
 
     console.log("this.totalStyles", this.totalStyles);
   }
+
   convertJSObjToTSMap(jsObj: any) {
     const tsMap = new Map();
     const arrayOfMapEntries = new Map<any, any>(Object.entries(jsObj));
@@ -320,12 +323,44 @@ export class AdminComponent implements AfterViewChecked {
     return flatNode;
   };
 
+  ReloadPreview() {
+    this.updateCache();
+
+    (<HTMLIFrameElement>document.getElementById("iframe-preview")).src =
+      "/preview?postId=1007";
+  }
+
+  savePreviewArticle() {
+    let previewCrtls: ArticalControlBase<string>[] = [];
+    this.treeControl.dataNodes.forEach((crtl) => {
+      if (crtl.level == 0) {
+        previewCrtls.push(crtl.props);
+      }
+    });
+    console.log("Save-preview", previewCrtls);
+    let article: Article = {
+      content: JSON.stringify(previewCrtls),
+      isActive: false,
+      parent: "Article",
+      order: 11,
+      id: "1007",
+      name: "Article-7",
+      //Add Page title
+    };
+    this.saveArticleByValidation(article);
+  }
+
   togglePreview() {
     let previewEle = document.getElementById("preview-div");
     if (previewEle!.style.display == "none") {
+      //console.log("previewCrtls", previewCrtls);
       previewEle!.style.display = "block";
+      this.updateCache();
+      (<HTMLIFrameElement>document.getElementById("iframe-preview")).src =
+        "/preview?postId=1007";
       this.togglePreviewText = "Close Preview";
     } else {
+      //this.articleService.previewArticel = [];
       previewEle!.style.display = "none";
       this.togglePreviewText = "Open Preview";
     }
@@ -351,6 +386,18 @@ export class AdminComponent implements AfterViewChecked {
     return result && !this.descendantsAllSelected(node);
   }
 
+  updateCache() {
+    let previewCrtls: ArticalControlBase<string>[] = [];
+    this.treeControl.dataNodes.forEach((crtl) => {
+      if (crtl.level == 0) {
+        previewCrtls.push(crtl.props);
+      }
+    });
+    localStorage.setItem("selectedpage", "Kingdom-Of-God/Articals/Latest");
+    localStorage.setItem("pageControls", JSON.stringify(previewCrtls));
+  }
+
+  
   /** Toggle the to-do item selection. Select/deselect all the descendants node */
   todoItemSelectionToggle(node: TodoItemFlatNode): void {
     this.selectedNode = {
@@ -409,6 +456,7 @@ export class AdminComponent implements AfterViewChecked {
       return mapObject.get(field);
     }
   }
+
   saveProps() {
     this.updateSelectedNode();
   }
@@ -588,13 +636,19 @@ export class AdminComponent implements AfterViewChecked {
     }
     return null;
   }
+
   removeItem(node: TodoItemFlatNode) {
     const parentNode = this.getParentNode(node);
-    const parentFlat = this.flatNodeMap.get(parentNode!);
-    let propChildren = parentNode?.props?.children;
-    parentNode!.props.children = parentNode!.props.children?.filter(
-      (v) => v.key != node.item
-    );
+    let parentFlat = this.flatNodeMap.get(parentNode!);
+    // let propChildren = parentNode?.props?.children;
+    if (parentNode! != null) {
+      parentNode!.props.children = parentNode!.props.children?.filter(
+        (v) => v.key != node.item
+      );
+    }
+    if (parentFlat == undefined || parentFlat == null) {
+      parentFlat = this.flatNodeMap.get(node);
+    }
     this._database.deleteItem(parentFlat!, node.item!);
   }
   /** Select the category so we can insert the new item. */
@@ -626,7 +680,7 @@ export class AdminComponent implements AfterViewChecked {
     return ArticalControlBase.derived;
   }
 
-  saveArticleByValidation() {
+  saveArticleByValidation(article?: Article) {
     this.route.queryParams.subscribe((params) => {
       let queryStringCode = params["code"];
       if (queryStringCode == undefined || queryStringCode == "") {
@@ -635,17 +689,20 @@ export class AdminComponent implements AfterViewChecked {
       this.authorizeService.getAccessToken(queryStringCode).subscribe(
         (result: any) => {
           //console.log("access_token", result);
-          this.saveArticle(result.access_token).subscribe((result: any) => {
-            if (result.statusCode == 200 || result.statusCode == 201) {
-              this.statusMessage = "Artical saved successfully.";
-              this.statusMsgColor = "green";
-            } else {
-              console.log("Somthing went wrong!", result);
-              this.statusMessage =
-                "Somthing went wrong! status-code:" + result.status;
-              this.statusMsgColor = "red";
+          this.saveArticle(result.access_token, article).subscribe(
+            (result: any) => {
+              if (result.statusCode == 200 || result.statusCode == 201) {
+                this.statusMessage = "Artical saved successfully.";
+                this.statusMsgColor = "green";
+                this.previewUrl = "/preview";
+              } else {
+                console.log("Somthing went wrong!", result);
+                this.statusMessage =
+                  "Somthing went wrong! status-code:" + result.status;
+                this.statusMsgColor = "red";
+              }
             }
-          });
+          );
         },
         (err) => {
           console.log("Article save error", err);
@@ -656,8 +713,8 @@ export class AdminComponent implements AfterViewChecked {
       );
     });
   }
-  saveArticle(token: string) {
-    let article: Article = {
+  saveArticle(token: string, article?: Article) {
+    let art: Article = article ?? {
       content: "Working fine",
       isActive: true,
       parent: "Article",
@@ -665,11 +722,13 @@ export class AdminComponent implements AfterViewChecked {
       id: "1007",
       name: "Article-7",
     };
-    return this.articleService.addArticle(article, token);
+    return this.articleService.addArticle(art, token);
   }
 
   displayMessage(msg: any) {
     this.selectedMenu = msg;
+    localStorage.removeItem('selectedpage')
+    localStorage.removeItem('pageControls')
   }
 
   loadDefault() {

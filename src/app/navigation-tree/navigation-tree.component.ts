@@ -11,7 +11,7 @@ import {
 import { BehaviorSubject } from "rxjs";
 import { ArticalControlBase } from "../artical-controls/artical-control-base";
 import { Article } from "../modal/article";
-import { ArticalService } from "../artical.service";
+import { ArticleService } from "../artical.service";
 import { AuthorizeService } from "../authorize.service";
 import { ActivatedRoute } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -163,7 +163,7 @@ export class NavigationTreeComponent implements AfterViewChecked {
   constructor(
     private _database: ChecklistDatabase,
     service: QuestionService,
-    private articleService: ArticalService,
+    private articleService: ArticleService,
     private authorizeService: AuthorizeService,
     private ref: ChangeDetectorRef
   ) {

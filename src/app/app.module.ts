@@ -18,6 +18,10 @@ import { LogoutComponent } from "./logout/logout.component";
 import { NavigationTreeComponent } from "./navigation-tree/navigation-tree.component";
 import { NodeItemPipe } from "./modal/nodePipe";
 import { AngularDraggableModule } from "angular2-draggable";
+import { PreviewComponent } from './preview/preview.component';
+import { ArticleService } from "./artical.service";
+import { AuthorizeService } from "./authorize.service";
+import { QuestionService } from "./question.service";
 
 const appRoutes: Routes = [
   { path: "admin", component: AdminComponent },
@@ -31,7 +35,8 @@ const appRoutes: Routes = [
   // { path: '**', component: PageNotFoundComponent },
   { path: "", component: HomeComponent },
   { path: "home", component: HomeComponent },
-  { path: "artical", component: ArticalComponent },
+  { path: "article", component: ArticalComponent },
+  { path: "preview", component: PreviewComponent },
   { path: "logout", component: LogoutComponent },
 ];
 @NgModule({
@@ -61,7 +66,9 @@ const appRoutes: Routes = [
     LogoutComponent,
     NavigationTreeComponent,
     NodeItemPipe,
+    PreviewComponent,
   ],
+  providers:[QuestionService, ArticleService, AuthorizeService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

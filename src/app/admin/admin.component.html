@@ -1,34 +1,36 @@
 <div class="admin-container">
-  <div id="preview-div" style="display: none;" ngDraggable ngResizable> Preview draggable and resizable 
+  <div id="preview-div" style="display: none;" ngDraggable ngResizable> Preview draggable and resizable
     <button style="float: right;" mat-icon-button (click)="this.togglePreview()">
       <mat-icon style="color: gray;">close</mat-icon>
     </button>
-    <iframe src="/artical" width="100%" height="88%"></iframe>
+    <!-- <app-artical-form [articalControls]="articalControls"></app-artical-form> -->
+    <iframe id="iframe-preview" src="/preview" width="100%" height="88%"></iframe>
   </div>
   <div class="container-main" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%"
     fxLayoutAlign="center">
     <div class="container">
       <div class="article-intro col-md-4">
-        <div class="login-div">
-          <h3><a *ngIf="this.needToLogin"
-              href="https://kingdomofgod.auth.ap-south-1.amazoncognito.com/oauth2/authorize?client_id=vclkssn2ftril9vhgbscnc46r&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone&redirect_uri=http://localhost:4200/admin/">Login</a>
-          </h3>
-        </div>
         <h2>Navigation</h2>
         <app-navigation-tree (messageEvent)="displayMessage($event)"></app-navigation-tree>
       </div>
       <div class="article-intro col-md-5">
-        <div class="login-div">
-          <h3>
-            <ul>
-              <li><a (click)="this.loadDefault()">Load Default</a></li>
-              <li><a (click)="this.togglePreview()">{{this.togglePreviewText}}</a></li>
-            </ul>
-          </h3>
-        </div>
         <h2>Pages/Articles</h2>
         <h3 [style.color]="this.statusMsgColor">{{this.statusMessage}}</h3>
-        <h4>Design page by adding controls</h4>
+        <ul class="steps steps-2">
+          <li><a title=""><em>Step 1: Workbench</em></a>
+              <div><a (click)="this.loadDefault()">1. Load default & design</a></div>
+              <div><a (click)="this.togglePreview()">2. {{this.togglePreviewText}}</a></div>
+              <div><a (click)="this.ReloadPreview()">3. Reload preview data</a></div>
+            </li>
+          <li class="current"><a title=""><em>Step 2: Save page</em></a>
+              <div><a *ngIf="this.needToLogin"
+                  href="https://kingdomofgod.auth.ap-south-1.amazoncognito.com/oauth2/authorize?client_id=vclkssn2ftril9vhgbscnc46r&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone&redirect_uri=http://localhost:4200/admin/">1. Login</a>
+              </div>
+              <div><a (click)="this.savePreviewArticle()">2. Save article</a></div>
+            </li>
+        </ul>
+       
+        <h5 style="font-weight: 500;">Design page by following steps</h5>
         <h4 class="tree-node-title">Menu: {{this.selectedMenu | nodeItemPipe}}</h4>
         <mat-tree *ngIf="this.selectedMenu != undefined" [dataSource]="dataSource" [treeControl]="treeControl">
           <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
@@ -104,10 +106,10 @@
                   <input [id]="this.selectedNode.node.item + '-' + fld.field" class="sample-xl" disabled
                     *ngIf="fld.field == 'parentKey'" title="{{this.getControlKeyValue(this.selectedNode, fld.field)}}"
                     value="{{this.getControlKeyValue(this.selectedNode, fld.field)}}" type="text" />
-                     <!-- string: label -->
+                  <!-- string: label -->
                   <textarea [id]="this.selectedNode.node.item + '-' + fld.field" class="sample-xl"
-                  *ngIf="fld.field == 'label'" title="{{this.getControlKeyValue(this.selectedNode, fld.field)}}"
-                  value="{{this.getControlKeyValue(this.selectedNode, fld.field)}}" type="text"></textarea>
+                    *ngIf="fld.field == 'label'" title="{{this.getControlKeyValue(this.selectedNode, fld.field)}}"
+                    value="{{this.getControlKeyValue(this.selectedNode, fld.field)}}" type="text"></textarea>
                   <!-- string: !css, !controlType & !parentKey -->
                   <input [id]="this.selectedNode.node.item + '-' + fld.field" class="sample-xl"
                     *ngIf="fld.field != 'css' && fld.field != 'controlType' && fld.field != 'label' && fld.field != 'parentKey'"
@@ -147,14 +149,18 @@
                   <!-- boolean: hasChildren -->
                   <select [id]="this.selectedNode.node.item + '-' + fld.field" class="sample-xl"
                     *ngIf="fld.field == 'hasChildren'" disabled>
-                    <option [selected]="this.getControlKeyValue(this.selectedNode, fld.field)+'' == 'true'" [value]="true">true</option>
-                    <option [selected]="this.getControlKeyValue(this.selectedNode, fld.field)+'' == 'false'" [value]="false">false</option>
+                    <option [selected]="this.getControlKeyValue(this.selectedNode, fld.field)+'' == 'true'"
+                      [value]="true">true</option>
+                    <option [selected]="this.getControlKeyValue(this.selectedNode, fld.field)+'' == 'false'"
+                      [value]="false">false</option>
                   </select>
-                   <!-- boolean: !hasChildren -->
+                  <!-- boolean: !hasChildren -->
                   <select [id]="this.selectedNode.node.item + '-' + fld.field" class="sample-xl"
                     *ngIf="fld.field != 'hasChildren'">
-                    <option [selected]="this.getControlKeyValue(this.selectedNode, fld.field)+'' == 'true'" [value]="true">true</option>
-                    <option [selected]="this.getControlKeyValue(this.selectedNode, fld.field)+'' == 'false'" [value]="false">false</option>
+                    <option [selected]="this.getControlKeyValue(this.selectedNode, fld.field)+'' == 'true'"
+                      [value]="true">true</option>
+                    <option [selected]="this.getControlKeyValue(this.selectedNode, fld.field)+'' == 'false'"
+                      [value]="false">false</option>
                   </select>
                 </ng-container>
 

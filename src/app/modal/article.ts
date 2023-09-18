@@ -1,6 +1,6 @@
 export class Article {
     content?: string;
-    isActive?: true;
+    isActive?: boolean;
     parent?: string;
     order?: number;
     id?: string;

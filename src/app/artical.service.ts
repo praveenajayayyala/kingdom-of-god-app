@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { catchError, of, retry } from "rxjs";
+import { BehaviorSubject, catchError, of, retry } from "rxjs";
 import { ArticalControlBase } from "./artical-controls/artical-control-base";
 import { DropdownControl } from "./artical-controls/control-dropdown";
 import { TextboxControl } from "./artical-controls/control-textbox";
@@ -16,14 +16,22 @@ import { HttpClient } from "@angular/common/http";
 import { Article } from "./modal/article";
 import { SpanControl } from "./artical-controls/control-span";
 
-@Injectable()
-export class ArticalService {
+@Injectable({
+  providedIn: 'root',
+})
+export class ArticleService {
   constructor(private http: HttpClient) {}
   baseUrl = "https://so926lyyic.execute-api.ap-south-1.amazonaws.com/prod";
   controls: ArticalControlBase<string>[] = [];
   ControlsByPostId: ArticalControlBase<string>[] = [];
   controlsByParentKey = new Map<string, ArticalControlBase<string>[]>();
-
+  previewContent: ArticalControlBase<string>[] = [];
+  // articalControls: BehaviorSubject<
+  //   any[]
+  // > = new BehaviorSubject<any[]>([
+  //   new ArticalControlBase<string>({ key: "testing" }),
+  // ]);
+  // bookingListener$ = this.articalControls.asObservable();
   public getArticleById(id: string, options?: any) {
     return this.http
       .get(this.baseUrl + "/getarticles?postId=" + id, options)
@@ -41,7 +49,10 @@ export class ArticalService {
       }
     );
   }
-
+  // public updatePreviewData(previewCrtls: ArticalControlBase<string>[]) {
+  //   //this.articalControls.next(previewCrtls);
+  //   this.previewDataServvice.articalControls.next(previewCrtls);
+  // }
   public addArticle(article: Article, token: string) {
     return this.http.post(
       this.baseUrl + "/addarticle",
@@ -63,7 +74,7 @@ export class ArticalService {
         },
       }).subscribe((response: any) => {
         let body: any = JSON.parse(response.body);
-        let controlsByPostId :ArticalControlBase<string>[]=[]; 
+        let controlsByPostId: ArticalControlBase<string>[] = [];
 
         body.forEach((v: any) => {
           if (v.content != undefined) {
@@ -74,15 +85,13 @@ export class ArticalService {
           }
         });
 
-        this.mapControlsBasedOnParentKey(controlsByPostId).subscribe(
-          (v) => {
-            resolve(v);
-          }
-        );
+        this.mapControlsBasedOnParentKey(controlsByPostId).subscribe((v) => {
+          resolve(v);
+        });
       });
     });
   }
-  
+
   getTansilateJSONToControl(control: ArticalControlBase<string>) {
     let result: any = null;
     switch (control.controlType) {
