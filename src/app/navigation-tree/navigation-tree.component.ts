@@ -3,7 +3,15 @@ import { QuestionService } from "../question.service";
 import { QuestionBase } from "../controls/question-base";
 import { SelectionModel } from "@angular/cdk/collections";
 import { FlatTreeControl } from "@angular/cdk/tree";
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Injectable, Output } from "@angular/core";
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Injectable,
+  Output,
+} from "@angular/core";
 import {
   MatTreeFlatDataSource,
   MatTreeFlattener,
@@ -21,6 +29,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 export class TodoItemNode {
   children!: TodoItemNode[];
   item!: string;
+  props!: Article;
+  order!: number;
 }
 
 /** Flat to-do item node with expandable and level information */
@@ -28,6 +38,8 @@ export class TodoItemFlatNode {
   item!: string;
   level!: number;
   expandable!: boolean;
+  props!: Article;
+  order!: number;
 }
 
 /**
@@ -35,14 +47,14 @@ export class TodoItemFlatNode {
  */
 const TREE_DATA = {
   "Kingdom-Of-God": {
-    Home: ["XXX"],
-    About: ["XXX"],
-    "Contact-us": ["XXX"],
-    Articals: {
-      Latest: ["XXX"],
-      Songs: { Telugu: ["XXX"], Hindi: ["XXX"] },
-      "Video-Massages": ["XXX"],
-    },
+    // Home: ["XXX"],
+    // About: ["XXX"],
+    // "Contact-us": ["XXX"],
+    // Articals: {
+    //   Latest: ["XXX"],
+    //   Songs: { Telugu: ["XXX"], Hindi: ["XXX"] },
+    //   "Video-Massages": ["XXX"],
+    // },
   },
   // Reminders: [
   //   'Cook dinner',
@@ -99,6 +111,42 @@ export class ChecklistDatabase {
     }, []);
   }
 
+  buildFileArticleTree(
+    article: Article,
+    level: number,
+    listArticle: Map<string, Article[]>
+  ): TodoItemNode {
+    const value = article;
+    const node = new TodoItemNode();
+    node.item = value.name!;
+    node.props = value;
+    node.order = value.order!;
+
+    if (value != null) {
+      //if (typeof value === "object") {
+      if (
+        listArticle.get(value.name!) &&
+        listArticle.get(value.name!) != undefined &&
+        listArticle.get(value.name!)?.length! > 0
+      ) {
+        listArticle.get(value.name!)?.forEach((child) => {
+          if (node.children == undefined) {
+            node.children = [];
+          }
+          node.children.push(
+            this.buildFileArticleTree(child, level + 1, listArticle)
+          );
+        });
+
+        //node.children = this.buildFileArticleTree(value.children, level + 1);
+      } else {
+        node.item = value.name!;
+        node.props = value;
+        node.order = value.order!;
+      }
+    }
+    return node;
+  }
   /** Add an item to to-do list */
   insertItem(parent: TodoItemNode, name: string) {
     if (parent.children) {
@@ -120,9 +168,9 @@ export class ChecklistDatabase {
   }
 }
 @Component({
-  selector: 'app-navigation-tree',
-  templateUrl: './navigation-tree.component.html',
-  styleUrls: ['./navigation-tree.component.css'],
+  selector: "app-navigation-tree",
+  templateUrl: "./navigation-tree.component.html",
+  styleUrls: ["./navigation-tree.component.css"],
   providers: [ChecklistDatabase],
 })
 export class NavigationTreeComponent implements AfterViewChecked {
@@ -130,7 +178,7 @@ export class NavigationTreeComponent implements AfterViewChecked {
   needToLogin: boolean = this.authorizeService.neetToLogin;
   questions$: Observable<QuestionBase<any>[]>;
   statusMessage: string = "";
-  statusMsgColor: string = "black";
+  statusMsgColor: string = "red";
   selectedNode!: { node: TodoItemFlatNode; isSelected: boolean };
   // constructor() {
 
@@ -163,6 +211,7 @@ export class NavigationTreeComponent implements AfterViewChecked {
   constructor(
     private _database: ChecklistDatabase,
     service: QuestionService,
+    private route: ActivatedRoute,
     private articleService: ArticleService,
     private authorizeService: AuthorizeService,
     private ref: ChangeDetectorRef
@@ -181,14 +230,20 @@ export class NavigationTreeComponent implements AfterViewChecked {
     //   this.getLevel,
     //   this.isExpandable
     // );
-    
+    this.loadMenu();
     this.dataSource = new MatTreeFlatDataSource(
       this.treeControl,
       this.treeFlattener
     );
-    
+
     _database.dataChange.subscribe((data) => {
       this.dataSource.data = data;
+      if (localStorage.getItem("selectedpage") != null) {
+        let selectedNode: TodoItemFlatNode = JSON.parse(
+          localStorage.getItem("selectedpage") + ""
+        );
+        this.selectManu(new MouseEvent(selectedNode.item), selectedNode);
+      }
     });
     this.questions$ = service.getQuestions();
 
@@ -230,6 +285,8 @@ export class NavigationTreeComponent implements AfterViewChecked {
         : new TodoItemFlatNode();
     flatNode.item = node.item;
     flatNode.level = level;
+    flatNode.props = node.props;
+    flatNode.order = node.order;
     flatNode.expandable = !!node.children?.length;
     this.flatNodeMap.set(flatNode, node);
     this.nestedNodeMap.set(node, flatNode);
@@ -255,34 +312,45 @@ export class NavigationTreeComponent implements AfterViewChecked {
     );
     return result && !this.descendantsAllSelected(node);
   }
-  onMouseClick(e: MouseEvent, node: TodoItemFlatNode) {
+  saveArticle() {
+    this.selectedNode.node.props = new Article({
+      name: (<HTMLInputElement>document.getElementById("article-name"))?.value,
+      id: (<HTMLInputElement>document.getElementById("article-id"))?.value,
+      isActive:
+        (<HTMLInputElement>document.getElementById("article-isActive"))
+          ?.value == "true",
+      pageTitle: (<HTMLInputElement>(
+        document.getElementById("article-pageTitle")
+      ))?.value,
+      order: Number.parseInt(
+        (<HTMLInputElement>document.getElementById("article-order"))?.value
+      ),
+      parent: (<HTMLInputElement>document.getElementById("article-parent"))
+        ?.value,
+    });
+    this.selectedNode.node.item = (<HTMLInputElement>(
+      document.getElementById("article-name")
+    ))?.value;
+  }
+  selectManu(e: MouseEvent, node: TodoItemFlatNode) {
     this.selectedNode = {
       node: node,
       isSelected: this.checklistSelection.isSelected(node),
     };
+
+    let parent = document.querySelectorAll(".slected-menu-cls");
+    parent.forEach((ele) => {
+      document.getElementById(ele.id)?.classList.remove("slected-menu-cls");
+    });
+
+    if (e.target != undefined) {
+      (<HTMLInputElement>e.target).classList.add("slected-menu-cls");
+    } else {
+      if (document.getElementById(node.item)) {
+        document.getElementById(node.item)?.classList.add("slected-menu-cls");
+      }
+    }
     this.messageEvent.emit(this.selectedNode);
-    //console.log("this.selectedNode.node.props=>", this.selectedNode.node.props);
-    //e.pageX will give you offset from left screen border
-    //e.pageY will give you offset from top screen border
-
-    //determine popup X and Y position to ensure it is not clipped by screen borders
-    const popupHeight = 400, // hardcode these values
-      popupWidth = 300; // or compute them dynamically
-
-    let popupXPosition, popupYPosition;
-
-    if (e.clientX + popupWidth > window.innerWidth) {
-      popupXPosition = e.pageX - popupWidth;
-    } else {
-      popupXPosition = e.pageX;
-    }
-
-    if (e.clientY + popupHeight > window.innerHeight) {
-      popupYPosition = e.pageY - popupHeight;
-    } else {
-      popupYPosition = e.pageY;
-    }
-    //this.propPosition = `top: ${popupYPosition - 50}px;`;
   }
   /** Toggle the to-do item selection. Select/deselect all the descendants node */
   todoItemSelectionToggle(node: TodoItemFlatNode): void {
@@ -375,5 +443,35 @@ export class NavigationTreeComponent implements AfterViewChecked {
     //nestedNode?.children.push({item: ""} as TodoItemNode)
     this._database.updateItem(nestedNode!, itemValue);
     //this.treeControl.dataNodes.forEach((d) => this.deleteDefault(d));
+  }
+
+  loadMenu() {
+    this.route.queryParams.subscribe((params) => {
+      let queryStringCode = params["code"];
+      if (queryStringCode == undefined || queryStringCode == "" || queryStringCode.length < 24) {
+        this.statusMessage = "Please login to proceed!"
+        return;
+      }
+      this.articleService.getArticlesByPostId("*").then((pages) => {
+        const groupedMap = pages.reduce(
+          (entryMap, e) =>
+            entryMap.set(e.parent, [...(entryMap.get(e.parent) || []), e]),
+          new Map()
+        );
+        //groupedMap.forEach((v, k) => console.log("groupedMap", k, v));
+        let nodes: TodoItemNode[] = [];
+        groupedMap.get("").forEach((article: Article) => {
+          nodes.push(
+            this._database.buildFileArticleTree(article, 0, groupedMap)
+          );
+        });
+        nodes = nodes.sort(function (a, b) {
+          return a.order - b.order;
+        });
+        //console.log("pages=>", pages, nodes);
+        this._database.dataChange.next(nodes);
+        this.treeControl.expandAll();
+      });
+    });
   }
 }

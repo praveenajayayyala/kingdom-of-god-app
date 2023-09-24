@@ -17,36 +17,17 @@
     </div>
     <!-- Navbar links -->
     <div [class]="menucss" id="navbar">
-      <ul>
-        <li>
-          <a routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page">Home</a>
-        </li>
-        <li><a href="#">About</a></li>
-        <li>
-          <a routerLink="/admin" routerLinkActive="active" ariaCurrentWhenActive="page">Admin</a>
-        </li>
-        <li class="dropdown">
-          <a routerLink="/article" routerLinkActive="active" ariaCurrentWhenActive="page" class="dropbtn">Article</a>
-          <div class="dropdown-content">
-            <a href="/article">Artical 1</a>
-            <a href="#">Link 2</a>
-            <a href="#">Link 3</a>
-          </div>
-        </li>
-        <li><a href="#">About</a></li>
-        <li>
-          <a href="https://kingdomofgod.auth.ap-south-1.amazoncognito.com/logout?client_id=vclkssn2ftril9vhgbscnc46r&logout_uri=http://localhost:4200/logout"
-            routerLinkActive="active" ariaCurrentWhenActive="page">Logout</a>
-        </li>
+      <ul #inserttarget>
+       
       </ul>
 
       <!-- Search -->
-      <div class="navbar-form navbar-right" role="search">
+      <!-- <div class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" />
         </div>
         <button type="submit" class="btn btn-default">Search</button>
-      </div>
+      </div> -->
     </div>
     <!-- /.navbar-collapse -->
   </div>

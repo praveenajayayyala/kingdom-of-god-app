@@ -3,6 +3,8 @@ import { ArticalControlBase } from "../artical-controls/artical-control-base";
 import { ArticleService } from "../artical.service";
 import { BehaviorSubject, take } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
+import { TodoItemFlatNode } from "../admin/admin.component";
+import { Article } from "../modal/article";
 
 @Injectable()
 export class PreviewDataSharingService {
@@ -39,7 +41,14 @@ export class PreviewComponent implements OnInit {
     //       this.previewDataService.articalControls.next(ctrls);
     //     });
     // });
-    let articleControls: ArticalControlBase<string>[] = JSON.parse(localStorage.getItem('pageControls')+'')
+    if (localStorage.getItem("selectedpage") == null) {
+      this.statusMessage = { message: "Complete page design!", color: "red" };
+      return;
+    }
+    let articleControls: ArticalControlBase<string>[] = ((JSON.parse(
+      localStorage.getItem("selectedpage") + ""
+    ) as TodoItemFlatNode).props as Article).controls!;
+    console.log("localStorage.getItem('pageControls')", articleControls);
     this.previewDataService.articalControls.next(articleControls);
   }
 

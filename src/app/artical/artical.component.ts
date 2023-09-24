@@ -3,6 +3,9 @@ import { ArticleService } from "../artical.service";
 import { ArticalControlBase } from "../artical-controls/artical-control-base";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
+import { Article } from "../modal/article";
+import { ActivatedRoute } from "@angular/router";
+import { Title } from "@angular/platform-browser";
 
 @Injectable()
 export class DataSharingService {
@@ -21,16 +24,29 @@ export class ArticalComponent implements OnInit {
   articalControls$: ArticalControlBase<string>[] = [];
   constructor(
     private service: ArticleService,
-    private dataSharingService: DataSharingService
+    private dataSharingService: DataSharingService,
+    private route: ActivatedRoute,
+    private titleService:Title
   ) {
-    this.service.getArticlesByPostId("1003").then((ctrls) => {
-      console.log("going to call next")
-      this.dataSharingService.articalControls.next(ctrls);
+
+    this.route.queryParams.subscribe((params) => {
+      let queryStringCode = params["postId"];
+      if (queryStringCode == undefined || queryStringCode == "") {
+        return;
+      }
+      this.service.getArticlesByPostId(queryStringCode).then((ctrls: Article[]) => {
+        console.log("going to call next", ctrls);
+        if (ctrls != undefined && ctrls != null && ctrls.length > 0) {
+          let pageTitle = ctrls.at(0)?.pageTitle! ?? "Kingdom Of God"
+          this.titleService.setTitle(pageTitle);
+          this.dataSharingService.articalControls.next(ctrls.at(0)?.controls!);
+        }
+      });
     });
   }
   ngOnInit(): void {
     this.dataSharingService.articalControls.subscribe((value) => {
-      console.log("going to subscribe next", value)
+      console.log("going to subscribe next", value);
       this.articalControls$ = value;
     });
   }

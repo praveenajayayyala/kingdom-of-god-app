@@ -82,8 +82,9 @@ nav a:hover {
 }
 nav a.active {
   background-color: black;
-  color: white;
+  color: white !important;
   text-decoration: none;
+  width: 100%;
 }
 
 nav ul {
@@ -112,6 +113,7 @@ nav li a:hover,
   background-color: red;
   text-decoration: underline;
   color: white;
+  width: 100%;
 }
 
 nav li.dropdown {
@@ -125,6 +127,7 @@ nav .dropdown-content {
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   background-color: #333;
+  border-radius: 6px;
 }
 
 nav .dropdown-content a {

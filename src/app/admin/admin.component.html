@@ -9,35 +9,38 @@
   <div class="container-main" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%"
     fxLayoutAlign="center">
     <div class="container">
-      <div class="article-intro col-md-4">
+      <div class="article-intro col-md-4" style="padding-right: 0px">
         <h2>Navigation</h2>
         <app-navigation-tree (messageEvent)="displayMessage($event)"></app-navigation-tree>
       </div>
       <div class="article-intro col-md-5">
         <h2>Pages/Articles</h2>
-        <h3 [style.color]="this.statusMsgColor">{{this.statusMessage}}</h3>
+        <h3 [style.color]="this.statusMessage.color">{{this.statusMessage.message}}</h3>
         <ul class="steps steps-2">
           <li><a title=""><em>Step 1: Workbench</em></a>
-              <div><a (click)="this.loadDefault()">1. Load default & design</a></div>
-              <div><a (click)="this.togglePreview()">2. {{this.togglePreviewText}}</a></div>
-              <div><a (click)="this.ReloadPreview()">3. Reload preview data</a></div>
-            </li>
+            <div><a (click)="this.loadDefault()">1. Load default & design</a></div>
+            <div><a (click)="this.togglePreview()">2. {{this.togglePreviewText}}</a></div>
+            <div><a (click)="this.ReloadPreview()">3. Reload preview data</a></div>
+          </li>
           <li class="current"><a title=""><em>Step 2: Save page</em></a>
-              <div><a *ngIf="this.needToLogin"
-                  href="https://kingdomofgod.auth.ap-south-1.amazoncognito.com/oauth2/authorize?client_id=vclkssn2ftril9vhgbscnc46r&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone&redirect_uri=http://localhost:4200/admin/">1. Login</a>
-              </div>
-              <div><a (click)="this.savePreviewArticle()">2. Save article</a></div>
-            </li>
+            <div><a *ngIf="this.needToLogin"
+                href="https://kingdomofgod.auth.ap-south-1.amazoncognito.com/oauth2/authorize?client_id=vclkssn2ftril9vhgbscnc46r&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone&redirect_uri=http://localhost:4200/admin/">1.
+                Login</a>
+            </div>
+            <div><a (click)="this.savePreviewArticle()">2. Save page/article</a></div>
+            <div><a href="https://kingdomofgod.auth.ap-south-1.amazoncognito.com/logout?client_id=vclkssn2ftril9vhgbscnc46r&logout_uri=http://localhost:4200/logout"
+            routerLinkActive="active" ariaCurrentWhenActive="page">3. Logout</a></div>
+          </li>
         </ul>
-       
-        <h5 style="font-weight: 500;">Design page by following steps</h5>
+
+        <h5 style="font-weight: 500;"><span style="color: red; font-size: 16px;">*</span>Design page by following steps</h5>
         <h4 class="tree-node-title">Menu: {{this.selectedMenu | nodeItemPipe}}</h4>
         <mat-tree *ngIf="this.selectedMenu != undefined" [dataSource]="dataSource" [treeControl]="treeControl">
           <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
             <!-- <button mat-icon-button disabled></button> -->
             <!-- <mat-checkbox class="checklist-leaf-node" [checked]="checklistSelection.isSelected(node)"
               (change)="todoLeafItemSelectionToggle(node)">{{ node.item }}</mat-checkbox> -->
-            <h5 [id]="node.item + '-' + node.level" class="tree-node" (click)="onMouseClick($event,node)">{{ node.item
+            <h5 [id]="node.item + '-' + node.level" class="tree-node" (click)="selectControl($event,node)">{{ node.item
               }}</h5>
             <sup>[{{node?.props?.controlType}}]</sup>
             <button mat-icon-button (click)="removeItem(node)">
@@ -69,7 +72,7 @@
             <!-- <mat-checkbox [checked]="descendantsAllSelected(node)" (click)="onMouseClick($event,node)"
               [indeterminate]="descendantsPartiallySelected(node)" (change)="todoItemSelectionToggle(node)">{{ node.item
               }}</mat-checkbox> -->
-            <h5 [id]="node.item + '-' + node.level" class="tree-node" (click)="onMouseClick($event,node)">{{ node.item
+            <h5 [id]="node.item + '-' + node.level" class="tree-node" (click)="selectControl($event,node)">{{ node.item
               }}</h5>
             <sup>[{{node?.props?.controlType}}]</sup>
             <button mat-icon-button (click)="addNewItem(node)">
@@ -81,23 +84,23 @@
           </mat-tree-node>
         </mat-tree>
 
-        <button (click)="this.classFields" value="Get fields">
+        <!-- <button (click)="this.classFields" value="Get fields">
           Get fields
         </button>
         <button (click)="this.saveArticleByValidation()">Save article</button>
-        <!-- <button (click)="this.getValidate()">Validate</button> -->
-      </div>
+        <button (click)="this.getValidate()">Validate</button> -->
+      </div> 
       <div class="article-intro col-md-3" style="overflow-y: auto;">
         <h2>Properties of Control </h2>
         <div class="mat-crtl-col" *ngIf="this.selectedNode != undefined" [style]="this.propPosition">
           <h4 class="tree-node-title">Control: {{this.selectedNode | nodeItemPipe}}</h4>
           <!-- <form [formGroup]="form" (ngSubmit)="submit()"> -->
 
-          <table class="fl-table">
-            <!-- <tr>
-            <th>Field-Name</th>
-            <th>Values</th>
-          </tr> -->
+          <table class="fl-table" *ngIf="this.selectedNode != undefined">
+            <tr>
+            <th colspan="2">Control details</th>
+            
+          </tr>
             <tr *ngFor="let fld of classFields">
               <td>{{fld.field}}</td>
               <td [ngSwitch]="fld.type">

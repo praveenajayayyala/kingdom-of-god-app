@@ -6,7 +6,9 @@ import { ArticalControlBase } from "./artical-controls/artical-control-base";
 export class ArticalControlService {
   group: any = {};
   toFormGroup(articalControls: ArticalControlBase<string>[]) {
-    articalControls.forEach((crtl) => this.recurse(crtl));
+    if (articalControls != null) {
+      articalControls.forEach((crtl) => this.recurse(crtl));
+    }
     return new FormGroup(this.group);
   }
 

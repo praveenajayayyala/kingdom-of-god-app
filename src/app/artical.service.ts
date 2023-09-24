@@ -17,7 +17,7 @@ import { Article } from "./modal/article";
 import { SpanControl } from "./artical-controls/control-span";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ArticleService {
   constructor(private http: HttpClient) {}
@@ -67,27 +67,34 @@ export class ArticleService {
   }
 
   async getArticlesByPostId(postId: string) {
-    return await new Promise<ArticalControlBase<string>[]>((resolve) => {
+    return await new Promise<Article[]>((resolve) => {
       this.getArticleById(postId, {
         headers: {
           "Content-Type": "application/json",
         },
       }).subscribe((response: any) => {
         let body: any = JSON.parse(response.body);
-        let controlsByPostId: ArticalControlBase<string>[] = [];
+        //console.log("PostId:", postId, body);
+        let articles: Article[] = [];
 
-        body.forEach((v: any) => {
-          if (v.content != undefined) {
+        body.forEach((v: Article) => {
+          let controlsByPostId: ArticalControlBase<string>[] = [];
+          if (v.content != undefined && v.content != "") {
             //console.log("id:", v.id, JSON.parse(v.content));
-            JSON.parse(v.content).forEach((c: ArticalControlBase<string>) => {
-              controlsByPostId.push(this.getTansilateJSONToControl(c));
-            });
+            if (JSON.parse(v.content) != null) {
+              JSON.parse(v.content).forEach((c: ArticalControlBase<string>) => {
+                controlsByPostId.push(this.getTansilateJSONToControl(c));
+              });
+            }
           }
+          this.mapControlsBasedOnParentKey(controlsByPostId).subscribe(
+            (crtls) => {
+              v.controls = crtls;
+            }
+          );
+          articles.push(v);
         });
-
-        this.mapControlsBasedOnParentKey(controlsByPostId).subscribe((v) => {
-          resolve(v);
-        });
+        resolve(articles);
       });
     });
   }

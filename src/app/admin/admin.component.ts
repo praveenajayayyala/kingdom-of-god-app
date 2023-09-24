@@ -181,10 +181,9 @@ export class ChecklistDatabase {
 export class AdminComponent implements AfterViewChecked {
   needToLogin: boolean = this.authorizeService.neetToLogin;
   questions$: Observable<QuestionBase<any>[]>;
-  statusMessage: string = "";
-  statusMsgColor: string = "black";
-  selectedNode!: { node: TodoItemFlatNode; isSelected: boolean };
-  selectedMenu!: { node: TodoItemFlatNode; isSelected: boolean };
+  statusMessage = { message: "", color: "" };
+  selectedNode?: { node: TodoItemFlatNode; isSelected: boolean };
+  selectedMenu?: { node: TodoItemFlatNode; isSelected: boolean };
   selectedNodeItem: string = "";
   propPosition: string = "top: 45px;";
   totalStyles = new Map<string, string[]>();
@@ -327,7 +326,7 @@ export class AdminComponent implements AfterViewChecked {
     this.updateCache();
 
     (<HTMLIFrameElement>document.getElementById("iframe-preview")).src =
-      "/preview?postId=1007";
+      "/preview?postId=" + (this.selectedMenu?.node.props as Article).id;
   }
 
   savePreviewArticle() {
@@ -337,16 +336,12 @@ export class AdminComponent implements AfterViewChecked {
         previewCrtls.push(crtl.props);
       }
     });
-    console.log("Save-preview", previewCrtls);
-    let article: Article = {
-      content: JSON.stringify(previewCrtls),
-      isActive: false,
-      parent: "Article",
-      order: 11,
-      id: "1007",
-      name: "Article-7",
-      //Add Page title
-    };
+
+    let article: Article = this.selectedMenu?.node.props as Article;
+    article.controls = previewCrtls;
+    article.order = Number.parseInt(article.order + "");
+    article.content = JSON.stringify(previewCrtls);
+    console.log("article going to save", article);
     this.saveArticleByValidation(article);
   }
 
@@ -357,10 +352,9 @@ export class AdminComponent implements AfterViewChecked {
       previewEle!.style.display = "block";
       this.updateCache();
       (<HTMLIFrameElement>document.getElementById("iframe-preview")).src =
-        "/preview?postId=1007";
+        "/preview?postId=" + (this.selectedMenu?.node.props as Article).id;
       this.togglePreviewText = "Close Preview";
     } else {
-      //this.articleService.previewArticel = [];
       previewEle!.style.display = "none";
       this.togglePreviewText = "Open Preview";
     }
@@ -388,16 +382,17 @@ export class AdminComponent implements AfterViewChecked {
 
   updateCache() {
     let previewCrtls: ArticalControlBase<string>[] = [];
+    let selectedManuNode = this.selectedMenu?.node as TodoItemFlatNode;
     this.treeControl.dataNodes.forEach((crtl) => {
       if (crtl.level == 0) {
         previewCrtls.push(crtl.props);
       }
     });
-    localStorage.setItem("selectedpage", "Kingdom-Of-God/Articals/Latest");
-    localStorage.setItem("pageControls", JSON.stringify(previewCrtls));
+    
+    (selectedManuNode.props as Article).controls = previewCrtls;
+    localStorage.setItem("selectedpage", JSON.stringify(selectedManuNode));
   }
 
-  
   /** Toggle the to-do item selection. Select/deselect all the descendants node */
   todoItemSelectionToggle(node: TodoItemFlatNode): void {
     this.selectedNode = {
@@ -425,7 +420,7 @@ export class AdminComponent implements AfterViewChecked {
         .filter((v) => v != crtl.name);
       this.cssSelected = removedlst.join(" ");
     }
-    this.selectedNode.node.props.css = this.cssSelected;
+    this.selectedNode!.node.props.css = this.cssSelected;
   }
 
   getControlKeyValue(selectedNode: any, field: string) {
@@ -465,22 +460,22 @@ export class AdminComponent implements AfterViewChecked {
     this.classFields.forEach((cf) => {
       if (cf.type == "boolean") {
         fildsValues[cf.field] = (<HTMLSelectElement>(
-          document.getElementById(this.selectedNode.node.item + "-" + cf.field)
+          document.getElementById(this.selectedNode?.node.item + "-" + cf.field)
         ))?.value;
       } else {
         fildsValues[cf.field] = (<HTMLInputElement>(
-          document.getElementById(this.selectedNode.node.item + "-" + cf.field)
+          document.getElementById(this.selectedNode?.node.item + "-" + cf.field)
         ))?.value;
       }
     });
-    fildsValues["children"] = this.selectedNode.node.props.children;
+    fildsValues["children"] = this.selectedNode?.node.props.children;
     fildsValues["hasChildren"] =
-      this.selectedNode.node.props.children != undefined &&
+      this.selectedNode?.node.props.children != undefined &&
       this.selectedNode.node.props.children.length > 0;
     fildsValues["css"] = this.cssSelected;
     let parentNode =
-      this.selectedNode.node.level > 0
-        ? this.getParentNode(this.selectedNode.node)
+      this.selectedNode!.node.level > 0
+        ? this.getParentNode(this.selectedNode!.node)
         : null;
     fildsValues["parentKey"] = parentNode?.item;
     let newChanges = new ArticalControlBase<string>(fildsValues);
@@ -488,24 +483,24 @@ export class AdminComponent implements AfterViewChecked {
       "newChanges",
       newChanges,
       (<HTMLSelectElement>(
-        document.getElementById(this.selectedNode.node.item + "-required")
+        document.getElementById(this.selectedNode?.node.item + "-required")
       ))?.value
     );
     //Updating Parent Pros.Children
     let currentNodeInparent = parentNode?.props?.children?.find(
-      (v) => v.key == this.selectedNode.node.item
+      (v) => v.key == this.selectedNode?.node.item
     );
     if (currentNodeInparent == undefined) {
       parentNode?.props?.children?.push(newChanges);
     } else {
       parentNode?.props?.children?.forEach((cn) => {
-        if (cn.key == this.selectedNode.node.item) {
+        if (cn.key == this.selectedNode?.node.item) {
           cn = newChanges;
         }
       });
     }
     if (
-      this.selectedNode.node.props.children != undefined &&
+      this.selectedNode?.node.props.children != undefined &&
       this.selectedNode.node.props.children.length > 0
     ) {
       this.selectedNode.node.props.children.forEach((v) => {
@@ -514,18 +509,18 @@ export class AdminComponent implements AfterViewChecked {
     }
     //Updating Node.Children
     let childrenNodes =
-      this.selectedNode.node.level > 0
+      this.selectedNode!.node.level > 0
         ? this.getChildren(this.flatNodeMap.get(parentNode!)!)
         : null;
     childrenNodes?.forEach((cn) => {
-      if (cn.item == this.selectedNode.node.item) {
+      if (cn.item == this.selectedNode?.node.item) {
         cn.props = newChanges;
         cn.item = newChanges.key;
       }
     });
 
-    this.selectedNode.node.props = newChanges;
-    this.selectedNode.node.item = newChanges.key;
+    this.selectedNode!.node.props = newChanges;
+    this.selectedNode!.node.item = newChanges.key;
   }
 
   showCheckboxes() {
@@ -541,7 +536,7 @@ export class AdminComponent implements AfterViewChecked {
       this.expanded = false;
     }
   }
-  onMouseClick(e: MouseEvent, node: TodoItemFlatNode) {
+  selectControl(e: MouseEvent, node: TodoItemFlatNode) {
     this.selectedNode = {
       node: node,
       isSelected: this.checklistSelection.isSelected(node),
@@ -638,6 +633,12 @@ export class AdminComponent implements AfterViewChecked {
   }
 
   removeItem(node: TodoItemFlatNode) {
+    if (this.selectedMenu != undefined) {
+      let status = this.confirmMethod("Do you want to delete controls?");
+      if (!status) {
+        return;
+      }
+    }
     const parentNode = this.getParentNode(node);
     let parentFlat = this.flatNodeMap.get(parentNode!);
     // let propChildren = parentNode?.props?.children;
@@ -692,46 +693,70 @@ export class AdminComponent implements AfterViewChecked {
           this.saveArticle(result.access_token, article).subscribe(
             (result: any) => {
               if (result.statusCode == 200 || result.statusCode == 201) {
-                this.statusMessage = "Artical saved successfully.";
-                this.statusMsgColor = "green";
+                this.statusMessage = {
+                  message: "Artical saved successfully.",
+                  color: "green",
+                };
                 this.previewUrl = "/preview";
               } else {
                 console.log("Somthing went wrong!", result);
-                this.statusMessage =
-                  "Somthing went wrong! status-code:" + result.status;
-                this.statusMsgColor = "red";
+                this.statusMessage = {
+                  message: "Somthing went wrong! status-code:" + result.status,
+                  color: "red",
+                };
               }
             }
           );
         },
         (err) => {
           console.log("Article save error", err);
-          this.statusMessage = "Please login to get active session.";
-          this.statusMsgColor = "red";
+          this.statusMessage = {
+            message: "Please login to get active session.",
+            color: "red",
+          };
           this.needToLogin = true;
         }
       );
     });
   }
   saveArticle(token: string, article?: Article) {
-    let art: Article = article ?? {
-      content: "Working fine",
-      isActive: true,
-      parent: "Article",
-      order: 11,
-      id: "1007",
-      name: "Article-7",
-    };
-    return this.articleService.addArticle(art, token);
+    return this.articleService.addArticle(article!, token);
+  }
+
+  confirmMethod(name: string): boolean {
+    if (confirm(name)) {
+      console.log("Implement delete functionality here");
+      return true;
+    } else {
+      return false;
+    }
   }
 
   displayMessage(msg: any) {
     this.selectedMenu = msg;
-    localStorage.removeItem('selectedpage')
-    localStorage.removeItem('pageControls')
+
+    let nodes: TodoItemNode[] = [];
+    let article = this.selectedMenu?.node.props as Article;
+    console.log("this.selectedMenu.node.props", this.selectedMenu?.node.props);
+    this.selectedNode = undefined;
+    if (this.selectedMenu?.node.props) {
+      article.controls!.forEach((ctrl) =>
+        nodes.push(this.buildFileArticleTree(ctrl, 0))
+      );
+      console.log("nodes=>", nodes);
+      this._database.dataChange.next(nodes);
+    }
+    localStorage.removeItem("selectedpage");
+    //let tree = this._database.dataChange.next(nodes);
   }
 
   loadDefault() {
+    let status = this.confirmMethod(
+      "Do you want to load default page controls?"
+    );
+    if (!status) {
+      return;
+    }
     this.articleService.getQuestions().subscribe((v) => {
       //console.log(JSON.stringify(v));
 
