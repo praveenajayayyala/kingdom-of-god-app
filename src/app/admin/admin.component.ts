@@ -388,7 +388,7 @@ export class AdminComponent implements AfterViewChecked {
         previewCrtls.push(crtl.props);
       }
     });
-    
+
     (selectedManuNode.props as Article).controls = previewCrtls;
     localStorage.setItem("selectedpage", JSON.stringify(selectedManuNode));
   }
@@ -461,7 +461,7 @@ export class AdminComponent implements AfterViewChecked {
       if (cf.type == "boolean") {
         fildsValues[cf.field] = (<HTMLSelectElement>(
           document.getElementById(this.selectedNode?.node.item + "-" + cf.field)
-        ))?.value;
+        ))?.value == 'true';
       } else {
         fildsValues[cf.field] = (<HTMLInputElement>(
           document.getElementById(this.selectedNode?.node.item + "-" + cf.field)
@@ -473,19 +473,15 @@ export class AdminComponent implements AfterViewChecked {
       this.selectedNode?.node.props.children != undefined &&
       this.selectedNode.node.props.children.length > 0;
     fildsValues["css"] = this.cssSelected;
+
     let parentNode =
       this.selectedNode!.node.level > 0
         ? this.getParentNode(this.selectedNode!.node)
         : null;
     fildsValues["parentKey"] = parentNode?.item;
+
     let newChanges = new ArticalControlBase<string>(fildsValues);
-    console.log(
-      "newChanges",
-      newChanges,
-      (<HTMLSelectElement>(
-        document.getElementById(this.selectedNode?.node.item + "-required")
-      ))?.value
-    );
+
     //Updating Parent Pros.Children
     let currentNodeInparent = parentNode?.props?.children?.find(
       (v) => v.key == this.selectedNode?.node.item
@@ -493,12 +489,10 @@ export class AdminComponent implements AfterViewChecked {
     if (currentNodeInparent == undefined) {
       parentNode?.props?.children?.push(newChanges);
     } else {
-      parentNode?.props?.children?.forEach((cn) => {
-        if (cn.key == this.selectedNode?.node.item) {
-          cn = newChanges;
-        }
-      });
+      let indexOfNode = parentNode?.props?.children?.findIndex(cn=> cn.key == this.selectedNode?.node.item)
+      parentNode?.props?.children?.splice(indexOfNode!, 1, newChanges);
     }
+
     if (
       this.selectedNode?.node.props.children != undefined &&
       this.selectedNode.node.props.children.length > 0
@@ -528,11 +522,9 @@ export class AdminComponent implements AfterViewChecked {
     //var checkboxes = checkboxes
     if (!this.expanded) {
       this.chkStyle = "display: block";
-      //checkboxes.style.display = "block";
       this.expanded = true;
     } else {
       this.chkStyle = "display: none";
-      //checkboxes.style.display = "none";
       this.expanded = false;
     }
   }
@@ -737,13 +729,13 @@ export class AdminComponent implements AfterViewChecked {
 
     let nodes: TodoItemNode[] = [];
     let article = this.selectedMenu?.node.props as Article;
-    console.log("this.selectedMenu.node.props", this.selectedMenu?.node.props);
+    //console.log("this.selectedMenu.node.props", this.selectedMenu?.node.props);
     this.selectedNode = undefined;
     if (this.selectedMenu?.node.props) {
       article.controls!.forEach((ctrl) =>
         nodes.push(this.buildFileArticleTree(ctrl, 0))
       );
-      console.log("nodes=>", nodes);
+      //console.log("nodes=>", nodes);
       this._database.dataChange.next(nodes);
     }
     localStorage.removeItem("selectedpage");

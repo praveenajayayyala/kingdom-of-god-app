@@ -83,10 +83,10 @@ export class ChecklistDatabase {
   initialize() {
     // Build the tree nodes from Json object. The result is a list of `TodoItemNode` with nested
     //     file node as children.
-    const data = this.buildFileTree(TREE_DATA, 0);
+    //const data = this.buildFileTree(TREE_DATA, 0);
 
     // Notify the change.
-    this.dataChange.next(data);
+    //this.dataChange.next(data);
   }
 
   /**
@@ -449,7 +449,8 @@ export class NavigationTreeComponent implements AfterViewChecked {
     this.route.queryParams.subscribe((params) => {
       let queryStringCode = params["code"];
       if (queryStringCode == undefined || queryStringCode == "" || queryStringCode.length < 24) {
-        this.statusMessage = "Please login to proceed!"
+        this.statusMessage = "Please login to proceed!";
+        localStorage.removeItem('selectedpage');
         return;
       }
       this.articleService.getArticlesByPostId("*").then((pages) => {

@@ -10,6 +10,7 @@ export class DynamicArticalParentDivComponent {
   @Input() parentControl!: ArticalControlBase<string>;
   @Input() form!: FormGroup;
   get styleOfControl() {
-    return "background-color: " + this.parentControl.backGroundColor;
+    //console.log(this.parentControl.key, this.parentControl.styles);
+    return this.parentControl.styles;
   }
 }

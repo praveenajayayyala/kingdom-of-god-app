@@ -22,18 +22,10 @@ export class DynamicArticalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // if (this.articalControls.length <= 0) {
-    //   this.service.getArticlesByPostId("1003").then((ctrls) => {
-    //     this.articalControls = ctrls;
-    //     this.form = this.qcs.toFormGroup(
-    //       this.articalControls as ArticalControlBase<string>[]
-    //     );
-    //   });
-    // } else {
-      this.form = this.qcs.toFormGroup(
-        this.articalControls as ArticalControlBase<string>[]
-      );
-   // }
+    //console.log("articalControls", this.articalControls);
+    this.form = this.qcs.toFormGroup(
+      this.articalControls as ArticalControlBase<string>[]
+    );
   }
 
   onSubmit() {

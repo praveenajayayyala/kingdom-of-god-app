@@ -174,7 +174,7 @@ export class ArticleService {
       new DivControl({
         key: "jumbotron-Row",
         css: "jumbotron feature",
-        backGroundColor: "#337ab7",
+        styles: "backGroundColor: #337ab7",
         row: 1,
         order: 1,
         hasChildren: true,
@@ -372,7 +372,7 @@ export class ArticleService {
       new DivControl({
         key: "last-jumbotron-Row",
         css: "jumbotron feature",
-        backGroundColor: "rgb(114 143 115)",
+        styles: "backGroundColor: rgb(114 143 115)",
         row: 1,
         order: 18,
         hasChildren: true,

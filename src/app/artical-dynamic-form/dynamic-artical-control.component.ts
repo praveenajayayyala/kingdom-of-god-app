@@ -11,6 +11,7 @@ export class DynamicArticalControlComponent {
   @Input() form!: FormGroup;
 
   get isValid() {
-    return this.form?.controls[this.control.key]?.valid ?? true;
+    // console.log("this.control?.required", this.control?.required, this.control)
+    return this.control?.required as boolean ? this.form?.controls[this.control.key]?.valid ?? true : true;
   }
 }

@@ -106,7 +106,7 @@ export class AppComponent implements AfterViewInit {
           "id",
           childMenu.name! + "-" + childMenu.id
         );
-        console.log("/" + childMenu.parent!.toLowerCase(), window.location.pathname.toLowerCase(), ": ", window.location.search.toLowerCase(), "?postId=" + childMenu.id!.toLowerCase())
+        //console.log("/" + childMenu.parent!.toLowerCase(), window.location.pathname.toLowerCase(), ": ", window.location.search.toLowerCase(), "?postId=" + childMenu.id!.toLowerCase())
         if (window.location.pathname.toLowerCase() == ("/" + childMenu.parent!).toLowerCase() &&
           window.location.search.toLowerCase() == ("?postId=" + childMenu.id!).toLowerCase()) {
           this.renderer.setAttribute(childA, "class", "active");

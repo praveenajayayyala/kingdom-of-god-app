@@ -1,51 +1,34 @@
 <div [formGroup]="form">
   <!-- Div Control has children -->
-  <app-artical-parent-control
-    *ngIf="control.hasChildren && control.controlType == 'div'"
-    [parentControl]="control"
-    [form]="form"
-  ></app-artical-parent-control>
+  <app-artical-parent-control *ngIf="control.hasChildren && control.controlType == 'div'" [parentControl]="control"
+    [form]="form"></app-artical-parent-control>
 
   <!-- Control Switch case -->
   <div [ngSwitch]="control.controlType">
-    <input
-      class="sample-xl"
-      *ngSwitchCase="'textbox'"
-      [formControlName]="control.key"
-      [id]="control.key"
-      [type]="control.type"
-    />
+    <input class="sample-xl" *ngSwitchCase="'textbox'" [formControlName]="control.key" [id]="control.key"
+      [type]="control.type" [style]="control.styles" />
     <!-- Control LABEL -->
-    <label *ngSwitchCase="'label'" [attr.for]="control.key">{{
+    <label *ngSwitchCase="'label'" [attr.for]="control.key" [style]="control.styles">{{
       control.label
-    }}</label>
+      }}</label>
     <!-- Control BR -->
     <br *ngSwitchCase="'br'" />
     <!-- Control P -->
-    <p *ngSwitchCase="'pera'">{{ control.label }}</p>
+    <p *ngSwitchCase="'pera'" [style]="control.styles">{{ control.label }}</p>
     <!-- Control SELECT -->
-    <select
-      [id]="control.key"
-      *ngSwitchCase="'dropdown'"
-      [formControlName]="control.key"
-    >
+    <select [id]="control.key" *ngSwitchCase="'dropdown'" [formControlName]="control.key" [style]="control.styles">
       <option *ngFor="let opt of control.options" [value]="opt.key">
         {{ opt.value }}
       </option>
     </select>
     <!-- Control IMG -->
-    <img
-      *ngSwitchCase="'image'"
-      [formControlName]="control.key"
-      [id]="control.key"
-      [src]="control.src"
-    />
+    <img *ngSwitchCase="'image'" [formControlName]="control.key" [style]="control.styles" [id]="control.key" [src]="control.src" />
     <!-- Control H1 -->
-    <h1 *ngSwitchCase="'h1'" class="{{ control.css }}">{{ control.label }}</h1>
+    <h1 *ngSwitchCase="'h1'" class="{{ control.css }}" [style]="control.styles">{{ control.label }}</h1>
     <!-- Control H3 -->
-    <h3 *ngSwitchCase="'h3'" class="{{ control.css }}">{{ control.label }}</h3>
+    <h3 *ngSwitchCase="'h3'" class="{{ control.css }}" [style]="control.styles">{{ control.label }}</h3>
     <!-- Control SPAN -->
-    <span *ngSwitchCase="'span'">{{ control.label }}</span>
+    <span *ngSwitchCase="'span'" [style]="control.styles">{{ control.label }}</span>
     <!-- Control MAT-CARD-BASIC -->
     <mat-card *ngSwitchCase="'card-basic'">
       <mat-card-content>{{ control.label }}</mat-card-content>
@@ -54,15 +37,13 @@
     <mat-card class="example-card" *ngSwitchCase="'card-artical'">
       <mat-card-header>
         <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>{{ control.label }}</mat-card-title>
-        <mat-card-subtitle>custom sub msg</mat-card-subtitle>
+        <mat-card-title>{{ control.type }}</mat-card-title>
+        <!-- <mat-card-subtitle>{{ control.type }}</mat-card-subtitle> -->
       </mat-card-header>
-      <img mat-card-image [src]="control.src" alt="Photo of a Shiba Inu" />
+      <img mat-card-image *ngIf="control.src != ''" [src]="control.src" alt="Photo of a Shiba Inu" />
       <mat-card-content>
         <p>
-          The Shiba Inu is the smallest of the six original and distinct spitz
-          breeds of dog from Japan. A small, agile dog that copes very well with
-          mountainous terrain, the Shiba Inu was originally bred for hunting.
+          {{ control.label }}
         </p>
       </mat-card-content>
       <mat-card-actions>

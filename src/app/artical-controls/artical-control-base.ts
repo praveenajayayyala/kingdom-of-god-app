@@ -6,7 +6,7 @@ export class ArticalControlBase<T> {
   src: string;
   css: string;
   order: number;
-  backGroundColor: string;
+  styles: string;
   row: number;
   column: number;
   controlType: string;
@@ -31,7 +31,7 @@ export class ArticalControlBase<T> {
       parentKey?: string;
       hasChildren?: boolean;
       children?: ArticalControlBase<T>[];
-      backGroundColor?: string;
+      styles?: string;
 
       options?: { key: string; value: string }[];
     } = {}
@@ -51,7 +51,7 @@ export class ArticalControlBase<T> {
     this.parentKey = options.parentKey || "";
     this.hasChildren = options.hasChildren || false;
     this.children = options.children || [];
-    this.backGroundColor = options.backGroundColor || "inherit";
+    this.styles = options.styles || "";
   }
   static derived = new Set();
   // updateValue(field: string, vale: any) {
