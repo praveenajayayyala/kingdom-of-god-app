@@ -74,6 +74,7 @@ nav a {
   /* background-color: #e8e8e8; */
   color: #3d3d3d;
   border-radius: 4px;
+  text-transform: uppercase;
 }
 
 nav a:hover {
@@ -1767,6 +1768,9 @@ pre code {
   max-height: 340px;
   overflow-y: scroll;
 }
+.First-container {
+  margin-top: 40px;
+}
 .container {
   padding-right: 15px;
   padding-left: 15px;
@@ -1777,15 +1781,24 @@ pre code {
   .container {
     width: 750px;
   }
+  .First-container {
+    margin-top: 40px;
+  }
 }
 @media (min-width: 992px) {
   .container {
     width: 970px;
   }
+  .First-container {
+    margin-top: 40px;
+  }
 }
 @media (min-width: 1200px) {
   .container {
     width: 1170px;
+  }
+  .First-container {
+    margin-top: 40px;
   }
 }
 .container-fluid {
@@ -4554,6 +4567,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .navbar-fixed-bottom .navbar-collapse {
     max-height: 200px;
   }
+  .First-container {
+    margin-top: 40px;
+  }
 }
 .container > .navbar-header,
 .container-fluid > .navbar-header,
@@ -5290,6 +5306,7 @@ a.badge:focus {
 }
 
 .jumbotron {
+  margin-top: 20px;
   padding-top: 30px;
   padding-bottom: 30px;
   margin-bottom: 30px;
@@ -5318,6 +5335,9 @@ a.badge:focus {
 @media (max-device-width: 600px) {
   .jumbotron {
     margin-top: -30px;
+  }
+  .First-container {
+    margin-top: 0px;
   }
 }
 @media screen and (min-width: 768px) {

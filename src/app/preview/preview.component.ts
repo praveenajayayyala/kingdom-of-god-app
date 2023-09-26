@@ -26,7 +26,7 @@ export class PreviewComponent implements OnInit {
   //acceptedControls$: Observable<ArticalControlBase<string>[]> = this.previewService.bookingListener$;
   constructor(
     private route: ActivatedRoute,
-    private previewService: ArticleService,
+    private articleService: ArticleService,
     private previewDataService: PreviewDataSharingService
   ) {
     // this.route.queryParams.subscribe((params) => {
@@ -53,7 +53,6 @@ export class PreviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("PreviewComponent-Crtls", this.previewService.previewContent);
     this.previewDataService.articalControls.subscribe((value) => {
       this.articalControls$ = value;
     });

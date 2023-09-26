@@ -22,6 +22,8 @@ import { PreviewComponent } from './preview/preview.component';
 import { ArticleService } from "./artical.service";
 import { AuthorizeService } from "./authorize.service";
 import { QuestionService } from "./question.service";
+import { AboutUsComponent } from './about-us/about-us.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
 const appRoutes: Routes = [
   { path: "admin", component: AdminComponent },
@@ -35,6 +37,8 @@ const appRoutes: Routes = [
   // { path: '**', component: PageNotFoundComponent },
   { path: "", component: HomeComponent },
   { path: "home", component: HomeComponent },
+  { path: "contact-us", component: ContactUsComponent },
+  { path: "about-us", component: AboutUsComponent },
   { path: "article", component: ArticalComponent },
   { path: "preview", component: PreviewComponent },
   { path: "logout", component: LogoutComponent },
@@ -67,6 +71,8 @@ const appRoutes: Routes = [
     NavigationTreeComponent,
     NodeItemPipe,
     PreviewComponent,
+    AboutUsComponent,
+    ContactUsComponent,
   ],
   providers:[QuestionService, ArticleService, AuthorizeService],
   bootstrap: [AppComponent],

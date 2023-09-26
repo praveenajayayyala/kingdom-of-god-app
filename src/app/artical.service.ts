@@ -25,7 +25,8 @@ export class ArticleService {
   controls: ArticalControlBase<string>[] = [];
   ControlsByPostId: ArticalControlBase<string>[] = [];
   controlsByParentKey = new Map<string, ArticalControlBase<string>[]>();
-  previewContent: ArticalControlBase<string>[] = [];
+  previewContent: BehaviorSubject<Article> = new BehaviorSubject<Article>({});
+  articals: BehaviorSubject<Article[]> = new BehaviorSubject<Article[]>([]);
   // articalControls: BehaviorSubject<
   //   any[]
   // > = new BehaviorSubject<any[]>([
@@ -94,6 +95,7 @@ export class ArticleService {
           );
           articles.push(v);
         });
+        this.articals.next(articles);
         resolve(articles);
       });
     });

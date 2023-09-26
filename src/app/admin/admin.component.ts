@@ -55,6 +55,7 @@ const availableStyles = {
   "": [],
   div: [
     "jumbotron",
+    "First-container",
     "feature",
     "container",
     "container-main",
@@ -253,7 +254,7 @@ export class AdminComponent implements AfterViewChecked {
     this.treeControl.expandAll();
     this.totalStyles = this.convertJSObjToTSMap(availableStyles);
 
-    console.log("this.totalStyles", this.totalStyles);
+    //console.log("this.totalStyles", this.totalStyles);
   }
 
   convertJSObjToTSMap(jsObj: any) {
