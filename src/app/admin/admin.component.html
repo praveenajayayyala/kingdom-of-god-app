@@ -95,7 +95,7 @@
         <div class="mat-crtl-col" *ngIf="this.selectedNode != undefined" [style]="this.propPosition">
           <h4 class="tree-node-title">Control: {{this.selectedNode | nodeItemPipe}}</h4>
           <!-- <form [formGroup]="form" (ngSubmit)="submit()"> -->
-
+            <h3 [style.color]="this.crtlStatusMessage.color">{{this.crtlStatusMessage.message}}</h3>
           <table class="fl-table" *ngIf="this.selectedNode != undefined">
             <tr>
             <th colspan="2">Control details</th>

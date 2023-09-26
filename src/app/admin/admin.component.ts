@@ -183,6 +183,7 @@ export class AdminComponent implements AfterViewChecked {
   needToLogin: boolean = this.authorizeService.neetToLogin;
   questions$: Observable<QuestionBase<any>[]>;
   statusMessage = { message: "", color: "" };
+  crtlStatusMessage = { message: "", color: "" };
   selectedNode?: { node: TodoItemFlatNode; isSelected: boolean };
   selectedMenu?: { node: TodoItemFlatNode; isSelected: boolean };
   selectedNodeItem: string = "";
@@ -457,65 +458,83 @@ export class AdminComponent implements AfterViewChecked {
     this.updateSelectedNode();
   }
   updateSelectedNode() {
-    let fildsValues: any = {};
-    this.classFields.forEach((cf) => {
-      if (cf.type == "boolean") {
-        fildsValues[cf.field] = (<HTMLSelectElement>(
-          document.getElementById(this.selectedNode?.node.item + "-" + cf.field)
-        ))?.value == 'true';
-      } else {
-        fildsValues[cf.field] = (<HTMLInputElement>(
-          document.getElementById(this.selectedNode?.node.item + "-" + cf.field)
-        ))?.value;
-      }
-    });
-    fildsValues["children"] = this.selectedNode?.node.props.children;
-    fildsValues["hasChildren"] =
-      this.selectedNode?.node.props.children != undefined &&
-      this.selectedNode.node.props.children.length > 0;
-    fildsValues["css"] = this.cssSelected;
-
-    let parentNode =
-      this.selectedNode!.node.level > 0
-        ? this.getParentNode(this.selectedNode!.node)
-        : null;
-    fildsValues["parentKey"] = parentNode?.item;
-
-    let newChanges = new ArticalControlBase<string>(fildsValues);
-
-    //Updating Parent Pros.Children
-    let currentNodeInparent = parentNode?.props?.children?.find(
-      (v) => v.key == this.selectedNode?.node.item
-    );
-    if (currentNodeInparent == undefined) {
-      parentNode?.props?.children?.push(newChanges);
-    } else {
-      let indexOfNode = parentNode?.props?.children?.findIndex(cn=> cn.key == this.selectedNode?.node.item)
-      parentNode?.props?.children?.splice(indexOfNode!, 1, newChanges);
-    }
-
-    if (
-      this.selectedNode?.node.props.children != undefined &&
-      this.selectedNode.node.props.children.length > 0
-    ) {
-      this.selectedNode.node.props.children.forEach((v) => {
-        v.parentKey = newChanges.key;
+    try {
+      let fildsValues: any = {};
+      this.classFields.forEach((cf) => {
+        if (cf.type == "boolean") {
+          fildsValues[cf.field] =
+            (<HTMLSelectElement>(
+              document.getElementById(
+                this.selectedNode?.node.item + "-" + cf.field
+              )
+            ))?.value == "true";
+        } else {
+          fildsValues[cf.field] = (<HTMLInputElement>(
+            document.getElementById(
+              this.selectedNode?.node.item + "-" + cf.field
+            )
+          ))?.value;
+        }
       });
-    }
-    //Updating Node.Children
-    let childrenNodes =
-      this.selectedNode!.node.level > 0
-        ? this.getChildren(this.flatNodeMap.get(parentNode!)!)
-        : null;
-    childrenNodes?.forEach((cn) => {
-      if (cn.item == this.selectedNode?.node.item) {
-        cn.props = newChanges;
-        cn.item = newChanges.key;
-      }
-    });
+      fildsValues["children"] = this.selectedNode?.node.props.children;
+      fildsValues["hasChildren"] =
+        this.selectedNode?.node.props.children != undefined &&
+        this.selectedNode.node.props.children.length > 0;
+      fildsValues["css"] = this.cssSelected;
 
-    this.selectedNode!.node.props = newChanges;
-    this.selectedNode!.node.item = newChanges.key;
+      let parentNode =
+        this.selectedNode!.node.level > 0
+          ? this.getParentNode(this.selectedNode!.node)
+          : null;
+      fildsValues["parentKey"] = parentNode?.item;
+
+      let newChanges = new ArticalControlBase<string>(fildsValues);
+
+      //Updating Parent Pros.Children
+      let currentNodeInparent = parentNode?.props?.children?.find(
+        (v) => v.key == this.selectedNode?.node.item
+      );
+      if (currentNodeInparent == undefined) {
+        parentNode?.props?.children?.push(newChanges);
+      } else {
+        let indexOfNode = parentNode?.props?.children?.findIndex(
+          (cn) => cn.key == this.selectedNode?.node.item
+        );
+        parentNode?.props?.children?.splice(indexOfNode!, 1, newChanges);
+      }
+
+      if (
+        this.selectedNode?.node.props.children != undefined &&
+        this.selectedNode.node.props.children.length > 0
+      ) {
+        this.selectedNode.node.props.children.forEach((v) => {
+          v.parentKey = newChanges.key;
+        });
+      }
+      //Updating Node.Children
+      let childrenNodes =
+        this.selectedNode!.node.level > 0
+          ? this.getChildren(this.flatNodeMap.get(parentNode!)!)
+          : null;
+      childrenNodes?.forEach((cn) => {
+        if (cn.item == this.selectedNode?.node.item) {
+          cn.props = newChanges;
+          cn.item = newChanges.key;
+        }
+      });
+
+      this.selectedNode!.node.props = newChanges;
+      this.selectedNode!.node.item = newChanges.key;
+      this.crtlStatusMessage = {
+        message: "Props saved successfully",
+        color: "green",
+      };
+    } catch (ex) {
+      this.crtlStatusMessage = {
+        message: JSON.stringify(ex),
+        color: "red",
+      };
+    }
   }
 
   showCheckboxes() {
@@ -534,6 +553,7 @@ export class AdminComponent implements AfterViewChecked {
       node: node,
       isSelected: this.checklistSelection.isSelected(node),
     };
+    this.crtlStatusMessage = {message:"",color:""};
     console.log("this.selectedNode", this.selectedNode.node);
     let parent = document.querySelectorAll(".slected-node-cls");
     parent.forEach((ele) => {
