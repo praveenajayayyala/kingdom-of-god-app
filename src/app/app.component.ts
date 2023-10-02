@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { ArticleService } from "./artical.service";
 import { Article } from "./modal/article";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-root",

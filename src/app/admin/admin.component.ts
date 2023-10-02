@@ -20,7 +20,7 @@ import { Article } from "../modal/article";
 import { ArticleService } from "../artical.service";
 import { AuthorizeService } from "../authorize.service";
 import { ActivatedRoute } from "@angular/router";
-
+import { environment } from "../../environments/environment";
 /**
  * Node for to-do item
  */
@@ -393,6 +393,14 @@ export class AdminComponent implements AfterViewChecked {
 
     (selectedManuNode.props as Article).controls = previewCrtls;
     localStorage.setItem("selectedpage", JSON.stringify(selectedManuNode));
+  }
+
+  get loginUrl(){
+    return environment.loginUrl;
+  }
+
+  get logoutUrl(){
+    return environment.logoutUrl;
   }
 
   /** Toggle the to-do item selection. Select/deselect all the descendants node */

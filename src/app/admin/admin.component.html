@@ -23,17 +23,16 @@
             <div><a (click)="this.ReloadPreview()">3. Reload preview data</a></div>
           </li>
           <li class="current"><a title=""><em>Step 2: Save page</em></a>
-            <div><a *ngIf="this.needToLogin"
-                href="https://kingdomofgod.auth.ap-south-1.amazoncognito.com/oauth2/authorize?client_id=vclkssn2ftril9vhgbscnc46r&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone&redirect_uri=http://localhost:4200/admin/">1.
+            <div><a *ngIf="this.needToLogin" href="{{this.loginUrl}}">1.
                 Login</a>
             </div>
             <div><a (click)="this.savePreviewArticle()">2. Save page/article</a></div>
-            <div><a href="https://kingdomofgod.auth.ap-south-1.amazoncognito.com/logout?client_id=vclkssn2ftril9vhgbscnc46r&logout_uri=http://localhost:4200/logout"
-            routerLinkActive="active" ariaCurrentWhenActive="page">3. Logout</a></div>
+            <div><a href="{{this.logoutUrl}}" routerLinkActive="active" ariaCurrentWhenActive="page">3. Logout</a></div>
           </li>
         </ul>
 
-        <h5 style="font-weight: 500;"><span style="color: red; font-size: 16px;">*</span>Design page by following steps</h5>
+        <h5 style="font-weight: 500;"><span style="color: red; font-size: 16px;">*</span>Design page by following steps
+        </h5>
         <h4 class="tree-node-title">Menu: {{this.selectedMenu | nodeItemPipe}}</h4>
         <mat-tree *ngIf="this.selectedMenu != undefined" [dataSource]="dataSource" [treeControl]="treeControl">
           <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
@@ -83,24 +82,18 @@
             </button>
           </mat-tree-node>
         </mat-tree>
-
-        <!-- <button (click)="this.classFields" value="Get fields">
-          Get fields
-        </button>
-        <button (click)="this.saveArticleByValidation()">Save article</button>
-        <button (click)="this.getValidate()">Validate</button> -->
-      </div> 
+      </div>
       <div class="article-intro col-md-3" style="overflow-y: auto;">
         <h2>Properties of Control </h2>
         <div class="mat-crtl-col" *ngIf="this.selectedNode != undefined" [style]="this.propPosition">
           <h4 class="tree-node-title">Control: {{this.selectedNode | nodeItemPipe}}</h4>
           <!-- <form [formGroup]="form" (ngSubmit)="submit()"> -->
-            <h3 [style.color]="this.crtlStatusMessage.color">{{this.crtlStatusMessage.message}}</h3>
+          <h3 [style.color]="this.crtlStatusMessage.color">{{this.crtlStatusMessage.message}}</h3>
           <table class="fl-table" *ngIf="this.selectedNode != undefined">
             <tr>
-            <th colspan="2">Control details</th>
-            
-          </tr>
+              <th colspan="2">Control details</th>
+
+            </tr>
             <tr *ngFor="let fld of classFields">
               <td>{{fld.field}}</td>
               <td [ngSwitch]="fld.type">
@@ -170,11 +163,9 @@
               </td>
             </tr>
             <tr>
-              <td><button mat-button (click)="this.saveProps()">
+              <td></td>
+              <td><button mat-button class="save-button" (click)="this.saveProps()">
                   Save
-                </button></td>
-              <td><button mat-button>
-                  Cancel
                 </button></td>
             </tr>
           </table>

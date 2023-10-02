@@ -400,3 +400,6 @@ th {
 .steps li:hover::after {
   border-left-color: #696;
 }
+.mat-mdc-button:hover {
+  color: white !important;
+}

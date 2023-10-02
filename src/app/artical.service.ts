@@ -15,13 +15,13 @@ import { H3Control } from "./artical-controls/control-h3";
 import { HttpClient } from "@angular/common/http";
 import { Article } from "./modal/article";
 import { SpanControl } from "./artical-controls/control-span";
-
+import { environment } from "../environments/environment";
 @Injectable({
   providedIn: "root",
 })
 export class ArticleService {
   constructor(private http: HttpClient) {}
-  baseUrl = "https://so926lyyic.execute-api.ap-south-1.amazonaws.com/prod";
+  baseUrl = environment.baseUrl;
   controls: ArticalControlBase<string>[] = [];
   ControlsByPostId: ArticalControlBase<string>[] = [];
   controlsByParentKey = new Map<string, ArticalControlBase<string>[]>();
@@ -39,21 +39,6 @@ export class ArticleService {
       .pipe(catchError(retry(2)));
   }
 
-  public getValidate() {
-    return this.http.post(
-      "https://kingdomofgod.auth.ap-south-1.amazoncognito.com/login?response_type=codeclient_id=vclkssn2ftril9vhgbscnc46r&redirect_uri=http://localhost:4200/admin/",
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      }
-    );
-  }
-  // public updatePreviewData(previewCrtls: ArticalControlBase<string>[]) {
-  //   //this.articalControls.next(previewCrtls);
-  //   this.previewDataServvice.articalControls.next(previewCrtls);
-  // }
   public addArticle(article: Article, token: string) {
     return this.http.post(
       this.baseUrl + "/addarticle",
