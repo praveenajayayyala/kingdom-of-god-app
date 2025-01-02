@@ -39,7 +39,7 @@ const appRoutes: Routes = [
   { path: "home", component: HomeComponent },
   { path: "contact-us", component: ContactUsComponent },
   { path: "about-us", component: AboutUsComponent },
-  { path: "article", component: ArticalComponent },
+  { path: "articles", component: ArticalComponent },
   { path: "preview", component: PreviewComponent },
   { path: "logout", component: LogoutComponent },
 ];
