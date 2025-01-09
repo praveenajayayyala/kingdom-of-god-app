@@ -10,8 +10,9 @@ import { Article } from "./modal/article";
 import { Router } from "@angular/router";
 
 @Component({
-  selector: "app-root",
-  templateUrl: "app.component.html",
+    selector: "app-root",
+    templateUrl: "app.component.html",
+    standalone: false
 })
 export class AppComponent implements AfterViewInit {
   isloading = "block";

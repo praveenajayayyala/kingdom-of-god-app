@@ -5,9 +5,10 @@ import { ArticleService } from '../artical.service';
 import { Article } from '../modal/article';
 
 @Component({
-  selector: 'app-about-us',
-  templateUrl: './about-us.component.html',
-  styleUrls: ['./about-us.component.css']
+    selector: 'app-about-us',
+    templateUrl: './about-us.component.html',
+    styleUrls: ['./about-us.component.css'],
+    standalone: false
 })
 export class AboutUsComponent implements OnInit {
   articles: Article[]=[];

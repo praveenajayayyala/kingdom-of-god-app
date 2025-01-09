@@ -3,8 +3,9 @@ import { FormGroup } from "@angular/forms";
 import { ArticalControlBase } from "../artical-controls/artical-control-base";
 
 @Component({
-  selector: "app-artical-parent-control",
-  templateUrl: "./dynamic-artical-parent-div.component.html",
+    selector: "app-artical-parent-control",
+    templateUrl: "./dynamic-artical-parent-div.component.html",
+    standalone: false
 })
 export class DynamicArticalParentDivComponent {
   @Input() parentControl!: ArticalControlBase<string>;

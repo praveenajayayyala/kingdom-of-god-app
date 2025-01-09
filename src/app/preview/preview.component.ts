@@ -14,10 +14,11 @@ export class PreviewDataSharingService {
   //bookingListener$ = this.articalControls.asObservable();
 }
 @Component({
-  selector: "app-preview",
-  templateUrl: "./preview.component.html",
-  styleUrls: ["./preview.component.css"],
-  providers: [PreviewDataSharingService],
+    selector: "app-preview",
+    templateUrl: "./preview.component.html",
+    styleUrls: ["./preview.component.css"],
+    providers: [PreviewDataSharingService],
+    standalone: false
 })
 export class PreviewComponent implements OnInit {
   articalControls$: ArticalControlBase<string>[] = [];

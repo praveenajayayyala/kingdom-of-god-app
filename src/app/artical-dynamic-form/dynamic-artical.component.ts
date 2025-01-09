@@ -5,9 +5,10 @@ import { ArticalControlService } from "../artical-control.service";
 import { ArticleService } from "../artical.service";
 
 @Component({
-  selector: "app-artical-form",
-  templateUrl: "./dynamic-artical.component.html",
-  providers: [ArticalControlService],
+    selector: "app-artical-form",
+    templateUrl: "./dynamic-artical.component.html",
+    providers: [ArticalControlService],
+    standalone: false
 })
 export class DynamicArticalComponent implements OnInit {
   @Input() articalControls: any;

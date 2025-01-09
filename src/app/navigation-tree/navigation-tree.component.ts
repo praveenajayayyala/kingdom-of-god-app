@@ -168,10 +168,11 @@ export class ChecklistDatabase {
   }
 }
 @Component({
-  selector: "app-navigation-tree",
-  templateUrl: "./navigation-tree.component.html",
-  styleUrls: ["./navigation-tree.component.css"],
-  providers: [ChecklistDatabase],
+    selector: "app-navigation-tree",
+    templateUrl: "./navigation-tree.component.html",
+    styleUrls: ["./navigation-tree.component.css"],
+    providers: [ChecklistDatabase],
+    standalone: false
 })
 export class NavigationTreeComponent implements AfterViewChecked {
   @Output() messageEvent = new EventEmitter<any>();

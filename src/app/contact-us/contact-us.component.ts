@@ -5,9 +5,10 @@ import { Title } from '@angular/platform-browser';
 import { ArticalControlBase } from '../artical-controls/artical-control-base';
 
 @Component({
-  selector: 'app-contact-us',
-  templateUrl: './contact-us.component.html',
-  styleUrls: ['./contact-us.component.css']
+    selector: 'app-contact-us',
+    templateUrl: './contact-us.component.html',
+    styleUrls: ['./contact-us.component.css'],
+    standalone: false
 })
 export class ContactUsComponent implements OnInit {
   articles: Article[]=[];

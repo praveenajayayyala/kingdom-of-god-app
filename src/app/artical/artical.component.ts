@@ -5,9 +5,10 @@ import { ActivatedRoute } from "@angular/router";
 import { Title } from "@angular/platform-browser";
 
 @Component({
-  selector: "app-artical",
-  templateUrl: "./artical.component.html",
-  styleUrls: ["./artical.component.css"],
+    selector: "app-artical",
+    templateUrl: "./artical.component.html",
+    styleUrls: ["./artical.component.css"],
+    standalone: false
 })
 export class ArticalComponent implements OnInit {
   articalControls$: ArticalControlBase<string>[] = [];

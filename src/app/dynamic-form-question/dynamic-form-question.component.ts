@@ -4,8 +4,9 @@ import { FormGroup } from '@angular/forms';
 import { QuestionBase } from '../controls/question-base';
 
 @Component({
-  selector: 'app-question',
-  templateUrl: './dynamic-form-question.component.html',
+    selector: 'app-question',
+    templateUrl: './dynamic-form-question.component.html',
+    standalone: false
 })
 export class DynamicFormQuestionComponent {
   @Input() question!: QuestionBase<string>;

@@ -174,10 +174,11 @@ export class ChecklistDatabase {
 }
 
 @Component({
-  selector: "app-admin",
-  templateUrl: "./admin.component.html",
-  styleUrls: ["./admin.component.css"],
-  providers: [ChecklistDatabase],
+    selector: "app-admin",
+    templateUrl: "./admin.component.html",
+    styleUrls: ["./admin.component.css"],
+    providers: [ChecklistDatabase],
+    standalone: false
 })
 export class AdminComponent implements AfterViewChecked {
   needToLogin: boolean = this.authorizeService.neetToLogin;
