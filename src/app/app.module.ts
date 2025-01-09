@@ -13,7 +13,7 @@ import { ArticalComponent } from "./artical/artical.component";
 import { DynamicArticalComponent } from "./artical-dynamic-form/dynamic-artical.component";
 import { DynamicArticalControlComponent } from "./artical-dynamic-form/dynamic-artical-control.component";
 import { DynamicArticalParentDivComponent } from "./artical-dynamic-form/dynamic-artical-parent-div.component";
-import { HttpClientModule } from "@angular/common/http";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { LogoutComponent } from "./logout/logout.component";
 import { NavigationTreeComponent } from "./navigation-tree/navigation-tree.component";
 import { NodeItemPipe } from "./modal/nodePipe";
@@ -43,38 +43,29 @@ const appRoutes: Routes = [
   { path: "preview", component: PreviewComponent },
   { path: "logout", component: LogoutComponent },
 ];
-@NgModule({
-  imports: [
-    BrowserModule,
-    ReactiveFormsModule,
-    MaterialModule,
-    FlexLayoutModule,
-    HttpClientModule,
-    FormsModule,
-    AngularDraggableModule,
-    RouterModule.forRoot(
-      appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
-    ),
-  ],
-  declarations: [
-    AppComponent,
-    DynamicFormComponent,
-    DynamicFormQuestionComponent,
-    DynamicArticalComponent,
-    DynamicArticalControlComponent,
-    DynamicArticalParentDivComponent,
-    HomeComponent,
-    AdminComponent,
-    ArticalComponent,
-    LogoutComponent,
-    NavigationTreeComponent,
-    NodeItemPipe,
-    PreviewComponent,
-    AboutUsComponent,
-    ContactUsComponent,
-  ],
-  providers:[QuestionService, ArticleService, AuthorizeService],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        DynamicFormComponent,
+        DynamicFormQuestionComponent,
+        DynamicArticalComponent,
+        DynamicArticalControlComponent,
+        DynamicArticalParentDivComponent,
+        HomeComponent,
+        AdminComponent,
+        ArticalComponent,
+        LogoutComponent,
+        NavigationTreeComponent,
+        NodeItemPipe,
+        PreviewComponent,
+        AboutUsComponent,
+        ContactUsComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        FlexLayoutModule,
+        FormsModule,
+        AngularDraggableModule,
+        RouterModule.forRoot(appRoutes, { enableTracing: true } // <-- debugging purposes only
+        )], providers: [QuestionService, ArticleService, AuthorizeService, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {}
