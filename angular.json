@@ -66,17 +66,17 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular.io-kingdomofgod:build",
             "proxyConfig": "./proxy.conf.json",
             "host": "127.0.0.1",
-            "port": 4200
+            "port": 4200,
+            "buildTarget": "angular.io-kingdomofgod:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "angular.io-kingdomofgod:build:production"
+              "buildTarget": "angular.io-kingdomofgod:build:production"
             },
             "development": {
-              "browserTarget": "angular.io-kingdomofgod:build:development"
+              "buildTarget": "angular.io-kingdomofgod:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -84,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular.io-kingdomofgod:build"
+            "buildTarget": "angular.io-kingdomofgod:build"
           }
         },
         "test": {
