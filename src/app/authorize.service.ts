@@ -24,19 +24,10 @@ export class AuthorizeService {
     this.invalidToken = newstate;
   }
 
-  // public getArticleById(id: string, options?: any) {
-  //   return this.http
-  //     .get(this.baseUrl + "/getarticles?postId=" + id, options)
-  //     .pipe(retry(2));
-  // }
-
-  // public updateCode(queryStr: string) {
-  //   this.code = queryStr;
-  // }
-
-  public getAccessToken(code: string) {
+  public getAccessToken(code: string, redirectUri: string) {
+    //console.log("getAccessToken=>", code)
     return this.http.post(
-      `${environment.authorizeUrl}/token?grant_type=${this.grantType}&client_id=${this.clientId}&code=${code}&redirect_uri=${environment.redirectUrl}`,
+      `${environment.authorizeUrl}/token?grant_type=${this.grantType}&client_id=${this.clientId}&code=${code}&redirect_uri=${redirectUri}`,
       "",
       {
         headers: {
@@ -45,7 +36,7 @@ export class AuthorizeService {
           grant_type: this.grantType,
           client_id: this.clientId,
           code: code == "" ? this.code : "",
-          redirect_uri: environment.redirectUrl
+          redirect_uri: redirectUri
         },
       }
     );

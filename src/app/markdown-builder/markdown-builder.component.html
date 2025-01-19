@@ -1,0 +1,43 @@
+<div style="margin: 5px">
+    <form novalidate #form="ngForm">
+        <input type="text" class="form-control" name="Test" [(ngModel)]="content">
+        <md-editor #mdEditor #md="ngModel" name="Content" (onEditorLoaded)="onEditorLoaded($event)"
+            [preRender]="preRender" [postRender]="postRender" (onPreviewDomChanged)="onPreviewDomChanged($event)"
+            [upload]="doUpload" [(ngModel)]="content" [mode]="mode" [options]="options" required [maxlength]="maxLength"
+            height="400px">
+            <div custom-btns>
+                <input #imgInput type="file" style="display: none" (change)="uploadImg($event)" />
+                <button type="button" class="btn btn-sm btn-default" (click)="imgInput.click()">Upload Img</button>
+            </div>
+        </md-editor>
+    </form>
+    <div class="well well-sm">
+        <button class="btn btn-default btn-primary" (click)="savePage()">
+            Save Page *
+        </button>
+        &nbsp;&nbsp;
+        <button class="btn btn-default btn-primary" (click)="togglePreviewPanel()">
+            {{ options!.showPreviewPanel ? 'Hide' : 'Show' }} Preview Panel
+        </button>
+        &nbsp;&nbsp;
+        <button class="btn btn-default btn-primary" (click)="changeMode()">Change Mode (Current: {{ mode }})</button>
+        &nbsp;&nbsp;
+        <button class="btn btn-default btn-primary" (click)="togglePreviewClick()">
+            {{ options!.enablePreviewContentClick ? 'Disable' : 'Enable' }} PreviewContentClick
+        </button>
+        &nbsp;&nbsp;
+        <button class="btn btn-default btn-primary" (click)="toggleResizeAble()">
+            {{ options!.resizable ? 'Disable' : 'Enable' }} Resizeable
+        </button>
+    </div>
+    <br>
+    <div class="well well-sm" style="display: none;">
+        <label class="control-label">NgModel:</label>
+        <textarea class="form-control" rows="10" readonly [value]="content"></textarea>
+    </div>
+    <div class="well well-sm">
+        <label class="control-label">Form validate:</label>
+        <p>Required: {{ md!.errors != null ? md!.errors!["required"]: false }}</p>
+        <p>Maxlength: {{ md!.errors!= null ? md!.errors!["maxlength"]: false | json }}</p>
+    </div>
+</div>

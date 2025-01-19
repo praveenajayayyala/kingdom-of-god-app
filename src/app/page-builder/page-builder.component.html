@@ -1,0 +1,66 @@
+<div class="container-main" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+    <div class="container">
+        <div class="article-intro col-md-2" style="padding-right: 0px; background-color:#e9d2a7">
+            <h2>Navigation</h2>
+            <app-navigation-tree (messageEvent)="displayMessage($event)"></app-navigation-tree>
+        </div>
+        <div class="article-intro col-md-10">
+            <h2>Pages/Articles</h2>
+            <div style="text-align: left;">
+                <ul>
+                    <li><a *ngIf="this.needToLogin" href="{{this.loginUrl}}">
+                            Login</a></li>
+                    <li><a>Save page/article</a></li>
+                </ul>
+            </div>
+            <h3 [style.color]="this.statusMessage.color">{{this.statusMessage.message}}</h3>
+
+            <h4 class="tree-node-title">Menu: {{this.selectedMenu | nodeItemPipe}}</h4>
+
+            <table class="fl-table" *ngIf="this.selectedArticle != undefined">
+                <tbody>
+                    <tr>
+                        <th colspan="2">Page details</th>
+                    </tr>
+                    <tr>
+                        <td>Name</td>
+                        <td><input class="sample-xl txt-cls" id="article-name" type="text"
+                                [value]="selectedArticle.name"></td>
+                    </tr>
+                    <tr>
+                        <td>Id</td>
+                        <td><input class="sample-xl txt-cls" id="article-id" type="number" [value]="selectedArticle.id">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Is Active</td>
+                        <td><input class="sample-xl txt-cls" id="article-isActive" type="text"
+                                [value]="selectedArticle.isActive"></td>
+                    </tr>
+                    <tr>
+                        <td>Page Title</td>
+                        <td><input class="sample-xl txt-cls" id="article-pageTitle" type="text"
+                                [value]="selectedArticle.pageTitle"></td>
+                    </tr>
+                    <tr>
+                        <td>Background Img Path</td>
+                        <td><input class="sample-xl txt-cls" id="article-pageBackImg" type="text"
+                                [value]="selectedArticle.pageBackImg"></td>
+                    </tr>
+                    <tr>
+                        <td>Parent</td>
+                        <td><input class="sample-xl txt-cls" id="article-parent" type="text"
+                                [value]="selectedArticle.parent"></td>
+                    </tr>
+                    <tr>
+                        <td>Order</td>
+                        <td><input class="sample-xl txt-cls" id="article-order" type="number"
+                                [value]="selectedArticle.order"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <app-markdown-builder *ngIf="this.selectedArticle != undefined" [content]="content"
+                (markdownNewValue)="saveArticle($event)"></app-markdown-builder>
+        </div>
+    </div>
+</div>

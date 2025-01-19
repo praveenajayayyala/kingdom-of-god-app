@@ -1,7 +1,6 @@
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-  <div class="container">
-    <!-- Logo and responsive toggle -->
-    <div class="navbar-header">
+<nav class="navbar navbar-expand-lg navbar-light" id="mainNav" role="navigation" [style.backgroundColor]="(backgroundColor$ | async)">
+  <div class="container px-4 px-lg-5">
+    <div class="navbar-header px-4 px-lg-5">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar"
         (click)="this.openCloseMenu()">
         <span class="sr-only">Toggle navigation</span>
@@ -9,37 +8,22 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">
-        <!-- <span class="glyphicon glyphicon-fire"></span>
-        Logo -->
-        <!-- <img class="glyphicon" src="{{this.baseUrl + 'assets/kog-logo.png'}} " /> -->
+      <a class="navbar-brand" href="/home">
         <img class="glyphicon" src="../assets/kog-logo.png" />
       </a>
     </div>
-    <!-- Navbar links -->
-    <div [class]="menucss" id="navbar">
-      <!-- <div [style.display]="isloading"><img class="loading-img" src="{{this.baseUrl + 'assets/ruedadecarga-rueda.gif'}}"/></div> -->
-      <div [style.display]="isloading"><img class="loading-img" src="../assets/ruedadecarga-rueda.gif"/></div>
-      <ul #inserttarget>
+    <!-- <div [class]="menucss">  -->
+      <div id="navbarResponsive" [class]="menucss">
+      <ul #inserttarget class="navbar-nav ms-auto">
        
       </ul>
-      <!-- <a><div data-aid="NAV_MORE" style="pointer-events: none; display: flex; align-items: center;"><span style="margin-right: 4px;">More</span><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" data-ux="Icon" class="x-el x-el-svg c2-1 c2-2 c2-q c2-r c2-s c2-t c2-u c2-v c2-f c2-3 c2-i c2-m c2-n c2-o c2-p"><path fill-rule="evenodd" d="M19.774 7.86c.294-.335.04-.839-.423-.84L4.538 7c-.447-.001-.698.48-.425.81l7.204 8.693a.56.56 0 0 0 .836.011l7.621-8.654z"></path></svg></div></a>
-      <a><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" data-ux="Icon" class="x-el x-el-svg c2-1 c2-2 c2-q c2-r c2-s c2-t c2-u c2-v c2-f c2-3 c2-i c2-m c2-n c2-o c2-p"><path fill-rule="evenodd" d="M19.774 7.86c.294-.335.04-.839-.423-.84L4.538 7c-.447-.001-.698.48-.425.81l7.204 8.693a.56.56 0 0 0 .836.011l7.621-8.654z"></path></svg></a> -->
-      <!-- Search -->
-      <!-- <div class="navbar-form navbar-right" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" />
-        </div>
-        <button type="submit" class="btn btn-default">Search</button>
-      </div> -->
+      <div [style.display]="isloading"><img class="loading-img" src="../assets/loading.gif"/></div>
     </div>
-    <!-- /.navbar-collapse -->
+    <!-- </div> -->
   </div>
-
-  <!-- /.container -->
 </nav>
 <router-outlet></router-outlet>
-<footer>
+<!-- <footer>
   <div class="panel-footer">
     <div class="container">
       <div class="row" style="text-align:center">
@@ -143,34 +127,9 @@
             </li>
           </ul>
         </div>
-        <!-- <div class="col-md-5ths col-xs-6 count-5">
-          <h4>Watch &amp; Listen</h4>
-          <ul>
-            <li>
-              <a href="https://calvarychristian.church/sermons/">Sermons</a>
-            </li>
-            <li>
-              <a
-                href="https://calvarychristian.church/month-of-personal-commitment/"
-                >Month of Personal Commitment</a
-              >
-            </li>
-            <li>
-              <a href="https://calvarychristian.church/podcasts">Podcasts</a>
-            </li>
-            <li>
-              <a href="https://calvarychristian.church/social-media-disclaimer/"
-                >Social Media Disclaimer</a
-              >
-            </li>
-          </ul>
-        </div>-->
+        
       </div>
-      <!-- <div class="row">
-        <div class="col-md-4"><a href="/home">Home</a></div>
-        <div class="col-md-4"><a href="/about">About</a></div>
-        <div class="col-md-4"><a href="/contact">Contact</a></div>
-      </div> -->
+
       <br />
       <br />
     </div>
@@ -218,4 +177,4 @@
       </div>
     </div>
   </div>
-</footer>
+</footer> -->

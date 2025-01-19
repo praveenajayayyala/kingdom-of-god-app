@@ -49,7 +49,7 @@ export class PreviewComponent implements OnInit {
     let articleControls: ArticalControlBase<string>[] = ((JSON.parse(
       localStorage.getItem("selectedpage") + ""
     ) as TodoItemFlatNode).props as Article).controls!;
-    console.log("localStorage.getItem('pageControls')", articleControls);
+    //console.log("localStorage.getItem('pageControls')", articleControls);
     this.previewDataService.articalControls.next(articleControls);
   }
 

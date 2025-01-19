@@ -1,5 +1,5 @@
-<div class="page-details-div">
-  <table class="fl-table" *ngIf="this.selectedNode != undefined">
+<div class="page-details-div" >
+  <!-- <table class="fl-table" *ngIf="this.selectedNode != undefined">
     <tr>
     <th colspan="2">Page details</th>
   </tr>
@@ -31,12 +31,12 @@
       <td><button mat-button (click)="saveArticle()">Save</button></td>
       <td></td>
     </tr>
-  </table>
+  </table> -->
 </div>
 <div [style.color]="this.statusMsgColor" *ngIf="this.statusMessage != ''">
   {{this.statusMessage}}
 </div>
-<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+<mat-tree style="background-color: #e9d2a7;" [dataSource]="dataSource" [treeControl]="treeControl">
   <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
     <!-- <button mat-icon-button disabled></button> -->
     <!-- <mat-checkbox class="checklist-leaf-node" [checked]="checklistSelection.isSelected(node)"

@@ -7,9 +7,12 @@
 }
 .loading-img {
   text-align: center;
-  display: flex;
+  display: block;
   width: 100px;
-  height: 60px;
+  height: 100px;
+  position: relative;
+  top: -10px;
+  border: none;
 }
 .sample-xl {
   font-size: 11px;
@@ -58,6 +61,7 @@
 .page-details-div {
   float: right;
   border-radius: 6px;
+  border-color: lightblue;
 }
 .page-details-div .txt-cls {
   width: 100px !important;
@@ -199,11 +203,11 @@ th {
   font-weight: normal;
   border: none;
   border-collapse: collapse;
-  width: 100%;
+  width: 99%;
   max-width: 100%;
   white-space: nowrap;
   background-color: #e9d2a7;
-  padding: 5px;
+  margin: 5px;
 }
 
 .fl-table td,

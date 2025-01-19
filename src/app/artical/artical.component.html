@@ -1,4 +1,29 @@
-<app-artical-form
-  [articalControls]="articalControls$"
-></app-artical-form>
-
+<header class="masthead" *ngIf="header != null"
+  style="background-image: url('{{header.src}}'); top: -130px;">
+  <div class="header-container position-relative px-4 px-lg-5" style="text-align: center; position: relative; top: 200px">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="site-heading">
+          <h1>{{ header.label }}</h1>
+          <!-- <h2 class="subheading">{{ header.label }}</h2>
+          <span class="meta">{{ header.label }}</span> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<app-artical-form [style]="formStyle" [articalControls]="articalControls$"></app-artical-form>
+<footer class="border-top" [style]="footerStyle">
+  <div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+      <div class="medium text-center text-muted">
+      Kingdom Of God Church | 47 Grove St | xxx bajar, New Delhi xxxxx | +91-956-014-7251
+      </div>
+        <div class="small text-center text-muted fst-italic">
+          Copyright &copy; KingdomOfGod.in {{currentYear | date: 'yyyy'}}
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

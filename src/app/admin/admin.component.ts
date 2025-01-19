@@ -274,7 +274,7 @@ export class AdminComponent implements AfterViewChecked {
 
   deleteDefault = (node: TodoItemFlatNode) => {
     if (node.item == "XXX") {
-      console.log("deleteDefault", node);
+      //console.log("deleteDefault", node);
       this.removeItem(node);
     }
   };
@@ -344,7 +344,7 @@ export class AdminComponent implements AfterViewChecked {
     article.controls = previewCrtls;
     article.order = Number.parseInt(article.order + "");
     article.content = JSON.stringify(previewCrtls);
-    console.log("article going to save", article);
+    //console.log("article going to save", article);
     this.saveArticleByValidation(article);
   }
 
@@ -563,7 +563,7 @@ export class AdminComponent implements AfterViewChecked {
       isSelected: this.checklistSelection.isSelected(node),
     };
     this.crtlStatusMessage = {message:"",color:""};
-    console.log("this.selectedNode", this.selectedNode.node);
+    //console.log("this.selectedNode", this.selectedNode.node);
     let parent = document.querySelectorAll(".slected-node-cls");
     parent.forEach((ele) => {
       document.getElementById(ele.id)?.classList.remove("slected-node-cls");
@@ -684,7 +684,7 @@ export class AdminComponent implements AfterViewChecked {
   /** Save the node to database */
   saveNode(node: TodoItemFlatNode, itemValue: string) {
     const nestedNode = this.flatNodeMap.get(node);
-    console.log("saveNode", node, nestedNode, itemValue);
+    //console.log("saveNode", node, nestedNode, itemValue);
     this._database.updateItem(nestedNode!, itemValue);
   }
   // cancelNode(node: TodoItemFlatNode, itemValue: string){
@@ -709,7 +709,7 @@ export class AdminComponent implements AfterViewChecked {
       if (queryStringCode == undefined || queryStringCode == "") {
         return;
       }
-      this.authorizeService.getAccessToken(queryStringCode).subscribe(
+      this.authorizeService.getAccessToken(queryStringCode, environment.redirectUrl).subscribe(
         (result: any) => {
           //console.log("access_token", result);
           this.saveArticle(result.access_token, article).subscribe(
@@ -721,7 +721,7 @@ export class AdminComponent implements AfterViewChecked {
                 };
                 this.previewUrl = "/preview";
               } else {
-                console.log("Somthing went wrong!", result);
+                //console.log("Somthing went wrong!", result);
                 this.statusMessage = {
                   message: "Somthing went wrong! status-code:" + result.status,
                   color: "red",
@@ -731,7 +731,7 @@ export class AdminComponent implements AfterViewChecked {
           );
         },
         (err) => {
-          console.log("Article save error", err);
+          //console.log("Article save error", err);
           this.statusMessage = {
             message: "Please login to get active session.",
             color: "red",
@@ -784,10 +784,10 @@ export class AdminComponent implements AfterViewChecked {
 
       let nodes: TodoItemNode[] = [];
       v.forEach((ctrl) => nodes.push(this.buildFileArticleTree(ctrl, 0)));
-      console.log("nodes=>", nodes);
+      //console.log("nodes=>", nodes);
       let tree = this._database.dataChange.next(nodes);
 
-      console.log("tree", tree);
+      //console.log("tree", tree);
     });
   }
   articleTree: TodoItemNode[] = [];

@@ -1,6 +1,6 @@
 {
   "name": "angular.io-kingdomofgod",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "KingdomOfGod is christian church website",
   "license": "Contact-ajaypraveen.vtm@gmail.com",
   "scripts": {
@@ -13,6 +13,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-devkit/core": "^19.0.7",
     "@angular/animations": "^19.0.6",
     "@angular/cdk": "^19.0.5",
     "@angular/common": "^19.0.6",
@@ -24,10 +25,17 @@
     "@angular/platform-browser": "^19.0.6",
     "@angular/platform-browser-dynamic": "^19.0.6",
     "@angular/router": "^19.0.6",
+    "ace-builds": "^1.37.4",
     "angular-in-memory-web-api": "^0.19.0",
     "angular2-draggable": "^16.0.0",
+    "bootstrap": "^5.3.3",
+    "brace": "^0.11.1",
+    "font-awesome": "^4.7.0",
+    "markdown-to-json": "^0.5.4",
+    "ngx-markdown-editor": "^5.3.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.8.1",
+    "unescape-js": "^1.1.4",
     "zone.js": "^0.15.0"
   },
   "devDependencies": {
@@ -36,6 +44,7 @@
     "@angular/compiler-cli": "^19.0.6",
     "@types/jasmine": "~4.3.0",
     "@types/node": "^18.19.70",
+    "@types/unescape-js": "^1.0.3",
     "copyfiles": "^2.4.1",
     "jasmine-core": "~4.6.0",
     "jasmine-marbles": "^0.9.2",

@@ -9,6 +9,7 @@ export class Article {
     id?: string;
     name?: string;
     pageTitle?: string;
+    pageBackImg?: string;
     constructor(original: any){
         Object.assign(this, original);
     }

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, catchError, of, retry } from "rxjs";
+import { BehaviorSubject, catchError, of, retry, Subject } from "rxjs";
 import { ArticalControlBase } from "./artical-controls/artical-control-base";
 import { DropdownControl } from "./artical-controls/control-dropdown";
 import { TextboxControl } from "./artical-controls/control-textbox";
@@ -16,6 +16,11 @@ import { HttpClient } from "@angular/common/http";
 import { Article } from "./modal/article";
 import { SpanControl } from "./artical-controls/control-span";
 import { environment } from "../environments/environment";
+import unescapeJs from 'unescape-js';
+import { MarkdownControl } from "./artical-controls/control-markdown";
+import { HeaderControl } from "./artical-controls/control-header";
+
+
 @Injectable({
   providedIn: "root",
 })
@@ -27,19 +32,27 @@ export class ArticleService {
   controlsByParentKey = new Map<string, ArticalControlBase<string>[]>();
   previewContent: BehaviorSubject<Article> = new BehaviorSubject<Article>({});
   articals: BehaviorSubject<Article[]> = new BehaviorSubject<Article[]>([]);
-  // articalControls: BehaviorSubject<
-  //   any[]
-  // > = new BehaviorSubject<any[]>([
-  //   new ArticalControlBase<string>({ key: "testing" }),
-  // ]);
-  // bookingListener$ = this.articalControls.asObservable();
+
   public getArticleById(id: string, options?: any) {
     return this.http
       .get(this.baseUrl + "/getarticles?postId=" + id, options)
       .pipe(catchError(retry(2)));
   }
-
+  escapeJson = function (str: string) {
+    return str
+      .replace(/[\\]/g, '\\\\')
+      .replace(/[\"]/g, '\\\"')
+      //.replace(/[\/]/g, '\\/')
+      .replace(/[\b]/g, '\\b')
+      .replace(/[\f]/g, '\\f')
+      .replace(/[\n]/g, '\\n')
+      .replace(/[\r]/g, '\\r')
+      .replace(/[\t]/g, '\\t');
+  };
+ 
   public addArticle(article: Article, token: string) {
+  //article.content= this.escapeJson(article.content!);
+  //console.log("article==>", article);
     return this.http.post(
       this.baseUrl + "/addarticle",
       { "body-json": article },
@@ -76,8 +89,30 @@ export class ArticleService {
           this.mapControlsBasedOnParentKey(controlsByPostId).subscribe(
             (crtls) => {
               v.controls = crtls;
+              //v.content = unescape(v.content!);
             }
           );
+          articles.push(v);
+        });
+        this.articals.next(articles);
+        resolve(articles);
+      });
+    });
+  }
+
+  async getArticlesMDByPostId(postId: string) {
+    return await new Promise<Article[]>((resolve) => {
+      this.getArticleById(postId, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).subscribe((response: any) => {
+        let body: any = JSON.parse(response.body);
+        console.log("PostId:", postId, body);
+        let articles: Article[] = [];
+
+        body.forEach((v: Article) => {
+          v.content = unescapeJs(v.content!);
           articles.push(v);
         });
         this.articals.next(articles);
@@ -125,6 +160,12 @@ export class ArticleService {
       case "textbox":
         result = new TextboxControl(control);
         break;
+      case "header":
+          result = new HeaderControl(control);
+          break;
+      case "markdown":
+            result = new MarkdownControl(control);
+            break;
     }
     return result;
   }

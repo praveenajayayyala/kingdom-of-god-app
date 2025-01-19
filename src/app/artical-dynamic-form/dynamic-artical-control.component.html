@@ -22,13 +22,37 @@
       </option>
     </select>
     <!-- Control IMG -->
-    <img *ngSwitchCase="'image'" [formControlName]="control.key" [style]="control.styles" [id]="control.key" [src]="control.src" />
+    <img *ngSwitchCase="'image'" [formControlName]="control.key" [style]="control.styles" [id]="control.key"
+      [src]="control.src" />
     <!-- Control H1 -->
     <h1 *ngSwitchCase="'h1'" class="{{ control.css }}" [style]="control.styles">{{ control.label }}</h1>
     <!-- Control H3 -->
     <h3 *ngSwitchCase="'h3'" class="{{ control.css }}" [style]="control.styles">{{ control.label }}</h3>
     <!-- Control SPAN -->
     <span *ngSwitchCase="'span'" [style]="control.styles">{{ control.label }}</span>
+    <!-- <app-page-header *ngSwitchCase="'header'" title="(control.label) ?? ''"
+       img="control.src"
+       /> -->
+    <!-- Control Page-Header -->
+       <!-- <header *ngSwitchCase="'header'"
+       class="masthead"
+       style="background-image: url('{{control.src}}'); width: 100%; height: 100%;">
+       <div class="container position-relative px-4 px-lg-5">
+         <div class="row gx-4 gx-lg-5 justify-content-center">
+           <div class="col-md-10 col-lg-8 col-xl-7">
+             <div>
+               <h1>{{ control.label }}</h1>
+               <h2 class="subheading">{{ control.label }}</h2>
+               <span class="meta">{{ control.label }}</span>
+             </div>
+           </div>
+         </div>
+       </div>
+     </header> -->
+    <!-- Markdown-->
+    <md-editor *ngSwitchCase="'markdown'" #mdView [style]="control.styles" style="border: none !important;" name="Content" mode="preview" height="100%">
+      {{control.label}}
+    </md-editor>
     <!-- Control MAT-CARD-BASIC -->
     <mat-card *ngSwitchCase="'card-basic'">
       <mat-card-content>{{ control.label }}</mat-card-content>
@@ -56,4 +80,5 @@
   <div class="errorMessage" *ngIf="!isValid">
     {{ control.label }} is required
   </div>
+
 </div>
