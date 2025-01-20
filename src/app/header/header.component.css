@@ -1,0 +1,153 @@
+header.masthead {
+    position: relative;
+    margin-bottom: 3rem;
+    padding-top: calc(8rem + 57px);
+    padding-bottom: 8rem;
+    background: no-repeat center center;
+    background-color: #6c757d;
+    background-size: cover;
+    background-attachment: scroll;
+    height: 600px;
+  }
+  header.masthead:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #212529;
+    opacity: 0.5;
+  }
+  header.masthead .page-heading,
+  header.masthead .post-heading,
+  header.masthead .site-heading {
+    color: #fff;
+  }
+  header.masthead .page-heading,
+  header.masthead .site-heading {
+    text-align: center;
+  }
+  header.masthead .page-heading h1,
+  header.masthead .page-heading .h1,
+  header.masthead .site-heading h1,
+  header.masthead .site-heading .h1 {
+    font-size: 3rem;
+  }
+  header.masthead .page-heading .subheading,
+  header.masthead .site-heading .subheading {
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1.1;
+    display: block;
+    margin-top: 0.625rem;
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+      Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji',
+      'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  }
+  header.masthead .post-heading h1,
+  header.masthead .post-heading .h1 {
+    font-size: 2.25rem;
+  }
+  header.masthead .post-heading .meta,
+  header.masthead .post-heading .subheading {
+    line-height: 1.1;
+    display: block;
+  }
+  header.masthead .post-heading .subheading {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0.75rem 0 2rem;
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+      Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji',
+      'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  }
+  header.masthead .post-heading .meta {
+    font-size: 1.25rem;
+    font-weight: 300;
+    font-style: italic;
+    font-family: 'Lora', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+      'Segoe UI Symbol', 'Noto Color Emoji';
+  }
+  header.masthead .post-heading .meta a {
+    color: #fff;
+  }
+  @media (min-width: 992px) {
+    header.masthead {
+      padding-top: 12.5rem;
+      padding-bottom: 12.5rem;
+    }
+    header.masthead .page-heading h1,
+    header.masthead .page-heading .h1,
+    header.masthead .site-heading h1,
+    header.masthead .site-heading .h1 {
+      font-size: 5rem;
+    }
+    header.masthead .post-heading h1,
+    header.masthead .post-heading .h1 {
+      font-size: 3.5rem;
+    }
+    header.masthead .post-heading .subheading {
+      font-size: 1.875rem;
+    }
+  }
+  
+.header-container,
+.header-container-fluid,
+.header-container-xxl,
+.header-container-xl,
+.header-container-lg,
+.header-container-md,
+.header-container-sm {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  width: 100%;
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 576px) {
+  .header-container-sm,
+  .header-container {
+    max-width: 540px;
+  }
+}
+@media (min-width: 768px) {
+  .header-container-md,
+  .header-container-sm,
+  .header-container {
+    max-width: 720px;
+  }
+}
+@media (min-width: 992px) {
+  .header-container-lg,
+  .header-container-md,
+  .header-container-sm,
+  .header-container {
+    max-width: 960px;
+  }
+}
+@media (min-width: 1200px) {
+  .header-container-xl,
+  .header-container-lg,
+  .header-container-md,
+  .header-container-sm,
+  .header-container {
+    max-width: 1140px;
+  }
+}
+@media (min-width: 1400px) {
+  .header-container-xxl,
+  .header-container-xl,
+  .header-container-lg,
+  .header-container-md,
+  .header-container-sm,
+  .header-container {
+    max-width: 1320px;
+  }
+}
+
+  

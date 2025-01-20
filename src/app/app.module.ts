@@ -30,6 +30,8 @@ import { ContactUsComponent } from "./contact-us/contact-us.component";
 import { LMarkdownEditorModule } from "ngx-markdown-editor";
 import { PageBuilderComponent } from "./page-builder/page-builder.component";
 import { MarkdownBuilderComponent } from "./markdown-builder/markdown-builder.component";
+import { HeaderComponent } from "./header/header.component";
+import { FooterComponent } from "./footer/footer.component";
 
 const appRoutes: Routes = [
   { path: "admin", component: AdminComponent },
@@ -58,6 +60,8 @@ const appRoutes: Routes = [
     DynamicArticalComponent,
     DynamicArticalControlComponent,
     DynamicArticalParentDivComponent,
+    HeaderComponent,
+    FooterComponent,
     HomeComponent,
     AdminComponent,
     PageBuilderComponent,

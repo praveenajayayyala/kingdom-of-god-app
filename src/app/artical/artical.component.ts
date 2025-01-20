@@ -16,7 +16,6 @@ export class ArticalComponent implements OnInit {
   header: ArticalControlBase<string> | undefined;
   formStyle: string | undefined;
   footerStyle: string | undefined;
-  currentYear!: Date;
   constructor(
     private articleService: ArticleService,
     private route: ActivatedRoute,
@@ -45,6 +44,5 @@ export class ArticalComponent implements OnInit {
         }
       });
     });
-    this.currentYear = new Date();
   }
 }

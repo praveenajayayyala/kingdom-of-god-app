@@ -12,6 +12,9 @@ import { Article } from '../modal/article';
 })
 export class AboutUsComponent implements OnInit {
   articles: Article[]=[];
+  header: ArticalControlBase<string> | undefined;
+  formStyle: string | undefined;
+  footerStyle: string | undefined;
   constructor(private articleService: ArticleService,  private titleService: Title) {
   }
   articalControls$: ArticalControlBase<string>[] = [];
@@ -21,6 +24,15 @@ export class AboutUsComponent implements OnInit {
       let pageArticles = arts.find((v) => v.name?.toLowerCase() == "about-us");
       this.titleService.setTitle(pageArticles?.pageTitle!);
       this.articalControls$ = pageArticles?.controls!;
+      if (this.articalControls$ != undefined) {
+        this.articalControls$.forEach((crtl) => {
+          this.header = crtl.children?.filter(
+            (child) => child.controlType == "header"
+          )[0];
+          this.formStyle = "top: -160px; position: relative;";
+          this.footerStyle = "top: -130px; position: relative;";
+        });
+      }
     });
   }
 }
