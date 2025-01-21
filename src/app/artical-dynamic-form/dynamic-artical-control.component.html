@@ -52,7 +52,7 @@
     <!-- Markdown-->
     <markdown *ngSwitchCase="'markdown'" 
     data="{{getMarkdown(control.label)}}"
-    [disableSanitizer]="true">
+    [disableSanitizer]="false">
     </markdown>
     <!-- <md-editor *ngSwitchCase="'markdown'" #mdView [style]="control.styles" style="border: none !important;" name="Content" mode="preview" height="100%">
       {{control.label}}
