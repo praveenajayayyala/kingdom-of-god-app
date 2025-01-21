@@ -12768,7 +12768,7 @@ pre code {
     margin-left: 0;
   }
 }
-table {
+ table {
   background-color: transparent;
 }
 caption {
@@ -12783,7 +12783,7 @@ th {
 .table {
   width: 100%;
   max-width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 20px;  
 }
 .table > thead > tr > th,
 .table > tbody > tr > th,
@@ -13007,7 +13007,60 @@ table th[class*="col-"] {
   .table-responsive > .table-bordered > tfoot > tr:last-child > td {
     border-bottom: 0;
   }
+} 
+
+table {
+  border-spacing: 0;
+  border-collapse: separate;
+  border-left-width: 0;
+  border: 1px solid rgba(97, 34, 34, 0.12);
+  border-radius: 4px;
+  width: 100%;
+
+  tr th {
+    border-bottom-color: rgba(0, 0, 0, 0.12);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    /* background-color: #f5f5f5; */
+    color: gray;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 0;
+    text-transform: capitalize;
+  }
+
+  th:first-of-type,
+  td:first-of-type {
+    padding-left: 24px;
+  }
+
+  th:last-of-type,
+  td:last-of-type {
+    padding-right: 24px;
+  }
+
+  tr td {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 14px;
+    padding: 0;
+  }
+
+  tr:not(:last-of-type) td {
+    border-bottom-color: rgba(0, 0, 0, 0.12);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+  }
+
+  th {
+    height: 56px;
+  }
+
+  tr {
+    height: 48px;
+  }
 }
+
+/* ========================= */
 fieldset {
   min-width: 0;
   padding: 0;

@@ -32,6 +32,7 @@ import { PageBuilderComponent } from "./page-builder/page-builder.component";
 import { MarkdownBuilderComponent } from "./markdown-builder/markdown-builder.component";
 import { HeaderComponent } from "./header/header.component";
 import { FooterComponent } from "./footer/footer.component";
+import { MarkdownModule } from 'ngx-markdown';
 
 const appRoutes: Routes = [
   { path: "admin", component: AdminComponent },
@@ -83,6 +84,7 @@ const appRoutes: Routes = [
     FormsModule,
     LMarkdownEditorModule,
     AngularDraggableModule,
+    MarkdownModule.forRoot(),
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only

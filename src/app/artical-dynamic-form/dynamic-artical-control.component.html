@@ -50,9 +50,13 @@
        </div>
      </header> -->
     <!-- Markdown-->
-    <md-editor *ngSwitchCase="'markdown'" #mdView [style]="control.styles" style="border: none !important;" name="Content" mode="preview" height="100%">
+    <markdown *ngSwitchCase="'markdown'" 
+    data="{{getMarkdown(control.label)}}"
+    [disableSanitizer]="true">
+    </markdown>
+    <!-- <md-editor *ngSwitchCase="'markdown'" #mdView [style]="control.styles" style="border: none !important;" name="Content" mode="preview" height="100%">
       {{control.label}}
-    </md-editor>
+    </md-editor> -->
     <!-- Control MAT-CARD-BASIC -->
     <mat-card *ngSwitchCase="'card-basic'">
       <mat-card-content>{{ control.label }}</mat-card-content>
