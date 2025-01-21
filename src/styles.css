@@ -13020,7 +13020,7 @@ table {
   tr th {
     border-bottom-color: rgba(0, 0, 0, 0.12);
     border-bottom-style: solid;
-    border-bottom-width: 1px;
+    border-bottom-width: 3px;
     /* background-color: #f5f5f5; */
     color: gray;
     font-size: 16px;
