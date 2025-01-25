@@ -76,9 +76,9 @@ export class PageBuilderComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private ref: ChangeDetectorRef
   ) {
-    _database.dataChange.subscribe((data) => {
-      this.dataSource.data = data;
-    });
+    // _database.dataChange.subscribe((data) => {
+    //   this.dataSource.data = data;
+    // });
     this.shareService.updateBackgroundColor("#6c757d");
   }
   ngAfterViewInit(): void {

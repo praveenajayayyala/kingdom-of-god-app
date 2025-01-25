@@ -47,7 +47,7 @@ const appRoutes: Routes = [
   // { path: '**', component: PageNotFoundComponent },
   { path: "", component: HomeComponent },
   { path: "home", component: HomeComponent },
-  { path: "contact-us", component: ContactUsComponent },
+  // { path: "contact-us", component: ContactUsComponent },
   { path: "about-us", component: AboutUsComponent },
   { path: "articles", component: ArticalComponent },
   { path: "preview", component: PreviewComponent },
